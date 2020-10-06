@@ -1,0 +1,14 @@
+diff -rc trove/integration/scripts/files/elements/guest-agent/post-install.d/99-clean-apt trove/integration/scripts/files/elements/guest-agent-k2hdkc/post-install.d/99-clean-apt
+*** trove/integration/scripts/files/elements/guest-agent/post-install.d/99-clean-apt	2020-09-13 07:06:08.850039206 +0900
+--- trove/integration/scripts/files/elements/guest-agent-k2hdkc/post-install.d/99-clean-apt	2020-09-13 10:27:36.708267761 +0900
+***************
+*** 6,9 ****
+  set -e
+  set -o xtrace
+  
+! apt-get clean
+--- 6,9 ----
+  set -e
+  set -o xtrace
+  
+! dnf clean all

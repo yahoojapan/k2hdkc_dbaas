@@ -1,0 +1,15 @@
+[Unit]
+Description=k2hdkc trove service
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/libexec/k2hdkc-trove-helper -conf server.ini -cgp /etc/k2hdkc -startup_timeout 60 -normal_timeout 1
+ExecReload=/usr/libexec/k2hdkc-trove-helper -conf server.ini -cgp /etc/k2hdkc -startup_timeout 60 -normal_timeout 1
+ExecStop=/usr/libexec/k2hdkc-trove-helper -stop
+RemainAfterExit=yes
+Restart=no
+
+[Install]
+WantedBy=multi-user.target

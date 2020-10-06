@@ -1,0 +1,19 @@
+*** trove/integration/scripts/files/elements/guest-agent/install.d/50-user	2020-09-13 07:06:08.850039206 +0900
+--- trove/integration/scripts/files/elements/guest-agent-k2hdkc/install.d/50-user	2020-09-13 07:06:08.850039206 +0900
+***************
+*** 13,19 ****
+  
+  if ! id -u ${GUEST_USERNAME} >/dev/null 2>&1; then
+      echo "Adding ${GUEST_USERNAME} user"
+!     useradd -G sudo -m ${GUEST_USERNAME} -s /bin/bash
+      chown ${GUEST_USERNAME}:${GUEST_USERNAME} /home/${GUEST_USERNAME}
+      passwd ${GUEST_USERNAME} <<_EOF_
+  ${GUEST_USERNAME}
+--- 13,19 ----
+  
+  if ! id -u ${GUEST_USERNAME} >/dev/null 2>&1; then
+      echo "Adding ${GUEST_USERNAME} user"
+!     useradd -G users -m ${GUEST_USERNAME} -s /bin/bash
+      chown ${GUEST_USERNAME}:${GUEST_USERNAME} /home/${GUEST_USERNAME}
+      passwd ${GUEST_USERNAME} <<_EOF_
+  ${GUEST_USERNAME}

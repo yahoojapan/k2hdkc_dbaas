@@ -1,0 +1,16 @@
+[Unit]
+Description=service controler for chmpx on trove
+After=network-online.target
+
+[Service]
+Type=simple
+User=k2hdkc
+PermissionsStartOnly=true
+ExecStartPre=/sbin/sysctl fs.mqueue.msg_max=1024
+ExecStart=/usr/libexec/k2hdkc-trovectl chmpx -cgp /etc/k2hdkc -conf server.ini -initwait 120 -d msg
+ExecStop=/bin/kill -HUP $MAINPID
+Restart=always
+PIDFile=/var/run/k2hdkc-trovectl-chmpx.pid
+
+[Install]
+WantedBy=multi-user.target

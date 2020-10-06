@@ -1,0 +1,273 @@
+#!/bin/sh
+#
+# K2HDKC Cluster on OpenStack Trove
+#
+# Copyright 2020 Yahoo! Japan Corporation.
+#
+# A utility that links the K2HDKC cluster as a Database as a Service
+# (DBaaS) with the OpenStack Trove system.
+# This system is a DBaaS that operates a K2HDKC cluster by controlling
+# from Trove (OpenStack) and K2HR3. 
+# K2HDKC is a distributed KVS(Key Value Store) provided by Yahoo! JAPAN.
+#
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Takeshi Nakatani
+# CREATE:   Tue May 26 2020
+# REVISION:
+#
+
+ECHO="/bin/echo"
+CAT="/bin/cat"
+PS="/bin/ps"
+SLEEP="/bin/sleep"
+KILL="/bin/kill"
+RM="/bin/rm"
+
+#
+# Usage
+#
+func_usage()
+{
+	${ECHO} ""
+	${ECHO} "Usage:  $1 {-h | --help} [chmpx | k2hdkc] {options}"
+	${ECHO} "  -h(--help)           print help."
+	${ECHO} "  -cgp <dir>           specify output directory path for configuration group parameters and etc.(default: /etc/k2hdkc)"
+	${ECHO} "  -conf <path>         specify configuration file path"
+	${ECHO} "  -initwait <second>   specify wait seconds at initial startup"
+	${ECHO} "  -wait <pidfile>      specify wait process id by file path"
+	${ECHO} "  -pidwait <second>    specify wait process after detecting pid file"
+	${ECHO} "  -d <level>           specify debug message level parameter:"
+	${ECHO} "                           silent - no output"
+	${ECHO} "                           err    - error level"
+	${ECHO} "                           wan    - warning level"
+	${ECHO} "                           msg    - debug(message) level"
+	${ECHO} "                           dump   - communication debug level"
+	${ECHO} ""
+}
+
+#
+# Signal handler
+#
+SigHandle()
+{
+	${ECHO} "Caught signal $1, try to stop chmpx process."
+	${KILL} -$1 ${TARGET_PROC_PID}
+	EXIT_BY_SIGNAL=1
+}
+
+#
+# Set trap signals
+#
+# SIGHUP(1) / SIGINT(2) / SIGQUIT(3) / SIGABRT(6) / SIGTERM(15)
+#
+trap 'SigHandle 1'	1
+trap 'SigHandle 2'	2
+trap 'SigHandle 3'	3
+trap 'SigHandle 6'	6
+trap 'SigHandle 15'	15
+
+#
+# Check options
+#
+PRGNAME=`/bin/basename $0`
+SCRIPTDIR=`/bin/dirname $0`
+CONFIGGROUP_PARAM_DIR=""
+CONF_FILE_NAME=""
+TARGET_PROC_PATH="/usr/bin"
+TARGET_PROC_NAME=""
+TARGET_PROC_PIDPATH="/tmp"
+DEBUG_LEVEL="silent"
+INIT_WAIT_SEC=
+PID_WAIT_SEC=15
+WAIT_PID_FILE=""
+
+while [ $# -ne 0 ]; do
+	if [ "X$1" = "X" ]; then
+		break;
+
+	elif [ "X$1" = "X-h" -o "X$1" = "X-H" -o "X$1" = "X--HELP" -o "X$1" = "X--help" ]; then
+		func_usage $PRGNAME
+		exit 0
+
+	elif [ "X$1" = "X-cgp" -o "X$1" = "X-CGP" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-cgp), check usage with the -h option."
+			exit 1
+		fi
+		CONFIGGROUP_PARAM_DIR=$1
+
+	elif [ "X$1" = "X-conf" -o "X$1" = "X-CONF" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-conf), check usage with the -h option."
+			exit 1
+		fi
+		CONF_FILE_NAME=$1
+
+	elif [ "X$1" = "X-wait" -o "X$1" = "X-WAIT" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-wait), check usage with the -h option."
+			exit 1
+		fi
+		WAIT_PID_FILE=$1
+
+	elif [ "X$1" = "X-initwait" -o "X$1" = "X-INITWAIT" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-initwait), check usage with the -h option."
+			exit 1
+		fi
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -ge 2 ]; then
+			${ECHO} "The parameter of option(-initwait) must be number, check usage with the -h option."
+			exit 1
+		fi
+		INIT_WAIT_SEC=$1
+
+	elif [ "X$1" = "X-pidwait" -o "X$1" = "X-PIDWAIT" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-pidwait), check usage with the -h option."
+			exit 1
+		fi
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -ge 2 ]; then
+			${ECHO} "The parameter of option(-pidwait) must be number, check usage with the -h option."
+			exit 1
+		fi
+		PID_WAIT_SEC=$1
+
+	elif [ "X$1" = "X-d" -o "X$1" = "X-D" ]; then
+		shift
+		if [ "X$1" = "Xsilent" -o "X$1" = "XSILENT" ]; then
+			DEBUG_LEVEL="silent"
+		elif [ "X$1" = "Xerr" -o "X$1" = "XERR" ]; then
+			DEBUG_LEVEL="err"
+		elif [ "X$1" = "Xwan" -o "X$1" = "XWAN" ]; then
+			DEBUG_LEVEL="wan"
+		elif [ "X$1" = "Xmsg" -o "X$1" = "XMSG" ]; then
+			DEBUG_LEVEL="msg"
+		elif [ "X$1" = "Xdump" -o "X$1" = "XDUMP" ]; then
+			DEBUG_LEVEL="dump"
+		elif [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-d), check usage with the -h option."
+			exit 1
+		else
+			${ECHO} "Unknown option(-d) parameter: $1, check usage with the -h option."
+			exit 1
+		fi
+
+	elif [ "X$1" = "Xchmpx" -o "X$1" = "XCHMPX" ]; then
+		TARGET_PROC_NAME="chmpx"
+
+	elif [ "X$1" = "Xk2hdkc" -o "X$1" = "XK2HDKC" ]; then
+		TARGET_PROC_NAME="k2hdkc"
+
+	else
+		${ECHO} "Unknown option: $1, check usage with the -h option."
+		exit 1
+	fi
+	shift
+done
+
+#
+# Configuration file
+#
+if [ "X${CONF_FILE_NAME}" = "X" ]; then
+	CONF_FILE_NAME="server.ini"
+fi
+if [ "X${CONFIGGROUP_PARAM_DIR}" = "X" ]; then
+	CONFIGGROUP_PARAM_DIR="/etc/k2hdkc"
+fi
+CONF_FILE_PATH="${CONFIGGROUP_PARAM_DIR}/${CONF_FILE_NAME}"
+
+if [ "X${TARGET_PROC_NAME}" = "X" ]; then
+	${ECHO} "$PRGNAME must specify \"chmpx\" or \"k2hdkc\" program type, check usage with the -h option."
+	exit 1
+fi
+
+#
+# Wait for seconds at initial startup
+#
+if [ "X${INIT_WAIT_SEC}" != "X" ]; then
+	${ECHO} "Wait for ${INIT_WAIT_SEC} seconds specified at initial startup."
+	${SLEEP} ${INIT_WAIT_SEC}
+fi
+
+#
+# Run main process
+#
+START_MSG_PREFIX="Start"
+EXIT_BY_SIGNAL=0
+while true; do
+	#
+	# Wait configuration file
+	#
+	${ECHO} "Wait for making configuration file(${CONF_FILE_PATH})"
+	while true; do
+		FOUND_CONF_FILE=0
+		if [ -f ${CONF_FILE_PATH} ]; then
+			if [ -s ${CONF_FILE_PATH} ]; then
+				${ECHO} "Found configuration file(${CONF_FILE_PATH}), stop waiting."
+				#
+				# Check other process running
+				#
+				if [ "X${WAIT_PID_FILE}" != "X" ]; then
+					${ECHO} "Check for other process by ${WAIT_PID_FILE}"
+					if [ -f ${WAIT_PID_FILE} ]; then
+						WAIT_PID=`${CAT} ${WAIT_PID_FILE} 2>/dev/null`
+						if [ "X${WAIT_PID}" != "X" ]; then
+							${PS} -p ${WAIT_PID} >/dev/null 2>&1
+							if [ $? -eq 0 ]; then
+								${ECHO} "Wait for ${PID_WAIT_SEC} seconds after detecting pid file."
+								${SLEEP} ${PID_WAIT_SEC}
+								break;
+							fi
+						fi
+					fi
+				else
+					break;
+				fi
+			fi
+		fi
+		${SLEEP} 1
+	done
+
+	${ECHO} "${START_MSG_PREFIX} process ${TARGET_PROC_NAME}."
+	${TARGET_PROC_PATH}/${TARGET_PROC_NAME} -conf ${CONF_FILE_PATH} -d ${DEBUG_LEVEL} &
+	TARGET_PROC_PID=$!
+	${ECHO} "${TARGET_PROC_PID}" > ${TARGET_PROC_PIDPATH}/${PRGNAME}-${TARGET_PROC_NAME}.pid
+
+	wait ${TARGET_PROC_PID} >/dev/null 2>&1
+
+	if [ -f ${TARGET_PROC_PIDPATH}/${PRGNAME}-${TARGET_PROC_NAME}.pid ]; then
+		CURRENT_PID=`${CAT} ${TARGET_PROC_PIDPATH}/${PRGNAME}-${TARGET_PROC_NAME}.pid 2>/dev/null`
+		if [ "X${CURRENT_PID}" != "X" ]; then
+			if [ ${CURRENT_PID} -eq ${TARGET_PROC_PID} ]; then
+				${RM} -f ${TARGET_PROC_PIDPATH}/${PRGNAME}-${TARGET_PROC_NAME}.pid
+			fi
+		else
+			${RM} -f ${TARGET_PROC_PIDPATH}/${PRGNAME}-${TARGET_PROC_NAME}.pid
+		fi
+	fi
+	${ECHO} "Process ${TARGET_PROC_NAME}(${PID}) is exited."
+
+	if [ ${EXIT_BY_SIGNAL} -ne 0 ]; then
+		exit 0
+	fi
+
+	${SLEEP} 1
+	START_MSG_PREFIX="Restart"
+done
+
+exit 0
+
+#
+# VIM modelines
+#
+# vim:set ts=4 fenc=utf-8:
+#

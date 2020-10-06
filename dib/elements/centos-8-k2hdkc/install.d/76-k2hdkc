@@ -1,0 +1,8 @@
+#!/bin/sh
+
+set -e
+set -o xtrace
+
+# Apply patch
+SRCDIR=$(cd $(dirname "$0") && pwd)
+sh ${SRCDIR}/trove/patch.sh -d

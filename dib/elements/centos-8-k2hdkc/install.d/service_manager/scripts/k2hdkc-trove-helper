@@ -1,0 +1,756 @@
+#!/bin/sh
+#
+# K2HDKC Cluster on OpenStack Trove
+#
+# Copyright 2020 Yahoo! Japan Corporation.
+#
+# A utility that links the K2HDKC cluster as a Database as a Service
+# (DBaaS) with the OpenStack Trove system.
+# This system is a DBaaS that operates a K2HDKC cluster by controlling
+# from Trove (OpenStack) and K2HR3. 
+# K2HDKC is a distributed KVS(Key Value Store) provided by Yahoo! JAPAN.
+#
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Takeshi Nakatani
+# CREATE:   Tue May 26 2020
+# REVISION:
+#
+
+ECHO="/bin/echo"
+SLEEP="/bin/sleep"
+CP="/bin/cp"
+CAT="/bin/cat"
+TR="/bin/tr"
+PS="/bin/ps"
+SUDO="/bin/sudo"
+KILL="/bin/kill"
+RM="/bin/rm"
+TOUCH="/bin/touch"
+DATE="/bin/date"
+MV="/bin/mv"
+
+#--------------------------------------------------------------
+# Usage and Options
+#--------------------------------------------------------------
+#
+# Usage
+#
+func_usage()
+{
+	${ECHO} ""
+	${ECHO} "Usage:  $1 {-h(--help) | -stop | options}"
+	${ECHO} "  -h(--help)                print help."
+	${ECHO} "  -stop                     stop k2hdkc processes"
+	${ECHO} "  -cgp <dir>                specify output directory path for configuration group parameters and etc.(default: /etc/k2hdkc)"
+	${ECHO} "  -conf <file>              specify output configuration(ini) file name(default: server.ini)"
+	${ECHO} "  -startup_timeout <sec>    specify starup timeout seconds(default: 60s)"
+	${ECHO} "  -normal_timeout <sec>     specify normal(after startup) timeout seconds(default: 1s)"
+	${ECHO} ""
+}
+
+#
+# Check options
+#
+PRGNAME=`/bin/basename $0`
+SCRIPTDIR=`/bin/dirname $0`
+CONFIGGROUP_PARAM_DIR=""
+K2HDKC_CONF_NAME=""
+STARTUP_TIMEOUT=
+NORMAL_TIMEOUT=
+STOP_SERVICE=0
+
+while [ $# -ne 0 ]; do
+	if [ "X$1" = "X" ]; then
+		break;
+
+	elif [ "X$1" = "X-h" -o "X$1" = "X-H" -o "X$1" = "X--HELP" -o "X$1" = "X--help" ]; then
+		func_usage $PRGNAME
+		exit 0
+
+	elif [ "X$1" = "X-stop" -o "X$1" = "X-STOP" ]; then
+		STOP_SERVICE=1
+
+	elif [ "X$1" = "X-conf" -o "X$1" = "X-CONF" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-conf), check usage with the -h option."
+			exit 1
+		fi
+		K2HDKC_CONF_NAME=$1
+
+	elif [ "X$1" = "X-cgp" -o "X$1" = "X-CGP" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-cgp), check usage with the -h option."
+			exit 1
+		fi
+		CONFIGGROUP_PARAM_DIR=$1
+
+	elif [ "X$1" = "X-startup_timeout" -o "X$1" = "X-STARTUP_TIMOUT" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-startup_timeout), check usage with the -h option."
+			exit 1
+		fi
+		# check number
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -ge 1 ]; then
+			${ECHO} "The option(-startup_timeout) parameter is not number($1), check usage with the -h option."
+			exit 1
+		fi
+		if [ $1 -lt 0 ]; then
+			${ECHO} "The option(-startup_timeout) parameter must be positive value($1) or zero, check usage with the -h option."
+			exit 1
+		fi
+		STARTUP_TIMEOUT=$1
+
+	elif [ "X$1" = "X-normal_timeout" -o "X$1" = "X-NORMAL_TIMOUT" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "No parameter is specified for option(-normal_timeout), check usage with the -h option."
+			exit 1
+		fi
+		# check number
+		expr "$1" + 1 >/dev/null 2>&1
+		if [ $? -ge 1 ]; then
+			${ECHO} "The option(-normal_timeout) parameter is not number($1), check usage with the -h option."
+			exit 1
+		fi
+		if [ $1 -lt 0 ]; then
+			${ECHO} "The option(-normal_timeout) parameter must be positive value($1) or zero, check usage with the -h option."
+			exit 1
+		fi
+		NORMAL_TIMEOUT=$1
+
+	else
+		${ECHO} "Unknown option: $1, check usage with the -h option."
+		exit 1
+	fi
+	shift
+done
+
+#
+# Set default values
+#
+if [ "X${K2HDKC_CONF_NAME}" = "X" ]; then
+	K2HDKC_CONF_NAME="server.ini"
+fi
+if [ "X${CONFIGGROUP_PARAM_DIR}" = "X" ]; then
+	CONFIGGROUP_PARAM_DIR="/etc/k2hdkc"
+fi
+
+if [ "X${STARTUP_TIMEOUT}" = "X" ]; then
+	STARTUP_TIMEOUT=60
+fi
+if [ "X${NORMAL_TIMEOUT}" = "X" ]; then
+	NORMAL_TIMEOUT=1
+fi
+
+#--------------------------------------------------------------
+# Commmon values
+#--------------------------------------------------------------
+#
+# Configuration Group parameters
+#
+CONFFILE_EXTDATA_URL="extdata-url"
+CONFFILE_GROUP="cluster-name"
+CONFFILE_PORT="chmpx-server-port"
+CONFFILE_CTLPORT="chmpx-server-ctlport"
+CONFFILE_SLAVE_CTLPORT="chmpx-slave-ctlport"
+
+STARTUP_MARKING_FILE="${CONFIGGROUP_PARAM_DIR}/k2hdkc-startup-time"
+K2HDKC_CONF_FILE="${CONFIGGROUP_PARAM_DIR}/${K2HDKC_CONF_NAME}"
+OLD_MANDATORY_PARAM_FILE="${CONFIGGROUP_PARAM_DIR}/mandatory-params"
+CHMPX_PROC_PIDFILE="/tmp/k2hdkc-trovectl-chmpx.pid"
+K2HDKC_PROC_PIDFILE="/tmp/k2hdkc-trovectl-k2hdkc.pid"
+
+CONFFILE_EXTDATA_SH="extdata_k2hr3_trove.sh"
+TROVE_EXTDATA_SH_FILE="${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_SH}"
+CLIENT_USER_AGENT="extdata_k2hr3_trove"
+
+#
+# Check running at startup
+#
+if [ ! -f ${STARTUP_MARKING_FILE} ]; then
+	${DATE} > ${STARTUP_MARKING_FILE} 2>/dev/null
+	TIMEOUT_SECOND=${STARTUP_TIMEOUT}
+else
+	${DATE} >> ${STARTUP_MARKING_FILE} 2>/dev/null
+	TIMEOUT_SECOND=${NORMAL_TIMEOUT}
+fi
+
+#--------------------------------------------------------------
+# Utility functions
+#--------------------------------------------------------------
+#
+# Message functions
+#
+ERROR_MESSAGE_BUFF=""
+DEBUG_MESSAGE_BUFF=""
+reset_message()
+{
+	ERROR_MESSAGE_BUFF=""
+	DEBUG_MESSAGE_BUFF=""
+}
+
+set_error()
+{
+	ERROR_MESSAGE_BUFF="$1"
+}
+
+add_error()
+{
+	if [ "X${ERROR_MESSAGE_BUFF}" = "X" ]; then
+		ERROR_MESSAGE_BUFF="$1"
+	else
+		ERROR_MESSAGE_BUFF="${ERROR_MESSAGE_BUFF} : $1"
+	fi
+}
+
+insert_error()
+{
+	if [ "X${ERROR_MESSAGE_BUFF} "= "X" ]; then
+		ERROR_MESSAGE_BUFF="$1"
+	else
+		ERROR_MESSAGE_BUFF="$1 : ${ERROR_MESSAGE_BUFF}"
+	fi
+}
+
+set_debug()
+{
+	DEBUG_MESSAGE_BUFF="$1"
+}
+
+print_message()
+{
+	if [ "X${ERROR_MESSAGE_BUFF}" != "X" ]; then
+		echo "[ERROR] ${ERROR_MESSAGE_BUFF}"
+	fi
+	if [ "X${DEBUG_MESSAGE_BUFF}" != "X" ]; then
+		echo "[DEBUG] ${DEBUG_MESSAGE_BUFF}"
+	fi
+	reset_message
+
+	if [ "X$1" != "X" ]; then
+		echo "[MESSAGE] $1"
+	fi
+}
+
+#
+# Get pid from file
+#
+# $1 - pid file
+#
+get_pid()
+{
+	reset_message
+	PIDFILE=$1
+	if [ "X${PIDFILE}" = "X" ]; then
+		set_error "Pid file path is empty"
+		echo "0"
+		return 1
+	fi
+	if [ -f ${PIDFILE} -a -s ${PIDFILE} ]; then
+		PROC_PID=`${CAT} ${PIDFILE} | ${TR} -d '\n'`
+		if [ "X${PROC_PID}" != "X" ]; then
+			${PS} -p ${PROC_PID} >/dev/null 2>&1
+			if [ $? -ne 0 ]; then
+				set_debug "Pid(${PROC_PID}) is not running"
+				PROC_PID=0
+			fi
+		else
+			set_debug "Pid file(${PIDFILE}) has empty value"
+			PROC_PID=0
+		fi
+	else
+		set_debug "Not found pid file(${PIDFILE})"
+		PROC_PID=0
+	fi
+	echo "${PROC_PID}"
+	return 0
+}
+
+#
+# Stop process
+#
+# $1 - PID file path
+# $2 - Process name
+#
+stop_process()
+{
+	reset_message
+
+	if [ "X$1" = "X" -o "X$2" = "X" ]; then
+		set_error "This function needs two parameters."
+		return 1
+	fi
+	PROC_PIDFILE=$1
+	PROC_NAME=$2
+	MAX_LOOP_COUNT=10
+
+	while [ ${MAX_LOOP_COUNT} -ne 0 ]; do
+		PROC_PID=`get_pid ${PROC_PIDFILE}`
+		if [ ${PROC_PID} -eq 0 ]; then
+			set_debug "${PROC_NAME} process id=${PROC_PID} is 0, so do not need to stop it."
+			break;
+		fi
+
+		${SUDO} ${KILL} -HUP ${PROC_PID}
+		${SLEEP} 1
+		${PS} -p ${PROC_PID} >/dev/null 2>&1
+		if [ $? -ne 0 ]; then
+			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal HUP"
+			break;
+		fi
+
+		${SUDO} ${KILL} -TERM ${PROC_PID}
+		${SLEEP} 1
+		${PS} -p ${PROC_PID} >/dev/null 2>&1
+		if [ $? -ne 0 ]; then
+			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal TERM"
+			break;
+		fi
+
+		${SUDO} ${KILL} -KILL ${PROC_PID}
+		${SLEEP} 1
+		${PS} -p ${PROC_PID} >/dev/null 2>&1
+		if [ $? -ne 0 ]; then
+			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal KILL"
+			break;
+		fi
+
+		MAX_LOOP_COUNT=`expr ${MAX_LOOP_COUNT} - 1`
+		${SLEEP} 1
+	done
+
+	if [ ${MAX_LOOP_COUNT} -eq 0 ]; then
+		set_error "Could not stop ${PROC_NAME} process(pid=${PROC_PID}) despite ${MAX_LOOP_COUNT} attempts"
+		return 1
+	fi
+	return 0
+}
+
+#
+# Load extdata for script
+#
+# $1	extdata url
+#
+load_extdata_script()
+{
+	_LOAD_LOCAL_EXTDATA_URL=$1
+
+	if [ "X${_LOAD_LOCAL_EXTDATA_URL}" = "X" ]; then
+		add_error "The parameter is empty(extdata url=${_LOAD_LOCAL_EXTDATA_URL})"
+		return 1
+	fi
+
+	#
+	# Get extdata for script
+	#
+	GET_EXTDATA_RESULT=`curl -s -S -X GET -H "User-Agent: ${CLIENT_USER_AGENT}" -w "%{http_code}\n" -o ${TROVE_EXTDATA_SH_FILE} ${_LOAD_LOCAL_EXTDATA_URL} 2>&1`
+	if [ "X${GET_EXTDATA_RESULT}" != "X200" ];then
+		add_error "Could not get extdata with status(${GET_EXTDATA_RESULT}) from \"${_LOAD_LOCAL_EXTDATA_URL}\""
+		return 1
+	fi
+	if [ ! -f ${TROVE_EXTDATA_SH_FILE} -o ! -s ${TROVE_EXTDATA_SH_FILE} ]; then
+		add_error "Could not get extdata(empty) from \"${_LOAD_LOCAL_EXTDATA_URL}\""
+		return 1
+	fi
+
+	#
+	# Check extdata contents(it must be shell script)
+	#
+	CHECK_WORDS=`head -1 ${TROVE_EXTDATA_SH_FILE} 2>/dev/null | cut -c 1-2 2>/dev/null`
+	if [ "X${CHECK_WORDS}" != "X#!" ]; then
+		add_error "Loaded extdata does not start #! at first line."
+		return 1
+	fi
+	chmod 0555 ${TROVE_EXTDATA_SH_FILE} 2>/dev/null
+	if [ $? -ne 0 ]; then
+		add_error "Could not set executable permission to ${TROVE_EXTDATA_SH_FILE}."
+		return 1
+	fi
+
+	return 0;
+}
+
+
+#
+# Register Instance
+#
+# $1	extdata url
+#
+register_instance()
+{
+	reset_message
+
+	#
+	# Get extdata for script
+	#
+	LOAD_EXTDATA_RESULT_MSG=`load_extdata_script $1`
+	if [ $? -ne 0 ]; then
+		insert_error "Failed to load extdata for script"
+		return 1
+	fi
+
+	#
+	# Register instance
+	#
+	REGISTER_RESULT_MSG=`${TROVE_EXTDATA_SH_FILE} -r`
+	if [ $? -ne 0 ]; then
+		set_error "Failed to register instance"
+		add_error "${REGISTER_RESULT_MSG}"
+		return 1
+	fi
+
+	return 0
+}
+
+#
+# Delete Instance
+#
+delete_instance()
+{
+	reset_message
+
+	#
+	# Check extdata for script
+	#
+	if [ ! -f ${TROVE_EXTDATA_SH_FILE} ]; then
+		set_error "Not found ${TROVE_EXTDATA_SH_FILE} for deleting instance."
+		return 1;
+	fi
+
+	#
+	# Delete instance
+	#
+	DELETE_RESULT_MSG=`${TROVE_EXTDATA_SH_FILE} -d`
+	if [ $? -ne 0 ]; then
+		set_error "Failed to delete instance"
+		add_error "${DELETE_RESULT_MSG}"
+		return 1
+	fi
+
+	return 0
+}
+
+#
+# Stop and Serviceout
+#
+do_stop_k2hdkc()
+{
+	reset_message
+
+	#
+	# Stop k2hdkc process
+	#
+	# [NOTE]
+	# The status will automatically change to SUSPEND.
+	#
+	stop_process ${K2HDKC_PROC_PIDFILE} "k2hdkc"
+	if [ $? -ne 0 ]; then
+		insert_error "Something error is occurred in stopping k2hdkc process, but continue..."
+	fi
+
+	#
+	# Stop chmpx process
+	#
+	# [NOTE]
+	# The status will automatically change to SERVICEOUT.
+	# It is assumed that AUTOMERGE is ON, and I expect it to become SERVICEOUT
+	# at the same time as the chmpx process ends.
+	#
+	stop_process ${CHMPX_PROC_PIDFILE} "chmpx"
+	if [ $? -ne 0 ]; then
+		insert_error "Something error is occurred in stopping chmpx process, but continue..."
+	fi
+
+	return 0
+}
+
+#
+# Create configuration file
+#
+# $1 - configuration file name
+#
+create_configuration_file()
+{
+	reset_message
+
+	_LOAD_LOCAL_CONF_NAME=$1
+
+	if [ "X${_LOAD_LOCAL_CONF_NAME}" = "X" ]; then
+		add_error "The parameter is empty(conf file name=${_LOAD_LOCAL_CONF_NAME})"
+		return 1
+	fi
+
+	#
+	# Check extdata for script
+	#
+	if [ ! -f ${TROVE_EXTDATA_SH_FILE} ]; then
+		set_error "Not found ${TROVE_EXTDATA_SH_FILE} for creating configuration file."
+		return 1;
+	fi
+
+	#
+	# Create configuration file
+	#
+	CREATE_CONF_RESULT_MSG=`${TROVE_EXTDATA_SH_FILE} -l -s ${_LOAD_LOCAL_CONF_NAME}`
+	if [ $? -ne 0 ]; then
+		set_error "Failed to create configuration file(${_LOAD_LOCAL_CONF_NAME})."
+		add_error "${CREATE_CONF_RESULT_MSG}"
+		return 1
+	fi
+
+	return 0
+}
+
+#--------------------------------------------------------------
+# Main
+#--------------------------------------------------------------
+if [ ${STOP_SERVICE} -ne 1 ]; then
+	###########################
+	# Start
+	###########################
+	START_UNIXTIME=`/bin/date '+%s'`
+	LAG_UNIXTIME=0
+
+	${ECHO} "Start at ${START_UNIXTIME}"
+	while [ ${LAG_UNIXTIME} -le ${TIMEOUT_SECOND} ]; do
+		IS_BREAK_LOOP=0
+
+		reset_message
+		print_message "Start to main loop"
+
+		#
+		# Load new mandatory parameters
+		#
+		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} ]; then
+			CURRENT_EXTDATA_URL=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} | ${TR} -d '\n'`
+	        if [ "X${CURRENT_EXTDATA_URL}" = "XNone" ]; then
+				CURRENT_EXTDATA_URL=""
+	        fi
+		else
+			CURRENT_EXTDATA_URL=""
+		fi
+		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_GROUP} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_GROUP} ]; then
+			CURRENT_GROUP=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_GROUP} | ${TR} -d '\n'`
+	        if [ "X${CURRENT_GROUP}" = "XNone" ]; then
+				CURRENT_GROUP=""
+	        fi
+		else
+			CURRENT_GROUP=""
+		fi
+		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_PORT} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_PORT} ]; then
+			CURRENT_PORT=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_PORT} | ${TR} -d '\n'`
+	        if [ "X${CURRENT_PORT}" = "XNone" ]; then
+				CURRENT_PORT=""
+	        fi
+		else
+			CURRENT_PORT=""
+		fi
+		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_CTLPORT} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_CTLPORT} ]; then
+			CURRENT_CTLPORT=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_CTLPORT} | ${TR} -d '\n'`
+	        if [ "X${CURRENT_CTLPORT}" = "XNone" ]; then
+				CURRENT_CTLPORT=""
+	        fi
+		else
+			CURRENT_CTLPORT=""
+		fi
+		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_SLAVE_CTLPORT} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_SLAVE_CTLPORT} ]; then
+			CURRENT_SLAVE_CTLPORT=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_SLAVE_CTLPORT} | ${TR} -d '\n'`
+	        if [ "X${CURRENT_SLAVE_CTLPORT}" = "XNone" ]; then
+				CURRENT_SLAVE_CTLPORT=""
+	        fi
+		else
+			CURRENT_SLAVE_CTLPORT=""
+		fi
+
+		#
+		# Load old mandatory compressed parameters
+		#
+		if [ -f ${OLD_MANDATORY_PARAM_FILE} ]; then
+			OLD_MANDATORY_PARAMS=`${CAT} ${OLD_MANDATORY_PARAM_FILE} 2>/dev/null | ${TR} -d '\n'`
+			if [ "X${OLD_MANDATORY_PARAMS}" = "X" ]; then
+				OLD_MANDATORY_PARAMS=",,,,"
+			fi
+		else
+			OLD_MANDATORY_PARAMS=",,,,"
+		fi
+
+		#
+		# Check mandatory parameters
+		#
+		NEW_MANDATORY_PARAMS="${CURRENT_EXTDATA_URL},${CURRENT_GROUP},${CURRENT_PORT},${CURRENT_CTLPORT},${CURRENT_SLAVE_CTLPORT}"
+		if [ "X${NEW_MANDATORY_PARAMS}" = "X${OLD_MANDATORY_PARAMS}" ]; then
+			NOCHANGE_MANDATORY_PARAMS=1
+		else
+			NOCHANGE_MANDATORY_PARAMS=0
+		fi
+		if [ "X${CURRENT_EXTDATA_URL}" = "X" -o "X${CURRENT_GROUP}" = "X" -o "X${CURRENT_PORT}" = "X" -o "X${CURRENT_CTLPORT}" = "X" -o "X${CURRENT_SLAVE_CTLPORT}" = "X" ]; then
+			DEFICIENT_MANDATORY_PARAMS=1
+		else
+			DEFICIENT_MANDATORY_PARAMS=0
+		fi
+
+		#
+		# Update configuration files and control processes
+		#
+		if [ ${NOCHANGE_MANDATORY_PARAMS} -eq 1 ]; then
+			#
+			# Same mandatory parameters
+			#
+			print_message "Required parameters remain empty as before"
+
+			if [ ${DEFICIENT_MANDATORY_PARAMS} -eq 1 ]; then
+				#
+				# Nothing to do
+				#
+				print_message "The process should not have been started because there were no required parameters before. Again, there is no parameter, so nothing is done."
+				IS_BREAK_LOOP=1
+
+			else
+				#
+				# Check new server.ini from K2HR3, if changed, only update.
+				#
+				create_configuration_file ${K2HDKC_CONF_NAME}
+				if [ $? -ne 0 ]; then
+					print_message "Something error is occurred in creating configuration, but continue..."
+				else
+					print_message
+					IS_BREAK_LOOP=1
+				fi
+			fi
+
+		else
+			#
+			# Changed mandatory parameters
+			#
+
+			#
+			# Delete registration for this instance from K2HR3
+			#
+			delete_instance
+			if [ $? -ne 0 ]; then
+				print_message "Something error is occurred in removing instance, but continue..."
+			else
+				print_message
+			fi
+
+			#
+			# Do stop and serviceout
+			#
+			do_stop_k2hdkc
+			if [ $? -ne 0 ]; then
+				print_message "Something error is occurred in stop and serviceout, but continue..."
+			else
+				print_message
+			fi
+
+			#
+			# Remove configuration file
+			#
+			if [ -f ${K2HDKC_CONF_FILE} ]; then
+				${RM} -f ${K2HDKC_CONF_FILE}
+				print_message "Succeed to remove ${K2HDKC_CONF_FILE}"
+			fi
+
+			#
+			# New mandatory parameters are existed, restart processes
+			#
+			if [ ${DEFICIENT_MANDATORY_PARAMS} -ne 1 ]; then
+				#
+				# Register instance to K2HR3
+				#
+				register_instance ${CURRENT_EXTDATA_URL}
+				if [ $? -ne 0 ]; then
+					print_message "Something error is occurred in registering instance, but continue..."
+				else
+					print_message
+				fi
+
+				#
+				# Create configuration file
+				#
+				create_configuration_file ${K2HDKC_CONF_NAME}
+				if [ $? -ne 0 ]; then
+					print_message "Something error is occurred in creating configuration, but continue..."
+				else
+					print_message
+					IS_BREAK_LOOP=1
+				fi
+			else
+				IS_BREAK_LOOP=1
+			fi
+		fi
+
+		if [ ${IS_BREAK_LOOP} -eq 1 ]; then
+			echo ${NEW_MANDATORY_PARAMS} > ${OLD_MANDATORY_PARAM_FILE}
+			print_message "Finish to run without any error"
+			break;
+		fi
+
+		${SLEEP} 1
+		EXEC_UNIXTIME=`/bin/date '+%s'`
+		LAG_UNIXTIME=`expr ${EXEC_UNIXTIME} - ${START_UNIXTIME}`
+	done
+
+	if [ ${LAG_UNIXTIME} -gt ${TIMEOUT_SECOND} ]; then
+		print_message  "Failed to create(update) ${K2HDKC_CONF_FILE} by timeout(${TIMEOUT_SECOND}s)"
+	fi
+
+else
+	###########################
+	# Stop
+	###########################
+	STOP_UNIXTIME=`/bin/date '+%s'`
+	${ECHO} "Stop at ${STOP_UNIXTIME}"
+
+	#
+	# Delete registration for this instance from K2HR3
+	#
+	delete_instance
+	if [ $? -ne 0 ]; then
+		print_message "Something error is occurred in removing instance, but continue..."
+	else
+		print_message
+	fi
+
+	#
+	# Do stop and serviceout
+	#
+	do_stop_k2hdkc
+	if [ $? -ne 0 ]; then
+		print_message "Something error is occurred in stop and serviceout, but continue..."
+	else
+		print_message
+	fi
+
+	#
+	# Remove configuration file
+	#
+	if [ -f ${K2HDKC_CONF_FILE} ]; then
+		${RM} -f ${K2HDKC_CONF_FILE}
+		print_message "Succeed to remove ${K2HDKC_CONF_FILE}"
+	fi
+
+	#
+	# Remove mandatory compressed parameter file
+	#
+	if [ -f ${OLD_MANDATORY_PARAM_FILE} ]; then
+		${RM} -f ${OLD_MANDATORY_PARAM_FILE}
+		print_message "Succeed to remove ${OLD_MANDATORY_PARAM_FILE}"
+	fi
+
+	print_message "Finish to stop processes"
+fi
+
+exit 0
+
+#
+# VIM modelines
+#
+# vim:set ts=4 fenc=utf-8:
+#

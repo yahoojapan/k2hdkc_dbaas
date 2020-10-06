@@ -1,0 +1,468 @@
+#!/bin/sh
+#
+# K2HR3 PACK for K2HDKC DBaaS based on Trove
+#
+# Copyright 2020 Yahoo Japan Corporation
+#
+# K2HDKC DBaaS is a Database as a Service compatible with Trove which
+# is DBaaS for OpenStack.
+# Using K2HR3 as backend and incorporating it into Trove to provide
+# DBaaS functionality. K2HDKC, K2HR3, CHMPX and K2HASH are components
+# provided as AntPickax.
+# 
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Takeshi Nakatani
+# CREATE:   Mon Sep 14 2020
+# REVISION:
+#
+
+#----------------------------------------------------------
+# Values expanded by the K2HR3 EXTDATA API
+#----------------------------------------------------------
+ROLE_NAME={{= %K2HR3_ROLE_NAME% }}
+ROLE_TENANT={{= %K2HR3_ROLE_TENANT% }}
+ROLE_TOKEN={{= %K2HR3_ROLE_TOKEN% }}
+K2HR3_API_HOST={{= %K2HR3_API_HOST_URI% }}
+ERROR_MSG={{= %K2HR3_ERROR_MSG% }}
+
+#----------------------------------------------------------
+# Common variables
+#----------------------------------------------------------
+#
+# Escape sequence
+#
+if [ -t 1 ]; then
+	CDEF=$(printf '\033[0m')
+	CREV=$(printf '\033[7m')
+	CRED=$(printf '\033[31m')
+	CGRN=$(printf '\033[32m')
+else
+	CDEF=""
+	CREV=""
+	CRED=""
+	CGRN=""
+fi
+
+#
+# Arguments
+#
+CMDLINE_PROCESS_NAME=$0
+PROGRAM_NAME=`basename ${CMDLINE_PROCESS_NAME}`
+SCRIPTPATH=`dirname ${CMDLINE_PROCESS_NAME}`
+
+#
+# Local variables
+#
+CURRENT_TIME=`date "+%Y-%m-%d %H:%M:%S,%3N"`
+
+#
+# Cloud-init
+#
+CLOUDINIT_DATA_DIR="/var/lib/cloud/data"
+INSTANCE_ID_FILE="${CLOUDINIT_DATA_DIR}/instance-id"
+
+#
+# Trove Configuration Group
+#
+TROVE_INPUT_GROUP_FILE="cluster-name"
+TROVE_INPUT_PORT_FILE="chmpx-server-port"
+TROVE_INPUT_CTLPORT_FILE="chmpx-server-ctlport"
+TROVE_INPUT_SLAVE_CTLPORT_FILE="chmpx-slave-ctlport"
+
+#
+# Output file names
+#
+OUTPUT_ROLE_NAME_FILE="extdata_role_name"
+OUTPUT_ROLE_TENANT_FILE="extdata_role_tenant"
+OUTPUT_ROLE_TOKEN_FILE="extdata_role_token"
+OUTPUT_K2HR3_API_HOST_FILE="extdata_role_api_host_uri"
+
+#
+# Python
+#
+python --version >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+	PYBIN="python"
+else
+	python3 --version >/dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		PYBIN="python3"
+	else
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} The python program could not be found${CDEF}" 1>&2
+		exit 1
+	fi
+fi
+
+#----------------------------------------------------------
+# Functions
+#----------------------------------------------------------
+#
+# $1:	Program name
+#
+func_usage()
+{
+	echo ""
+	echo "Usage:  $1 [--register(-r) | --delete(-d) | --load_resource(-l)] [--config_dir(-c) <path>] [--serverini_name(-s) <filename>] [--help(-h)]"
+	echo ""
+	echo "    --register(-r)                Register host(vm) to role member on k2hr3"
+	echo "    --delete(-d)                  Delete host(vm) from role member on k2hr3"
+	echo "    --load_resource(-l)           Load resource and save it"
+	echo "    --config_dir(-c) <path>       Configuarion directory path for loading/saving files(default: /etc/k2hdkc)"
+	echo "    --serverini_name(-s) <name>   Configuration file name for K2HDKC(default: server.ini)"
+	echo "    --help(-h)                    print help"
+	echo ""
+}
+
+#
+# $1:	filepath
+# $2:	value
+#
+check_and_overwrite_file()
+{
+	_LOCAL_CO_FILE=$1
+	_LOCAL_CO_VALUE=$2
+
+	if [ -f ${_LOCAL_CO_FILE} ]; then
+		_LOCAL_CO_TMP=`cat ${_LOCAL_CO_FILE} 2>/dev/null | tr -d '\n' 2>/dev/null`
+		if [ "X${_LOCAL_CO_TMP}" = "X${_LOCAL_CO_VALUE}" ]; then
+			#
+			# Same content value
+			#
+			return 0;
+		fi
+	fi
+
+	echo -n "${_LOCAL_CO_VALUE}" > ${_LOCAL_CO_FILE} 2>/dev/null
+	if [ $? -ne 0 ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not save "${_LOCAL_CO_VALUE}" to ${_LOCAL_CO_FILE}.${CDEF}"
+		return 1;
+	fi
+	chmod 600 ${_LOCAL_CO_FILE} 2>/dev/null
+	if [ $? -ne 0 ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not change mode 600 to ${_LOCAL_CO_FILE}.${CDEF}"
+		return 1;
+	fi
+	echo "${CGRN}${CREV}[MSG]${CDEF} Succeed to save the value to ${_LOCAL_CO_FILE}."
+	return 0;
+}
+
+#
+# $1:	filepath
+#
+check_and_load_file()
+{
+	_LOCAL_CL_FILE=$1
+
+	if [ ! -f ${_LOCAL_CL_FILE} ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not read ${_LOCAL_CL_FILE}.${CDEF}" 1>&2
+		return 1;
+	fi
+
+	_LOCAL_CO_RESULT=`cat ${_LOCAL_CL_FILE} 2>/dev/null | tr -d '\n' 2>/dev/null`
+	echo ${_LOCAL_CO_RESULT}
+
+	return 0;
+}
+
+#----------------------------------------------------------
+# Options
+#----------------------------------------------------------
+PROG_MODE=
+CONFIGDIR=
+OUTPUT_SERVER_INI_FILE=
+while [ $# -ne 0 ]; do
+	if [ "X$1" = "X" ]; then
+		break
+
+	elif [ "X$1" = "X-h" -o "X$1" = "X-H" -o "X$1" = "X--help" -o "X$1" = "X--HELP" ]; then
+		func_usage $PROGRAM_NAME
+		exit 0
+
+	elif [ "X$1" = "X-r" -o "X$1" = "X-R" -o "X$1" = "X--register" -o "X$1" = "X--REGISTER" ]; then
+		if [ "X${PROG_MODE}" != "X" ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --register(-r) option cannot be set, because another mode option has already been set.${CDEF}" 1>&2
+			exit 1
+		fi
+		PROG_MODE="r"
+
+	elif [ "X$1" = "X-d" -o "X$1" = "X-D" -o "X$1" = "X--delete" -o "X$1" = "X--DELETE" ]; then
+		if [ "X${PROG_MODE}" != "X" ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --delete(-d) option cannot be set, because another mode option has already been set.${CDEF}" 1>&2
+			exit 1
+		fi
+		PROG_MODE="d"
+
+	elif [ "X$1" = "X-l" -o "X$1" = "X-L" -o "X$1" = "X--load_resource" -o "X$1" = "X--LOAD_RESOURCE" ]; then
+		if [ "X${PROG_MODE}" != "X" ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --load_resource(-l) option cannot be set, because another mode option has already been set.${CDEF}" 1>&2
+			exit 1
+		fi
+		PROG_MODE="l"
+
+	elif [ "X$1" = "X-c" -o "X$1" = "X-C" -o "X$1" = "X--config_dir" -o "X$1" = "X--CONFIG_DIR" ]; then
+		if [ "X${CONFIGDIR}" != "X" ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --config_dir(-c) option is already specified.${CDEF}" 1>&2
+			exit 1
+		fi
+		shift
+		if [ $# -eq 0 ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --config_dir(-c) option needs parameter.${CDEF}" 1>&2
+			exit 1
+		fi
+		if [ ! -d $1 ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} \"$1\" directory specified by the --config_dir(-c) option does not exist.${CDEF}" 1>&2
+			exit 1
+		fi
+		CONFIGDIR=$1
+
+	elif [ "X$1" = "X-s" -o "X$1" = "X-S" -o "X$1" = "X--serverini_name" -o "X$1" = "X--SERVERINI_NAME" ]; then
+		if [ "X${OUTPUT_SERVER_INI_FILE}" != "X" ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --serverini_name(-s) option is already specified.${CDEF}" 1>&2
+			exit 1
+		fi
+		shift
+		if [ $# -eq 0 ]; then
+			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} --serverini_name(-s) option needs parameter.${CDEF}" 1>&2
+			exit 1
+		fi
+		OUTPUT_SERVER_INI_FILE=$1
+
+	else
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} $1 option is unknown.${CDEF}" 1>&2
+		exit 1
+	fi
+	shift
+done
+
+if [ "X${PROG_MODE}" = "X" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} You must specify one of the \"--register(-r)\", \"--delete(-d)\" or \"--load_resource(-l)\" options.${CDEF}" 1>&2
+	exit 1
+fi
+if [ "X${CONFIGDIR}" = "X" ]; then
+	CONFIGDIR="/etc/k2hdkc"
+	if [ ! -d ${CONFIGDIR} ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} \"${CONFIGDIR}\" directory does not exist.${CDEF}" 1>&2
+		exit 1
+	fi
+fi
+if [ "X${OUTPUT_SERVER_INI_FILE}" = "X" ]; then
+	OUTPUT_SERVER_INI_FILE="server.ini"
+fi
+
+#----------------------------------------------------------
+# Check and Save common parameters
+#----------------------------------------------------------
+#
+# Check instance id and file for CUK
+#
+if [ ! -f ${INSTANCE_ID_FILE} ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not read ${INSTANCE_ID_FILE}.${CDEF}" 1>&2
+	exit 1
+fi
+INSTANCE_ID=`cat ${INSTANCE_ID_FILE} 2>/dev/null | tr -d '\n' 2>/dev/null`
+CUK_PARAMETER="cuk=${INSTANCE_ID}"
+EXTRA_PARAMETER="extra=openstack-auto-v1"
+LOCAL_HOSTNAME=`hostname`
+TAG_PARAMETER="tag=${LOCAL_HOSTNAME}"
+
+#
+# Check common values
+#
+if [ "X${ROLE_NAME}" = "X" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} ROLE_NAME value is empty.${CDEF}" 1>&2
+	exit 1
+fi
+if [ "X${ROLE_TENANT}" = "X" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} ROLE_TENANT value is empty.${CDEF}" 1>&2
+	exit 1
+fi
+if [ "X${ROLE_TOKEN}" = "X" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} ROLE_TOKEN value is empty.${CDEF}" 1>&2
+	exit 1
+fi
+if [ "X${K2HR3_API_HOST}" = "X" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} K2HR3_API_HOST value is empty.${CDEF}" 1>&2
+	exit 1
+fi
+if [ "X${ERROR_MSG}" != "X" -a "X${ERROR_MSG}" != "Xnull" ]; then
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} This ${PROGRAM_NAME} script cannot work properly because an error(\"${ERROR_MSG}\") occurred while getting EXTDATA.${CDEF}" 1>&2
+	exit 1
+fi
+
+#
+# Over writes values if the value is changed
+#
+TMP_RESULT_MSG=`check_and_overwrite_file "${CONFIGDIR}/${OUTPUT_ROLE_NAME_FILE}" "${ROLE_NAME}"`
+TMP_RESULT_CODE=$?
+if [ "X${TMP_RESULT_MSG}" != "X" ]; then
+	echo ${TMP_RESULT_MSG} 1>&2
+fi
+if [ ${TMP_RESULT_CODE} -ne 0 ]; then
+	exit 1;
+fi
+TMP_RESULT_MSG=`check_and_overwrite_file "${CONFIGDIR}/${OUTPUT_ROLE_TENANT_FILE}" "${ROLE_TENANT}"`
+TMP_RESULT_CODE=$?
+if [ "X${TMP_RESULT_MSG}" != "X" ]; then
+	echo ${TMP_RESULT_MSG} 1>&2
+fi
+if [ ${TMP_RESULT_CODE} -ne 0 ]; then
+	exit 1;
+fi
+TMP_RESULT_MSG=`check_and_overwrite_file "${CONFIGDIR}/${OUTPUT_ROLE_TOKEN_FILE}" "${ROLE_TOKEN}"`
+TMP_RESULT_CODE=$?
+if [ "X${TMP_RESULT_MSG}" != "X" ]; then
+	echo ${TMP_RESULT_MSG} 1>&2
+fi
+if [ ${TMP_RESULT_CODE} -ne 0 ]; then
+	exit 1;
+fi
+TMP_RESULT_MSG=`check_and_overwrite_file "${CONFIGDIR}/${OUTPUT_K2HR3_API_HOST_FILE}" "${K2HR3_API_HOST}"`
+TMP_RESULT_CODE=$?
+if [ "X${TMP_RESULT_MSG}" != "X" ]; then
+	echo ${TMP_RESULT_MSG} 1>&2
+fi
+if [ ${TMP_RESULT_CODE} -ne 0 ]; then
+	exit 1;
+fi
+
+#----------------------------------------------------------
+# Registration
+#----------------------------------------------------------
+if [ "X${PROG_MODE}" = "Xr" ]; then
+	echo "${CGRN}${CREV}[MSG]${CDEF} ${CURRENT_TIME} Start to register host(vm) to K2HR3." 1>&2
+
+	#
+	# Register host(vm)
+	#
+	REGISTER_RESULT=`curl -s -S -X PUT -H "x-auth-token: R=${ROLE_TOKEN}" "${K2HR3_API_HOST}/v1/role/${ROLE_NAME}?${CUK_PARAMETER}&${EXTRA_PARAMETER}&${TAG_PARAMETER}" 2>&1`
+	if [ $? -ne 0 ];then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not register to role member with curl error.${CDEF}" 1>&2
+		exit 1
+	fi
+	REGISTER_RESULT_VALUE=`echo ${REGISTER_RESULT} | ${PYBIN} -m json.tool | grep result | cut -d':' -f2,2 | sed 's/^[ ,]\+\|[ ,]\+$//g' | tr '[:lower:]' '[:upper:]'`
+	if [ "X${REGISTER_RESULT_VALUE}" != "XTRUE" ]; then
+		REGISTER_RESULT_MSG=`echo ${REGISTER_RESULT} | ${PYBIN} -m json.tool | grep message | cut -d':' -f2,2 | sed 's/^[ ,]\+\|[ ,]\+$//g'`
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Failed to put access for registering by \"${REGISTER_RESULT_MSG}\".${CDEF}" 1>&2
+		exit 1
+	fi
+
+	echo "${CGRN}${CREV}[SUCCESS]${CDEF} ${CURRENT_TIME} Register host(vm: ${INSTANCE_ID}) to K2HR3 role(${ROLE_NAME})." 1>&2
+
+#----------------------------------------------------------
+# Deletion
+#----------------------------------------------------------
+elif [ "X${PROG_MODE}" = "Xd" ]; then
+	echo "${CGRN}${CREV}[MSG]${CDEF} ${CURRENT_TIME} Start to delete host(vm) from K2HR3." 1>&2
+
+	#
+	# Delete host(vm)
+	#
+	DELETE_RESULT=`curl -s -S -X DELETE -o /dev/null -w "%{http_code}\n" "${K2HR3_API_HOST}/v1/role/${ROLE_NAME}?${CUK_PARAMETER}&${EXTRA_PARAMETER}" 2>&1`
+	if [ "X${DELETE_RESULT}" != "X204" ];then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not delete from role member with curl result status(${DELETE_RESULT}).${CDEF}" 1>&2
+		exit 1
+	fi
+
+	echo "${CGRN}${CREV}[SUCCESS]${CDEF} ${CURRENT_TIME} Delete host(vm: ${INSTANCE_ID}) from K2HR3 role(${ROLE_NAME})." 1>&2
+
+#----------------------------------------------------------
+# Get and Save resource
+#----------------------------------------------------------
+elif [ "X${PROG_MODE}" = "Xl" ]; then
+	echo "${CGRN}${CREV}[MSG]${CDEF} ${CURRENT_TIME} Start to load resource(${OUTPUT_SERVER_INI_FILE}) from K2HR3." 1>&2
+
+	#
+	# Check group name
+	#
+	GROUP_NAME=`check_and_load_file "${CONFIGDIR}/${TROVE_INPUT_GROUP_FILE}"`
+	if [ $? -ne 0 ]; then
+		echo ${GROUP_NAME} 1>&2
+		exit 1;
+	fi
+
+	#
+	# Make resource name(yrn path)
+	#
+	RESOURCE_NAME="${ROLE_TENANT}:resource:${GROUP_NAME}/server"
+
+	#
+	# Check ports
+	#
+	# [NOTE] These are only for checking, these value are not used in this script.
+	#
+	PORT_NUMBER=`check_and_load_file "${CONFIGDIR}/${TROVE_INPUT_PORT_FILE}"`
+	if [ $? -ne 0 ]; then
+		echo ${PORT_NUMBER} 1>&2
+		exit 1;
+	fi
+	CTLPORT_NUMBER=`check_and_load_file "${CONFIGDIR}/${TROVE_INPUT_CTLPORT_FILE}"`
+	if [ $? -ne 0 ]; then
+		echo ${CTLPORT_NUMBER} 1>&2
+		exit 1;
+	fi
+	SLAVE_CTLPORT_NUMBER=`check_and_load_file "${CONFIGDIR}/${TROVE_INPUT_SLAVE_CTLPORT_FILE}"`
+	if [ $? -ne 0 ]; then
+		echo ${SLAVE_CTLPORT_NUMBER} 1>&2
+		exit 1;
+	fi
+
+	#
+	# Get resource
+	#
+	GET_RESOURCE_RESULT=`curl -s -S -X GET -H "Content-Type: application/json" "${K2HR3_API_HOST}/v1/resource/${RESOURCE_NAME}?${CUK_PARAMETER}&role=${ROLE_NAME}&type=string" 2>&1`
+	if [ $? -ne 0 ];then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not get resource.${CDEF}" 1>&2
+		exit 1
+	fi
+	GET_RESOURCE_RESULT_VALUE=`echo ${GET_RESOURCE_RESULT} | ${PYBIN} -m json.tool | grep result | cut -d':' -f2,2 | sed 's/^[ ,]\+\|[ ,]\+$//g' | tr '[:lower:]' '[:upper:]'`
+	if [ "X${GET_RESOURCE_RESULT_VALUE}" != "XTRUE" ]; then
+		GET_RESOURCE_RESULT_MSG=`echo ${GET_RESOURCE_RESULT} | ${PYBIN} -m json.tool | grep message | cut -d':' -f2,2 | sed 's/^[ ,]\+\|[ ,]\+$//g'`
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Failed to get resource by \"${GET_RESOURCE_RESULT_MSG}\".${CDEF}" 1>&2
+		exit 1
+	fi
+
+	#
+	# Save resource as OUTPUT_SERVER_INI_FILE
+	#
+	OUTPUT_SERVER_INI_PATH="${CONFIGDIR}/${OUTPUT_SERVER_INI_FILE}"
+	rm -f ${OUTPUT_SERVER_INI_PATH}
+	echo ${GET_RESOURCE_RESULT} | ${PYBIN} -m json.tool | grep '"resource": ' | sed -e 's/"resource"://g' -e 's/^[ ,]\+\|[ ,]\+$//g' -e 's/^\"//g' -e 's/\"$//g' -e 's/\\n/\n/g' | sed -e "s/__TROVE_K2HDKC_SELF_CUK__/${INSTANCE_ID}/g" > ${OUTPUT_SERVER_INI_PATH}
+	if [ ! -f ${OUTPUT_SERVER_INI_PATH} ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not make ${OUTPUT_SERVER_INI_PATH} from resource.${CDEF}" 1>&2
+		exit 1
+	fi
+	if [ ! -s ${OUTPUT_SERVER_INI_PATH} ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not make ${OUTPUT_SERVER_INI_PATH} from resource.${CDEF}" 1>&2
+		rm -f ${OUTPUT_SERVER_INI_PATH}
+		exit 1
+	fi
+	chmod 644 ${OUTPUT_SERVER_INI_PATH} 2>/dev/null
+	if [ $? -ne 0 ]; then
+		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Could not change mode 600 to ${OUTPUT_SERVER_INI_PATH}, but continue...${CDEF}" 1>&2
+	fi
+
+	echo "${CGRN}${CREV}[SUCCESS]${CDEF} ${CURRENT_TIME} Make ${OUTPUT_SERVER_INI_PATH} from resource." 1>&2
+
+#----------------------------------------------------------
+# Error
+#----------------------------------------------------------
+else
+	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} Internal error in ${PROGRAM_NAME} script.${CDEF}" 1>&2
+	exit 1
+fi
+
+#----------------------------------------------------------
+# Finish
+#----------------------------------------------------------
+exit 0
+
+#
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: expandtab sw=4 ts=4 fdm=marker
+# vim<600: expandtab sw=4 ts=4
+#

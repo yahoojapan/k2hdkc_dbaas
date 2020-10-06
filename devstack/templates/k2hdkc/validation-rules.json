@@ -1,0 +1,40 @@
+{
+    "configuration-parameters": [
+        {
+            "name": "cluster-name",
+            "description": "K2HDKC Cluster name",
+            "restart_required": false,
+            "type": "string"
+        },
+        {
+            "name": "extdata-url",
+            "description": "extdata URL to K2HR3 (Do NOT set this value because sets automatically)",
+            "restart_required": false,
+            "type": "string"
+        },
+        {
+            "name": "chmpx-server-port",
+            "description": "CHMPX server node port number",
+            "restart_required": false,
+            "max": 65535,
+            "min": 1000,
+            "type": "integer"
+        },
+        {
+            "name": "chmpx-server-ctlport",
+            "description": "CHMPX server node control port number",
+            "restart_required": false,
+            "max": 65535,
+            "min": 1000,
+            "type": "integer"
+        },
+        {
+            "name": "chmpx-slave-ctlport",
+            "description": "CHMPX slave node port number",
+            "restart_required": false,
+            "max": 65535,
+            "min": 1000,
+            "type": "integer"
+        }
+    ]
+}

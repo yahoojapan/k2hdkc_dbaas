@@ -1,0 +1,9 @@
+#!/bin/sh
+
+set -e
+set -o xtrace
+
+# Install the k2hdkc and run it.
+SRCDIR=$(cd $(dirname "$0") && pwd)
+sh ${SRCDIR}/dkc/setup_dkc.sh -d
+

@@ -12,53 +12,10 @@
 # For the full copyright and license information, please view
 # the license file that was distributed with this source code.
 #
-# AUTHOR:   Takeshi Nakatani
+# AUTHOR:   Hirotaka Wakabayashi
 # CREATE:   Mon Sep 14 2020
 # REVISION:
 #
-
-#
-# archive files and backups
-#
-*.tgz
-*.gz
-*.pyc
-*.rpm
-*.deb
-*.swp
-*.bak
-*.xml
-*.qcow2
-
-#
-# Logs
-#
-*.log
-
-#
-# Runtime data
-#
-pids
-*.pid
-*.seed
-*.pid.lock
-
-#
-# dotenv environment variables file
-#
-*.env
-*.rc
-
-#
-# Secret keys
-#
-id_rsa
-
-#
-# Local file according to the environment
-#
-# ex) .custom
-custom_internal_*
 
 #
 # Local variables:

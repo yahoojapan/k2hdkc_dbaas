@@ -1,0 +1,186 @@
+#!/bin/sh
+#
+# K2HDKC Cluster on OpenStack Trove
+#
+# Copyright 2020 Yahoo! Japan Corporation.
+#
+# A utility that links the K2HDKC cluster as a Database as a Service
+# (DBaaS) with the OpenStack Trove system.
+# This system is a DBaaS that operates a K2HDKC cluster by controlling
+# from Trove (OpenStack) and K2HR3. 
+# K2HDKC is a distributed KVS(Key Value Store) provided by Yahoo! JAPAN.
+#
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Takeshi Nakatani
+# CREATE:   Thr Jun 4 2020
+# REVISION:
+#
+
+#----------------------------------------------------------
+# Common variables
+#----------------------------------------------------------
+ECHO="/bin/echo"
+MV="/bin/mv"
+RM="/bin/rm"
+
+#
+# Escape sequence
+#
+CDEF=$(printf '\033[0m')
+CREV=$(printf '\033[7m')
+CRED=$(printf '\033[31m')
+CGRN=$(printf '\033[32m')
+
+#
+# Local variables
+#
+CURRENT_TIME=`date "+%Y-%m-%d %H:%M:%S,%3N"`
+
+#--------------------------------------------------------------
+# Usage and Options
+#--------------------------------------------------------------
+#
+# Usage
+#
+func_usage()
+{
+	${ECHO} ""
+	${ECHO} "Usage:  $1 {-h | --help} {options}"
+	${ECHO} "  -h(--help)       print help."
+	${ECHO} "  -cgp <dir>       specify output directory path for configuration group parameters and etc.(default: /etc/k2hdkc)"
+	${ECHO} "  -extdata <file>  specify shell script name which loaded from extdata on k2hr3(default: extdata_k2hr3_trove.sh)"
+	${ECHO} "  -conf <file>     specify output configuration(ini) file name(default: server.ini)"
+	${ECHO} ""
+}
+
+#
+# Check options
+#
+PRGNAME=`/bin/basename $0`
+SCRIPTDIR=`/bin/dirname $0`
+CONFIGGROUP_PARAM_DIR=""
+K2HDKC_CONF_NAME=""
+TROVE_EXTDATA_SH_NAME=""
+
+while [ $# -ne 0 ]; do
+	if [ "X$1" = "X" ]; then
+		break;
+
+	elif [ "X$1" = "X-h" -o "X$1" = "X-H" -o "X$1" = "X--HELP" -o "X$1" = "X--help" ]; then
+		func_usage $PRGNAME
+		exit 0
+
+	elif [ "X$1" = "X-conf" -o "X$1" = "X-CONF" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} No parameter is specified for option(-conf), check usage with the -h option.${CDEF}" 1>&2
+			exit 1
+		fi
+		K2HDKC_CONF_NAME=$1
+
+	elif [ "X$1" = "X-cgp" -o "X$1" = "X-CGP" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} No parameter is specified for option(-cgp), check usage with the -h option.${CDEF}" 1>&2
+			exit 1
+		fi
+		CONFIGGROUP_PARAM_DIR=$1
+
+	elif [ "X$1" = "X-extdata" -o "X$1" = "X-EXTDATA" ]; then
+		shift
+		if [ "X$1" = "X" ]; then
+			${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} No parameter is specified for option(-extdata), check usage with the -h option.${CDEF}" 1>&2
+			exit 1
+		fi
+		TROVE_EXTDATA_SH_NAME=$1
+
+	else
+		${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} Unknown option: $1, check usage with the -h option.${CDEF}" 1>&2
+		exit 1
+	fi
+	shift
+done
+
+#
+# Set default values
+#
+if [ "X${K2HDKC_CONF_NAME}" = "X" ]; then
+	K2HDKC_CONF_NAME="server.ini"
+fi
+if [ "X${CONFIGGROUP_PARAM_DIR}" = "X" ]; then
+	CONFIGGROUP_PARAM_DIR="/etc/k2hdkc"
+fi
+
+if [ "X${TROVE_EXTDATA_SH_NAME}" = "X" ]; then
+	TROVE_EXTDATA_SH_NAME="extdata_k2hr3_trove.sh"
+fi
+K2HDKC_CONF_FILE="${CONFIGGROUP_PARAM_DIR}/${K2HDKC_CONF_NAME}"
+K2HDKC_CONF_TMP_NAME="${K2HDKC_CONF_NAME}.tmp"
+K2HDKC_CONF_TMP_FILE="${CONFIGGROUP_PARAM_DIR}/${K2HDKC_CONF_TMP_NAME}"
+TROVE_EXTDATA_SH_FILE="${CONFIGGROUP_PARAM_DIR}/${TROVE_EXTDATA_SH_NAME}"
+
+#--------------------------------------------------------------
+# Main
+#--------------------------------------------------------------
+echo "${CGRN}${CREV}[MSG]${CDEF} ${CURRENT_TIME} Start to check and update configration file(${K2HDKC_CONF_FILE}).${CDEF}" 1>&2
+
+#
+# Check shell script
+#
+if [ ! -f ${TROVE_EXTDATA_SH_FILE} -o ! -s ${TROVE_EXTDATA_SH_FILE} ]; then
+	${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} ${CURRENT_TIME} ${TROVE_EXTDATA_SH_FILE} is not found or empty file.${CDEF}" 1>&2
+	exit 1
+fi
+
+#
+# Remove temporary file if exists
+#
+if [ -f ${K2HDKC_CONF_TMP_FILE} ]; then
+	${ECHO} "${CRED}${CREV}[WARN]${CDEF}${CRED} Found ${K2HDKC_CONF_TMP_FILE} for temporary file, thus remove it.${CDEF}" 1>&2
+	${RM} -f ${K2HDKC_CONF_TMP_FILE}
+fi
+
+#
+# Create configuration file
+#
+CREATE_CONF_RESULT_MSG=`${TROVE_EXTDATA_SH_FILE} -l -c ${CONFIGGROUP_PARAM_DIR} -s ${K2HDKC_CONF_TMP_NAME}`
+if [ $? -ne 0 ]; then
+	${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} ${CURRENT_TIME} Failed to create configuration temporary file(${K2HDKC_CONF_TMP_FILE}) by ${CREATE_CONF_RESULT_MSG}.${CDEF}" 1>&2
+	exit 1
+fi
+
+#
+# Check updates
+#
+diff ${K2HDKC_CONF_TMP_FILE} ${K2HDKC_CONF_FILE} >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+	${RM} -f ${K2HDKC_CONF_TMP_FILE}
+	if [ $? -ne 0 ]; then
+		${ECHO} "${CRED}${CREV}[WARN]${CDEF}${CRED} Could not remove the temporary configuration file(${K2HDKC_CONF_TMP_FILE}), but continue...${CDEF}" 1>&2
+	fi
+	${ECHO} "${CGRN}${CREV}[SUCCESS]${CDEF} ${CURRENT_TIME} There are no changes to the configuration file(${K2HDKC_CONF_FILE}).${CDEF}" 1>&2
+	exit 0
+fi
+
+#
+# Update the file
+#
+${MV} ${K2HDKC_CONF_TMP_FILE} ${K2HDKC_CONF_FILE} >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+	${ECHO} "${CRED}${CREV}[ERROR]${CDEF}${CRED} ${CURRENT_TIME} Could not update the configuration file(${K2HDKC_CONF_FILE}).${CDEF}" 1>&2
+	exit 1
+fi
+
+#
+# Finish
+#
+${ECHO} "${CGRN}${CREV}[SUCCESS]${CDEF} ${CURRENT_TIME} Updated the configuration file(${K2HDKC_CONF_FILE}).${CDEF}" 1>&2
+exit 0
+
+#
+# VIM modelines
+#
+# vim:set ts=4 fenc=utf-8:
+#

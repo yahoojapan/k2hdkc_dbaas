@@ -1,0 +1,8 @@
+[Unit]
+Description=k2hdkc check configration timer
+ConditionPathExists=/etc/k2hdkc/extdata_k2hr3_trove.sh
+
+[Service]
+Type=oneshot
+User=root
+ExecStart=/usr/libexec/k2hdkc-check-conf -cgp /etc/k2hdkc -extdata extdata_k2hr3_trove.sh -conf server.ini

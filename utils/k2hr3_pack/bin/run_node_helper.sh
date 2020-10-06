@@ -1,5 +1,6 @@
+#!/bin/sh
 #
-# K2HDKC DBaaS based on Trove
+# K2HR3 PACK for K2HDKC DBaaS based on Trove
 #
 # Copyright 2020 Yahoo Japan Corporation
 #
@@ -18,47 +19,31 @@
 #
 
 #
-# archive files and backups
+# [NOTE]
+# We need to set an arbitrary umask when running npm with sudo.
+# However, it is assumed that umask cannot be specified due to system sudoers.
+# So instead of running npm directly with sudo, run it via this script.
+# This script sets the umask before running npm.
 #
-*.tgz
-*.gz
-*.pyc
-*.rpm
-*.deb
-*.swp
-*.bak
-*.xml
-*.qcow2
+if [ $# -ne 1 ]; then
+	exit 1
+fi
 
-#
-# Logs
-#
-*.log
+BASE_DIR=$1
+if [ ! -d ${BASE_DIR} ]; then
+	exit 1
+fi
+cd ${BASE_DIR} >/dev/null 2>&1
 
-#
-# Runtime data
-#
-pids
-*.pid
-*.seed
-*.pid.lock
+OLD_UMASK=`umask`
+umask 0000
 
-#
-# dotenv environment variables file
-#
-*.env
-*.rc
+npm run start
+if [ $? -ne 0 ]; then
+	exit $?
+fi
 
-#
-# Secret keys
-#
-id_rsa
-
-#
-# Local file according to the environment
-#
-# ex) .custom
-custom_internal_*
+exit 0
 
 #
 # Local variables:

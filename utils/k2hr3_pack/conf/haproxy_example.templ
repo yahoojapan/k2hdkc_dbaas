@@ -1,5 +1,5 @@
 #
-# K2HDKC DBaaS based on Trove
+# K2HR3 PACK for K2HDKC DBaaS based on Trove
 #
 # Copyright 2020 Yahoo Japan Corporation
 #
@@ -18,47 +18,24 @@
 #
 
 #
-# archive files and backups
+# for K2HR3 Web application
 #
-*.tgz
-*.gz
-*.pyc
-*.rpm
-*.deb
-*.swp
-*.bak
-*.xml
-*.qcow2
+frontend web_proxy
+    default_backend web_servers
+    bind *:__K2HR3_APP_PORT_EXT__
+
+backend web_servers
+    server k2hr3web __K2HR3_APP_HOST__:__K2HR3_APP_PORT__
 
 #
-# Logs
+# for K2HR3 REST API
 #
-*.log
+frontend api_proxy
+    default_backend api_servers
+    bind *:__K2HR3_API_PORT_EXT__
 
-#
-# Runtime data
-#
-pids
-*.pid
-*.seed
-*.pid.lock
-
-#
-# dotenv environment variables file
-#
-*.env
-*.rc
-
-#
-# Secret keys
-#
-id_rsa
-
-#
-# Local file according to the environment
-#
-# ex) .custom
-custom_internal_*
+backend api_servers
+    server k2hr3api __K2HR3_API_HOST__:__K2HR3_API_PORT__
 
 #
 # Local variables:

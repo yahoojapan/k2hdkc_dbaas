@@ -17,54 +17,15 @@
 # REVISION:
 #
 
-#
-# archive files and backups
-#
-*.tgz
-*.gz
-*.pyc
-*.rpm
-*.deb
-*.swp
-*.bak
-*.xml
-*.qcow2
-
-#
-# Logs
-#
-*.log
-
-#
-# Runtime data
-#
-pids
-*.pid
-*.seed
-*.pid.lock
-
-#
-# dotenv environment variables file
-#
-*.env
-*.rc
-
-#
-# Secret keys
-#
-id_rsa
-
-#
-# Local file according to the environment
-#
-# ex) .custom
-custom_internal_*
-
-#
-# Local variables:
-# tab-width: 4
-# c-basic-offset: 4
-# End:
-# vim600: expandtab sw=4 ts=4 fdm=marker
-# vim<600: expandtab sw=4 ts=4
-#
+*** /opt/stack/trove/trove/common/template.py	2020-06-09 16:18:00.770190167 +0900
+--- template.py	2020-06-11 13:28:27.540584594 +0900
+***************
+*** 38,43 ****
+--- 38,44 ----
+      'redis': configurations.RedisConfParser,
+      'vertica': configurations.VerticaConfParser,
+      'db2': configurations.DB2ConfParser,
++     'k2hdkc': configurations.K2hdkcConfParser,
+  }
+  
+  
