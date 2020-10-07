@@ -47,7 +47,8 @@ next_string: Usage
 
 ### 試用環境に必要なシステム
 **K2HDKC DBaaS** 試用環境には、16GB程度のメモリ、120GB程度のディスクサイズの環境を準備してください。  
-[DevStack](https://docs.openstack.org/devstack/latest/) が動作する同等の環境であれば十分です。  
+試用環境を構築するためには、[DevStack](https://docs.openstack.org/devstack/latest/)が動作する環境を準備してください。  
+準備する環境が、OpenStackで作成されたVirtual Machineなどの場合は、[Nested Virtualization](https://docs.openstack.org/devstack/latest/guides/devstack-with-nested-kvm.html)などを参考にして環境を整えてください。  
 
 ### 試用環境の構築
 以下に示す手順で、**K2HDKC DBaaS** の環境の構築ができます。  
@@ -93,6 +94,9 @@ URL: http://<hostname or ip address>/
 $ sudo su - stack
 $ ./k2hr3_pack_setup.sh
 ```
+このスクリプトは、途中であなたにブラウザでアクセスするためのhostnameもしくはIPアドレスを確認します。  
+表示されているhostnameやIPアドレスと異なる値を使う場合には、この確認で修正することができます。  
+
 スクリプトの実行完了後、試用環境を構築したHOSTを経由して、K2HR3 Web Applicationにアクセスすることができます。  
 
 以下のように確認することができます。  
@@ -103,3 +107,4 @@ URL: http://<hostname or ip address>:28080/
 #### (5) 確認
 (3)で示したTrove Dashboardおよび、(4)で示すK2HR3 Web Applicationにアクセスできれば、試用環境の構築は完了です。  
 試用環境を含むK2HDKC DBaaSの使い方は、次章の**K2HDKC DBaaS** の使い方で説明します。  
+

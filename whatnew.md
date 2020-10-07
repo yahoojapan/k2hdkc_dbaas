@@ -14,5 +14,5 @@ next_string: Build a trial environment
 ---
 
 # What's new
-## [7 Oct 2020] K2HDKC DBaaS Release Version 1.0.0
-K2HDKC DBaaS Release Version(1.0.0), all source code released on Github.com.  
+## [9 Oct 2020] K2HDKC DBaaS Release Version 1.0.0
+K2HDKC DBaaS Release Version(1.0.0), all source code released on Github.com.

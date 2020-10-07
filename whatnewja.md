@@ -14,5 +14,5 @@ next_string: Build a trial environment
 ---
 
 # What's new
-## 2020年10月7日 K2HDKC DBaaS Release Version 1.0.0 公開
+## 2020年10月9日 K2HDKC DBaaS Release Version 1.0.0 公開
 K2HDKC DBaaS Release Version 1.0.0 のソースコードをGithub.comで公開しました。  

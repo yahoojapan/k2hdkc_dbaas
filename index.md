@@ -12,7 +12,7 @@ arrow_link_usage: <a href="usage.html" class="link-title"><span class="arrow-bas
 ---
 
 # **K2HDKC DBaaS**
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that is provided by [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) which incorporates [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/indexja.html) as one of the Database.  
+**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that is provided by [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) which incorporates [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) as one of the Database.  
 **K2HDKC DBaaS** is one of [AntPickax](https://antpick.ax/)'s open source product by Yahoo! JAPAN.  
 
 ![K2HDKC DBaaS](images/top_k2hdkc_dbaas.png)

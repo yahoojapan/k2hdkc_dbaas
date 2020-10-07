@@ -14,7 +14,7 @@ next_string: Usage
 ---
 
 # Build a trial environment
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that is provided by [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) which incorporates [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/indexja.html) as one of the Database.  
+**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that is provided by [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) which incorporates [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) as one of the Database.  
 
 This document describes how to build a trial environment for **K2HDKC DBaaS**.  
 
@@ -48,7 +48,8 @@ We provide a **patch** for incorporating **K2HDKC DBaaS** into [Trove](https://w
 ### Required systems for a trial environment
 For **K2HDKC DBaaS** trial environment, prepare a host machine with a memory of about 16GB and a disk size of about 120GB.  
 _Strictly speaking, probably it also works in a lower performance host environment._  
-Please prepare the environment where [DevStack](https://docs.openstack.org/devstack/latest/) works.  
+To build a trial environment, please prepare an environment in which [DevStack](https://docs.openstack.org/devstack/latest/) operates.  
+If the environment to be prepared is a `Virtual Machine` created with OpenStack, etc., refer to [Nested Virtualization](https://docs.openstack.org/devstack/latest/guides/devstack-with-nested-kvm.html) etc. to prepare the environment.  
 
 ### Build a trial environment
 You can build the **K2HDKC DBaaS** trial environment by following the steps below.  
@@ -96,6 +97,9 @@ Finally, build the [K2HR3](https://k2hr3.antpick.ax/) system that is used as the
 $ sudo su - stack
 $ ./k2hr3_pack_setup.sh
 ```
+This script will ask you for a hostname or IP address to access with a browser along the way.  
+If you want to use a value different from the displayed hostname or IP address, you can correct it with this confirmation.  
+
 After the script completes successfully, you can access the `K2HR3 Web Application` via the host machine that built the trial environment.  
 ```
 URL: http://<hostname or ip address>:28080/
@@ -104,3 +108,4 @@ URL: http://<hostname or ip address>:28080/
 #### (5) Verification
 If you can successfully access the `Trove Dashboard` shown in (3) and the `K2HR3 Web Application` shown in (4), the trial environment has been **successfully built**.  
 How to use **K2HDKC DBaaS** will be explained in the next chapter.
+
