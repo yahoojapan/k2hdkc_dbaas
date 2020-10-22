@@ -5,7 +5,12 @@ set -o xtrace
 
 # Replace /etc/resolv.conf.ORIG with new resolver
 if test -f "/etc/resolv.conf.ORIG"; then
-    echo > /etc/resolv.conf.ORIG
+    cat > /etc/resolv.conf.ORIG << EOF
+nameserver 127.0.0.53
+options edns0
+search openstacklocal
+EOF
+
 else
     echo "/etc/resolv.conf.ORIG not found"
 fi
