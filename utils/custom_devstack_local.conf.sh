@@ -27,7 +27,8 @@
 cat > ~/devstack/local.conf <<EOF
 [[local|localrc]]
 RECLONE=True
-#HOST_IP=10.0.2.15
+NIC_NAME=\$(ip -f inet route | grep default  | awk '{print \$5}')
+HOST_IP=\$(ip -f inet addr show \${NIC_NAME}|grep inet|awk '{print \$2}'|perl -pe "s|(/.*)||g")
 IP_VERSION=4
 
 enable_plugin horizon https://opendev.org/openstack/horizon.git stable/ussuri
