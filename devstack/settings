@@ -25,6 +25,9 @@ define_plugin k2hdkc-dbaas
 # include any enable_service lines required by your plugin.
 enable_service trove k2hdkc-dbaas
 
+# enables to build the guest image
+BUILD_GUEST_IMAGE=${BUILD_GUEST_IMAGE:-"true"}
+
 #
 # Local variables:
 # tab-width: 4
