@@ -27,6 +27,7 @@
 cat > ~/devstack/local.conf <<EOF
 [[local|localrc]]
 RECLONE=True
+IPV4_ADDRS_SAFE_TO_USE="10.0.3.0/24"
 #HOST_IP=10.0.2.15
 IP_VERSION=4
 
