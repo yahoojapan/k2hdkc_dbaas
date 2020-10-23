@@ -27,6 +27,7 @@
 cat > ~/devstack/local.conf <<EOF
 [[local|localrc]]
 RECLONE=True
+IPV4_ADDRS_SAFE_TO_USE="10.0.3.0/24"
 NIC_NAME=\$(ip -f inet route | grep default  | awk '{print \$5}')
 HOST_IP=\$(ip -f inet addr show \${NIC_NAME}|grep inet|awk '{print \$2}'|perl -pe "s|(/.*)||g")
 IP_VERSION=4
