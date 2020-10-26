@@ -92,7 +92,7 @@ URL: http://<hostname or ip address>/
 [K2HR3](https://k2hr3.antpick.ax/indexja.html) システムは、上記で構築したOpenStackの払い出す1つのインスタンス（`Virtual Machine`）で動作するように構築されます。  
 ```
 $ sudo su - stack
-$ ./k2hr3_pack_setup.sh
+$ ./k2hr3_devpack_setup.sh
 ```
 このスクリプトは、途中であなたにブラウザでアクセスするためのhostnameもしくはIPアドレスを確認します。  
 表示されているhostnameやIPアドレスと異なる値を使う場合には、この確認で修正することができます。  

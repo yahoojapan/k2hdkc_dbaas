@@ -95,7 +95,7 @@ Finally, build the [K2HR3](https://k2hr3.antpick.ax/) system that is used as the
 [K2HR3](https://k2hr3.antpick.ax/) system is built to work in one instance(`Virtual Machine`) of OpenStack built above(3).  
 ```
 $ sudo su - stack
-$ ./k2hr3_pack_setup.sh
+$ ./k2hr3_devpack_setup.sh
 ```
 This script will ask you for a hostname or IP address to access with a browser along the way.  
 If you want to use a value different from the displayed hostname or IP address, you can correct it with this confirmation.  
