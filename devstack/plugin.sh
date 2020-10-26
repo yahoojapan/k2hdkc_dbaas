@@ -136,9 +136,11 @@ function create_k2hdkc_dbaas_guest_image {
         echo "NO $DEST/trove/integration/scripts/files/elements/centos-8-guest. Run unstack.sh firstly."
         exit 1
     fi
-    $DEST/k2hdkc_dbaas/utils/disk-image-create.sh
     IMAGE_FILE=$DEST/images/trove-datastore-centos-8-k2hdkc.qcow2
     IMAGE_NAME="trove-datastore-centos-8-k2hdkc"
+    if test "${BUILD_GUEST_IMAGE}" != "false"; then
+        $DEST/k2hdkc_dbaas/utils/disk-image-create.sh
+    fi
     if [ ! -f ${IMAGE_FILE} ]; then
         echo "NO Image file found at ${IMAGE_FILE}"
         exit 1
