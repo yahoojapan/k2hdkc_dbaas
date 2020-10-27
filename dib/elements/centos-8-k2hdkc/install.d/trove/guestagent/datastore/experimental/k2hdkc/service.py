@@ -125,3 +125,12 @@ class K2hdkcAppStatus(service.BaseDbStatus):  # pylint: disable=too-few-public-m
             else:
                 LOG.exception("Error getting K2HDKC status.")
                 return rd_instance.ServiceStatuses.SHUTDOWN
+
+#
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: expandtab sw=4 ts=4 fdm=marker
+# vim<600: expandtab sw=4 ts=4
+#

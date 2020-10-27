@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #
 # K2HDKC DBaaS based on Trove
 #

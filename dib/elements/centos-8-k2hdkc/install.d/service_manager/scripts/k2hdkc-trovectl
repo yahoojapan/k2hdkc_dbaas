@@ -1,15 +1,15 @@
 #!/bin/sh
 #
-# K2HDKC Cluster on OpenStack Trove
+# K2HDKC DBaaS based on Trove
 #
-# Copyright 2020 Yahoo! Japan Corporation.
+# Copyright 2020 Yahoo Japan Corporation
 #
-# A utility that links the K2HDKC cluster as a Database as a Service
-# (DBaaS) with the OpenStack Trove system.
-# This system is a DBaaS that operates a K2HDKC cluster by controlling
-# from Trove (OpenStack) and K2HR3. 
-# K2HDKC is a distributed KVS(Key Value Store) provided by Yahoo! JAPAN.
-#
+# K2HDKC DBaaS is a Database as a Service compatible with Trove which
+# is DBaaS for OpenStack.
+# Using K2HR3 as backend and incorporating it into Trove to provide
+# DBaaS functionality. K2HDKC, K2HR3, CHMPX and K2HASH are components
+# provided as AntPickax.
+# 
 # For the full copyright and license information, please view
 # the license file that was distributed with this source code.
 #
@@ -267,7 +267,10 @@ done
 exit 0
 
 #
-# VIM modelines
-#
-# vim:set ts=4 fenc=utf-8:
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: noexpandtab sw=4 ts=4 fdm=marker
+# vim<600: noexpandtab sw=4 ts=4
 #
