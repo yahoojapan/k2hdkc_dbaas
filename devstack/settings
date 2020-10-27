@@ -36,4 +36,3 @@ BUILD_GUEST_IMAGE=${BUILD_GUEST_IMAGE:-"true"}
 # vim600: expandtab sw=4 ts=4 fdm=marker
 # vim<600: expandtab sw=4 ts=4
 #
-

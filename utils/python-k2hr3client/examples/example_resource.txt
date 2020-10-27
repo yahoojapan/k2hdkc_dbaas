@@ -1,6 +1,6 @@
 {{#!k2hr3template }}
 #
-# K2HR3 PACK for K2HDKC DBaaS based on Trove
+# K2HDKC DBaaS based on Trove
 #
 # Copyright 2020 Yahoo Japan Corporation
 #
@@ -129,4 +129,3 @@ MAXTHREAD           = 20
 # vim600: expandtab sw=4 ts=4 fdm=marker
 # vim<600: expandtab sw=4 ts=4
 #
-
