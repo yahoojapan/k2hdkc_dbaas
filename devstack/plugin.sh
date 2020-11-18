@@ -105,6 +105,28 @@ function install_k2hdkc_dbaas {
     k2hdkc_patch_file $DEST/trove-dashboard/trove_dashboard/enabled/_1740_project_database_clusters_panel.py ${TROVE_PATCH_SRCDIR}/patches/trove_dashboard-enabled-_1740_project_database_clusters_panel.py
 }
 
+function apply_iptable_rules {
+    echo "apply_iptable_rules"
+    sudo iptables -A LIBVIRT_INP -i br-ex -s 172.24.4.0/24 -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+    sudo iptables -A LIBVIRT_INP -i br-ex -s 172.24.4.0/24 -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+    sudo iptables -A LIBVIRT_INP -i br-ex -s 172.24.4.0/24 -p tcp -m state --state NEW -m tcp --dport 18080 -j ACCEPT
+    sudo iptables -A LIBVIRT_INP -i br-ex -s 172.24.4.0/24 -p tcp -m state --state NEW -m tcp --dport 28080 -j ACCEPT
+    sudo iptables -A LIBVIRT_INP -i br-ex -s 172.24.4.0/24 -d 172.24.4.0/24 -p tcp -m state --state NEW -m tcp --dport 5672 -j ACCEPT
+    # DNS(ubuntu.com)
+    sudo iptables -A LIBVIRT_FWX -i br-ex -s 172.24.4.0/24 -p udp -m udp --dport 53 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -o br-ex -d 172.24.4.0/24 -p udp -m udp --sport 53 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -i br-ex -s 172.24.4.0/24 -p tcp -m tcp --dport 53 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -o br-ex -d 172.24.4.0/24 -p tcp -m tcp --sport 53 -j ACCEPT
+    # NTP
+    sudo iptables -A LIBVIRT_FWX -i br-ex -s 172.24.4.0/24 -p udp -m udp --dport 123 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -o br-ex -d 172.24.4.0/24 -p udp -m udp --sport 123 -j ACCEPT
+    # HTTPS(package)
+    sudo iptables -A LIBVIRT_FWX -i br-ex -s 172.24.4.0/24 -p tcp -m tcp --dport 80 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -o br-ex -d 172.24.4.0/24 -p tcp -m tcp --sport 80 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -i br-ex -s 172.24.4.0/24 -p tcp -m tcp --dport 443 -j ACCEPT
+    sudo iptables -A LIBVIRT_FWX -o br-ex -d 172.24.4.0/24 -p tcp -m tcp --sport 443 -j ACCEPT
+}
+
 function create_k2hdkc_dbaas_guest_image {
     echo "create_k2hdkc_dbaas_guest_image"
     if ! test -d "$DEST/trove/integration/scripts/files/elements/guest-agent-k2hdkc"; then
@@ -258,6 +280,8 @@ if is_service_enabled k2hdkc-dbaas; then
         echo_summary "Initializing K2hdkc"
         # 1. create k2hdkc guest image
         create_k2hdkc_dbaas_guest_image
+        # 2. apply iptable rules
+        apply_iptable_rules
     fi
 
     if [[ "$1" == "unstack" ]]; then
