@@ -61,7 +61,7 @@ fi
 if test "${OS_NAME}" = "centos"; then
     sudo dnf -y update
     sudo dnf install -y git
-    git clone https://git.openstack.org/openstack-dev/devstack --branch ${DEVSTACK_BRANCH}
+    git clone https://git.openstack.org/openstack-dev/devstack --branch ${DEVSTACK_BRANCH} ${DEVSTACK_DIR}
 
     # Uses the custom git repository
     sh ${SRCDIR}/custom_devstack_local.conf.sh
