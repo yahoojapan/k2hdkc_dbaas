@@ -1,0 +1,78 @@
+#!/bin/sh
+#
+# K2HDKC DBaaS based on Trove
+#
+# Copyright 2020 Yahoo Japan Corporation
+#
+# K2HDKC DBaaS is a Database as a Service compatible with Trove which
+# is DBaaS for OpenStack.
+# Using K2HR3 as backend and incorporating it into Trove to provide
+# DBaaS functionality. K2HDKC, K2HR3, CHMPX and K2HASH are components
+# provided as AntPickax.
+# 
+# For the full copyright and license information, please view
+# the license file that was distributed with this source code.
+#
+# AUTHOR:   Hirotaka Wakabayashi
+# CREATE:   Mon Sep 14 2020
+# REVISION:
+#
+
+set -e
+set -o xtrace
+
+# Stop a command which root is set by chroot
+#
+# Params::
+#   $1 command name
+#   $2 command root dir
+#
+# Returns::
+#   0 on success
+#   1 on failure
+#
+stop_command_in_chroot() {
+    _command_name="${1:?"command_name should not be zero"}"
+    _command_root_dir="${2:?"root_dir should not be zero"}"
+
+    if test -n "${_command_name}" -a -n "${_command_root_dir}"; then
+        echo "[OK] ps axuww|grep ${_command_name} | grep -v grep | awk '{print \$2}'"
+        pids=$(ps axuww|grep ${_command_name} | grep -v grep | awk '{print $2}')
+        for pid in ${pids}; do
+            if test -f "/proc/$pid/comm"; then
+                command=$(cat /proc/$pid/comm)
+                if test "${_command_name}" = "${command}"; then
+                    echo "[OK] sudo readlink -f /proc/$pid/root | grep ${_command_root_dir}"
+                    set +e
+                    sudo readlink -f /proc/$pid/root | grep -q ${_command_root_dir}
+                    if test "$?" -eq 0; then
+                        echo "[OK] sudo kill $pid"
+                        sudo kill $pid
+                    else
+                        echo "[SKIP] the command root fs is not set by chroot"
+                    fi
+                    set -e
+                else
+                    echo "[SKIP] command name is not equal. _command_name=${_command_name} command=${command}"
+                fi
+            else
+                echo "[SKIP] /proc/$pid/comm not found"
+            fi
+        done
+    else
+        echo "[NO] no command name or root dir"
+        exit 1
+    fi
+    return 0
+}
+
+stop_command_in_chroot gpg-agent $TMP_BUILD_DIR
+
+#
+# Local variables:
+# tab-width: 4
+# c-basic-offset: 4
+# End:
+# vim600: expandtab sw=4 ts=4 fdm=marker
+# vim<600: expandtab sw=4 ts=4
+#
