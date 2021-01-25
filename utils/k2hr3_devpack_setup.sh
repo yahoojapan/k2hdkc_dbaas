@@ -61,7 +61,6 @@ func_usage()
 	echo ""
 	echo "Usage:  $1 [--no_clear(-nc) | --clear(-c)]"
 	echo "        [--use_parent_auto(-upa) | --use_parent_custom(-upc) <hostname or ip address> | --use_parent_nic(-upn) | --use_parent_name(-upn)]"
-	echo "        [--flush_iptables(-fi) | --no_flush_iptables(-nfi)]"
 	echo "        [--up_wait_count(-uwc)]"
 	echo "        [--help(-h)]"
 	echo ""
@@ -71,8 +70,6 @@ func_usage()
 	echo "        --use_parent_custom(-upc) <host>  Specify hostname or IP address for HAProxy"
 	echo "        --use_parent_nic(-upnic)          Force to use default NIC IP address for HAProxy"
 	echo "        --use_parent_name(-upname)        Force to use local hostname(IP address) for HAProxy"
-	echo "        --flush_iptables(-fi)             Flash iptables after instance creation(default)"
-	echo "        --no_flush_iptables(-nfi)         Not flash iptables after instance creation"
 	echo "        --up_wait_count(-uwc) <count>     Specify the waiting try count (1 time is 10sec) until the instance up, and 0(default) for no upper limit."
 	echo "        --help(-h)                        print help"
 	echo ""
@@ -85,7 +82,6 @@ func_usage()
 # Check options
 #
 OPT_DO_CLEAR=-1
-OPT_DO_FLUSH_IPTABLES=-1
 OPT_UP_WAIT_COUNT=-1
 OPT_PARENT_TYPE=
 TYPE_CUSTOM_PARENT_HOSTNAME=
@@ -147,19 +143,6 @@ while [ $# -ne 0 ]; do
 		fi
 		OPT_PARENT_TYPE="Name"
 
-	elif [ "X$1" = "X--flush_iptables" -o "X$1" = "X--FLUSH_IPTABLES" -o "X$1" = "X-fi" -o "X$1" = "X-FI" ]; then
-		if [ ${OPT_DO_FLUSH_IPTABLES} -ne -1 ]; then
-			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} `${CURRENT_TIME}` Already specified \"--flush_iptables\" or \"--no_flush_iptables\" options.${CDEF}" 1>&2
-			exit 1
-		fi
-		OPT_DO_FLUSH_IPTABLES=1
-
-	elif [ "X$1" = "X--no_flush_iptables" -o "X$1" = "X--NO_FLUSH_IPTABLES" -o "X$1" = "X-nfi" -o "X$1" = "X-NFI" ]; then
-		if [ ${OPT_DO_FLUSH_IPTABLES} -ne -1 ]; then
-			echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} `${CURRENT_TIME}` Already specified \"--flush_iptables\" or \"--no_flush_iptables\" options.${CDEF}" 1>&2
-			exit 1
-		fi
-		OPT_DO_FLUSH_IPTABLES=0
 
 	elif [ "X$1" = "X--up_wait_count" -o "X$1" = "X--UP_WAIT_COUNT" -o "X$1" = "X-uwc" -o "X$1" = "X-UWC" ]; then
 		if [ ${OPT_UP_WAIT_COUNT} -ne -1 ]; then
@@ -197,9 +180,6 @@ if [ ${OPT_DO_CLEAR} -eq -1 ]; then
 fi
 if [ -z "${OPT_PARENT_TYPE}" ]; then
 	OPT_PARENT_TYPE="Auto"
-fi
-if [ ${OPT_DO_FLUSH_IPTABLES} -eq -1 ]; then
-	OPT_DO_FLUSH_IPTABLES=1
 fi
 if [ ${OPT_UP_WAIT_COUNT} -eq -1 ]; then
 	OPT_UP_WAIT_COUNT=0
@@ -654,14 +634,6 @@ done
 if [ ${IS_INSTANCE_UP} -ne 1 ]; then
 	echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} `${CURRENT_TIME}` Instance \"${K2HR3_HOSTNAME}\" did not start until the timeout.${CDEF}" 1>&2
 	exit 1
-fi
-
-#
-# Flush iptables
-#
-if [ ${OPT_DO_FLUSH_IPTABLES} -eq 1 ]; then
-	echo "${CREV}[INFO]${CDEF} `${CURRENT_TIME}` Flush FORWARD iptables." 1>&2
-	sudo iptables --flush FORWARD
 fi
 
 #
