@@ -1,3 +1,27 @@
+k2hdkc-dbaas (1.0.1) unstable; urgency=low
+
+  * Updated README.md for k2hdkc_dbaas_override_conf - #18
+  * Updated k2hdkc cluster construction to new logic(systemd) - #17
+  * Corresponds to CentOS-8.3.2011 - #16
+  * Removes the "flush_iptables" option - #15
+  * Adds +x permissions to the dib script - #14
+  * Uses binary packages - #13
+  * Adds iptable rules - #12
+  * Creates the devstack dir explicitly for the devstack official document
+    consistency- #11
+  * Probes nested virtualization on additional environments - #10
+  * Fixed Header/Footer inconsistency - #9
+  * Updated k2hr3_devpack_setup script name in build*.md - #8
+  * Updated the k2hr3 creation script to k2hr3_utils compatiblity etc - #7
+  * Changes the usage_timeout two times longer - #6
+  * Makes devstack use the different ip rage with default ip range of
+    10.0.0.0/24 - #5
+  * Adds BUILD_GUEST_IMAGE variable to skip building the image - #4
+  * Gets IP from NIC - #3
+  * Uses systemd-resolved to resolve the client names - #2
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Fri, 05 Feb 2021 16:25:57 +0900
+
 k2hdkc-dbaas (1.0.0) unstable; urgency=low
 
   * First version of open sorce on Github
