@@ -712,24 +712,6 @@ if [ -f ${K2HDKC_DBAAS_UTILS_DIR}/custom_production_app.templ ]; then
 		echo "${CREV}[INFO]${CDEF} `${CURRENT_TIME}` Copied ${K2HDKC_DBAAS_UTILS_DIR}/custom_production_app.templ to ${K2HR3_DEVPACK_CONF_DIR}/custom_production_app.templ." 1>&2
 	fi
 fi
-if [ -f ${K2HDKC_DBAAS_UTILS_DIR}/custom_k2hr3-init.sh.templ ]; then
-	cp -p ${K2HDKC_DBAAS_UTILS_DIR}/custom_k2hr3-init.sh.templ ${K2HR3_DEVPACK_CONF_DIR}/custom_k2hr3-init.sh.templ
-	if [ $? -ne 0 ]; then
-		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} `${CURRENT_TIME}` Could not copy ${K2HDKC_DBAAS_UTILS_DIR}/custom_k2hr3-init.sh.templ file.${CDEF}" 1>&2
-		exit 1
-	else
-		echo "${CREV}[INFO]${CDEF} `${CURRENT_TIME}` Copied ${K2HDKC_DBAAS_UTILS_DIR}/custom_k2hr3-init.sh.templ to ${K2HR3_DEVPACK_CONF_DIR}/custom_k2hr3-init.sh.templ." 1>&2
-	fi
-fi
-if [ -f ${K2HDKC_DBAAS_UTILS_DIR}/custom_extdata_k2hr3_trove.sh.templ ]; then
-	cp -p ${K2HDKC_DBAAS_UTILS_DIR}/custom_extdata_k2hr3_trove.sh.templ ${K2HR3_DEVPACK_CONF_DIR}/custom_extdata_k2hr3_trove.sh.templ
-	if [ $? -ne 0 ]; then
-		echo "${CRED}${CREV}[ERROR]${CDEF}${CRED} `${CURRENT_TIME}` Could not copy ${K2HDKC_DBAAS_UTILS_DIR}/custom_extdata_k2hr3_trove.sh.templ file.${CDEF}" 1>&2
-		exit 1
-	else
-		echo "${CREV}[INFO]${CDEF} `${CURRENT_TIME}` Copied ${K2HDKC_DBAAS_UTILS_DIR}/custom_extdata_k2hr3_trove.sh.templ to ${K2HR3_DEVPACK_CONF_DIR}/custom_extdata_k2hr3_trove.sh.templ." 1>&2
-	fi
-fi
 
 #
 # Make devpack archive file

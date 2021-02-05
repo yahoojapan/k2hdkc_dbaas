@@ -21,9 +21,43 @@
 set -e
 set -o xtrace
 
-# Install the k2hdkc and run it.
+# Sets the default locale. LC_ALL has precedence over other LC* variables.
+unset LANG
+unset LANGUAGE
+LC_ALL=en_US.utf8
+export LC_ALL
+
+# Sets PATH. setup_*.sh uses useradd command
+PATH=${PATH}:/usr/sbin:/sbin
+
+# an unset parameter expansion will fail
+set -u
+
+# umask 022 is enough
+umask 022
+
+# defines environments
 SRCDIR=$(cd $(dirname "$0") && pwd)
-sh ${SRCDIR}/dkc/setup_dkc.sh -d
+
+# Install the k2hdkc-trove-helper
+sudo install -C -m 0755 -o root -v ${SRCDIR}/service_manager/scripts/k2hdkc-trove-helper /usr/libexec/k2hdkc-trove-helper
+RESULT=$?
+if test "${RESULT}" -ne 0; then
+    echo "RESULT should be zero, not ${RESULT}"
+    return 1
+fi
+
+# Install the k2hdkc-trove.service
+sudo install -C -m 0644 -o root -v ${SRCDIR}/service_manager/k2hdkc-trove.service /lib/systemd/system/k2hdkc-trove.service
+RESULT=$?
+if test "${RESULT}" -ne 0; then
+    echo "RESULT should be zero, not ${RESULT}"
+    return 1
+fi
+
+sudo adduser k2hdkc
+sudo mkdir -p /var/lib/k2hdkc/data
+sudo mkdir -p /etc/k2hdkc
 
 #
 # Local variables:

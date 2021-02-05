@@ -45,7 +45,7 @@ SELFCTLPORT         = {{= %chmpx-server-ctlport% }}
 CTLPORT             = {{= %chmpx-slave-ctlport% }}
 SELFCTLPORT         = {{= %chmpx-slave-ctlport% }}
 {{ endif }}
-SELFCUK             = __TROVE_K2HDKC_SELF_CUK__
+SELFCUK             = __SELF_INSTANCE_ID__
 RWTIMEOUT           = 10000
 RETRYCNT            = 500
 CONTIMEOUT          = 1000
