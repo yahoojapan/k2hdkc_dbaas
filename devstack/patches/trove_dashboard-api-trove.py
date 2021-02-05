@@ -21,10 +21,10 @@ diff --git a/trove_dashboard/api/trove.py b/trove_dashboard/api/trove.py
 index 83208de..2201a92 100644
 --- a/trove_dashboard/api/trove.py
 +++ b/trove_dashboard/api/trove.py
-@@ -25,6 +25,16 @@ from keystoneauth1 import loading
+@@ -25,6 +25,16 @@
  from keystoneauth1 import session
  from novaclient import client as nova_client
- 
+
 +import json
 +import re
 +from pathlib import Path
@@ -38,8 +38,8 @@ index 83208de..2201a92 100644
  # Supported compute versions
  NOVA_VERSIONS = base.APIVersionManager("compute", preferred_version=2)
  NOVA_VERSIONS.load_supported_version(1.1,
-@@ -67,7 +77,8 @@ def cluster_delete(request, cluster_id):
- 
+@@ -67,7 +77,8 @@
+
  def cluster_create(request, name, volume, flavor, num_instances,
                     datastore, datastore_version,
 -                   nics=None, root_password=None, locality=None):
@@ -48,22 +48,20 @@ index 83208de..2201a92 100644
      instances = []
      for i in range(num_instances):
          instance = {}
-@@ -84,7 +95,8 @@ def cluster_create(request, name, volume, flavor, num_instances,
+@@ -84,7 +95,8 @@
          datastore,
          datastore_version,
          instances=instances,
 -        locality=locality)
 +        locality=locality,
 +        configuration=configuration)
- 
- 
+
+
  def cluster_grow(request, cluster_id, new_instances):
-@@ -414,9 +426,207 @@ def configuration_instances(request, group_id):
+@@ -414,8 +426,210 @@
      return troveclient(request).configurations.instances(group_id)
- 
- 
--def configuration_update(request, group_id, values):
--    return troveclient(request).configurations.update(group_id, values)
+
+
 +def _get_extdata_url(request, values, k2hr3_url):
 +    try:
 +        k2hr3_token = K2hr3Token(request.user.project_name, request.user.token.id)
@@ -154,8 +152,6 @@ index 83208de..2201a92 100644
 +        error_msg = 'create_k2hr3_policy error {}'.format(e)
 +        LOG.error(error_msg)
 +        raise Exception(error_msg)
-+
-+
 +def _create_k2hr3_resource(request, values, k2hr3_url):
 +    try:
 +        k2hr3_token = K2hr3Token(request.user.project_name, request.user.token.id)
@@ -181,7 +177,10 @@ index 83208de..2201a92 100644
 +            data_type='string',
 +            data="",
 +            keys={
-+                "chmpx-mode": "SERVER"
++                "chmpx-mode": "SERVER",
++                "k2hr3-init-packages": "",
++                "k2hr3-init-packagecloud-packages": "k2hdkc-dbaas-override-conf, k2hr3-get-resource, chmpx, k2hdkc",
++                "k2hr3-init-systemd-packages": "chmpx.service, k2hdkc.service, k2hr3-get-resource.timer"
 +            },
 +            alias=[]
 +        )
@@ -192,7 +191,10 @@ index 83208de..2201a92 100644
 +            data_type='string',
 +            data="",
 +            keys={
-+                "chmpx-mode": "SLAVE"
++                "chmpx-mode": "SLAVE",
++                "k2hr3-init-packages": "",
++                "k2hr3-init-packagecloud-packages": "k2hdkc-dbaas-override-conf, k2hr3-get-resource, chmpx",
++                "k2hr3-init-systemd-packages": "chmpx.service, k2hr3-get-resource.timer"
 +            },
 +            alias=[]
 +        )
@@ -201,10 +203,10 @@ index 83208de..2201a92 100644
 +        error_msg = 'create_k2hr3_resource error {}'.format(e)
 +        LOG.error(error_msg)
 +        raise Exception(error_msg)
- 
-+def configuration_update(request, group_id, values):
++
+ def configuration_update(request, group_id, values):
+-    return troveclient(request).configurations.update(group_id, values)
 +    try:
-+        LOG.debug("before values={} request.user.token.id={} request.user={} request.user.project_name={}".format(values, request.user.token.id, request.user, request.user.project_name))
 +        python_values = json.loads(values)
 +        # Applies default values
 +        if not 'chmpx-server-ctlport' in python_values:
@@ -265,6 +267,7 @@ index 83208de..2201a92 100644
 +    except Exception as e:
 +        LOG.error('error {}'.format(e))
 +    return False
- 
+
+
  def configuration_default(request, instance_id):
-     return troveclient(request).instances.configuration(instance_id)
+

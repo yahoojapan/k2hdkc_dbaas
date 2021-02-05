@@ -115,12 +115,6 @@ else
     ELEMENTS="${ELEMENTS} ubuntu-guest-stable-ussuri guest-agent-${MY_DB} ubuntu ubuntu-${MY_DB} no-resolvconf"
 fi
 
-# install k2hr3_utils scripts
-install -CD -m 0444 -v ${SRCDIR}/k2hr3_utils/devcluster/cluster_functions ${MY_DIB_ELEMENTS_PATH}/centos-8-${MY_DB}/install.d/cluster_functions
-install -CD -m 0755 -v ${SRCDIR}/k2hr3_utils/devcluster/cluster.sh ${MY_DIB_ELEMENTS_PATH}/centos-8-${MY_DB}/install.d/cluster.sh
-install -CD -m 0444 -v ${SRCDIR}/k2hr3_utils/devcluster/chmpx/setup_chmpx_functions ${MY_DIB_ELEMENTS_PATH}/centos-8-${MY_DB}/install.d/chmpx/setup_chmpx_functions
-install -CD -m 0755 -v ${SRCDIR}/k2hr3_utils/devcluster/dkc/setup_dkc.sh ${MY_DIB_ELEMENTS_PATH}/centos-8-${MY_DB}/install.d/dkc/setup_dkc.sh
-
 disk-image-create -x -a amd64 -o ${SRCDIR}/images/trove-datastore-${DISTRO_NAME}-${DIB_RELEASE}-${MY_DB} -t qcow2 \
     --image-size 6 \
     --image-cache ~/.cache/image-create \

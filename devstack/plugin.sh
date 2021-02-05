@@ -167,7 +167,7 @@ function create_k2hdkc_dbaas_guest_image {
         exit 1
     fi
     TROVE_DATASTORE_TYPE_K2HDKC=k2hdkc
-    TROVE_DATASTORE_VERSION_K2HDKC=0.9.30
+    TROVE_DATASTORE_VERSION_K2HDKC=BaseImage-1.0.0
 
     echo "Add the image to glance"
     glance_image_id=$(openstack --os-region-name RegionOne --os-password ${SERVICE_PASSWORD} \

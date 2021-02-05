@@ -5,8 +5,8 @@ After=network-online.target
 [Service]
 Type=oneshot
 User=root
-ExecStart=/usr/libexec/k2hdkc-trove-helper -conf server.ini -cgp /etc/k2hdkc -startup_timeout 60 -normal_timeout 1
-ExecReload=/usr/libexec/k2hdkc-trove-helper -conf server.ini -cgp /etc/k2hdkc -startup_timeout 60 -normal_timeout 1
+ExecStart=/usr/libexec/k2hdkc-trove-helper -start -cgp /etc/k2hdkc -startup_timeout 180 -normal_timeout 30
+ExecReload=/usr/libexec/k2hdkc-trove-helper -start -cgp /etc/k2hdkc -startup_timeout 180 -normal_timeout 30
 ExecStop=/usr/libexec/k2hdkc-trove-helper -stop
 RemainAfterExit=yes
 Restart=no

@@ -40,11 +40,11 @@ MV="/bin/mv"
 func_usage()
 {
 	${ECHO} ""
-	${ECHO} "Usage:  $1 {-h(--help) | -stop | options}"
+	${ECHO} "Usage:  $1 {-h(--help) | -start | -stop | options}"
 	${ECHO} "  -h(--help)                print help."
-	${ECHO} "  -stop                     stop k2hdkc processes"
+	${ECHO} "  -start                    start k2hdkc cluster(default)"
+	${ECHO} "  -stop                     stop k2hdkc cluster"
 	${ECHO} "  -cgp <dir>                specify output directory path for configuration group parameters and etc.(default: /etc/k2hdkc)"
-	${ECHO} "  -conf <file>              specify output configuration(ini) file name(default: server.ini)"
 	${ECHO} "  -startup_timeout <sec>    specify starup timeout seconds(default: 60s)"
 	${ECHO} "  -normal_timeout <sec>     specify normal(after startup) timeout seconds(default: 1s)"
 	${ECHO} ""
@@ -56,10 +56,9 @@ func_usage()
 PRGNAME=`/bin/basename $0`
 SCRIPTDIR=`/bin/dirname $0`
 CONFIGGROUP_PARAM_DIR=""
-K2HDKC_CONF_NAME=""
 STARTUP_TIMEOUT=
 NORMAL_TIMEOUT=
-STOP_SERVICE=0
+PROCESS_MODE=
 
 while [ $# -ne 0 ]; do
 	if [ "X$1" = "X" ]; then
@@ -69,16 +68,19 @@ while [ $# -ne 0 ]; do
 		func_usage $PRGNAME
 		exit 0
 
-	elif [ "X$1" = "X-stop" -o "X$1" = "X-STOP" ]; then
-		STOP_SERVICE=1
-
-	elif [ "X$1" = "X-conf" -o "X$1" = "X-CONF" ]; then
-		shift
-		if [ "X$1" = "X" ]; then
-			${ECHO} "No parameter is specified for option(-conf), check usage with the -h option."
+	elif [ "X$1" = "X-start" -o "X$1" = "X-START" ]; then
+		if [ "X${PROCESS_MODE}" != "X" ]; then
+			${ECHO} "Already specified process mode parameter(${PROCESS_MODE})."
 			exit 1
 		fi
-		K2HDKC_CONF_NAME=$1
+		PROCESS_MODE="start"
+
+	elif [ "X$1" = "X-stop" -o "X$1" = "X-STOP" ]; then
+		if [ "X${PROCESS_MODE}" != "X" ]; then
+			${ECHO} "Already specified process mode parameter(${PROCESS_MODE})."
+			exit 1
+		fi
+		PROCESS_MODE="stop"
 
 	elif [ "X$1" = "X-cgp" -o "X$1" = "X-CGP" ]; then
 		shift
@@ -134,13 +136,12 @@ done
 #
 # Set default values
 #
-if [ "X${K2HDKC_CONF_NAME}" = "X" ]; then
-	K2HDKC_CONF_NAME="server.ini"
+if [ "X${PROCESS_MODE}" = "X" ]; then
+	PROCESS_MODE="start"
 fi
 if [ "X${CONFIGGROUP_PARAM_DIR}" = "X" ]; then
 	CONFIGGROUP_PARAM_DIR="/etc/k2hdkc"
 fi
-
 if [ "X${STARTUP_TIMEOUT}" = "X" ]; then
 	STARTUP_TIMEOUT=60
 fi
@@ -161,10 +162,7 @@ CONFFILE_CTLPORT="chmpx-server-ctlport"
 CONFFILE_SLAVE_CTLPORT="chmpx-slave-ctlport"
 
 STARTUP_MARKING_FILE="${CONFIGGROUP_PARAM_DIR}/k2hdkc-startup-time"
-K2HDKC_CONF_FILE="${CONFIGGROUP_PARAM_DIR}/${K2HDKC_CONF_NAME}"
 OLD_MANDATORY_PARAM_FILE="${CONFIGGROUP_PARAM_DIR}/mandatory-params"
-CHMPX_PROC_PIDFILE="/tmp/k2hdkc-trovectl-chmpx.pid"
-K2HDKC_PROC_PIDFILE="/tmp/k2hdkc-trovectl-k2hdkc.pid"
 
 CONFFILE_EXTDATA_SH="extdata_k2hr3_trove.sh"
 TROVE_EXTDATA_SH_FILE="${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_SH}"
@@ -182,7 +180,7 @@ else
 fi
 
 #--------------------------------------------------------------
-# Utility functions
+# Message functions
 #--------------------------------------------------------------
 #
 # Message functions
@@ -238,100 +236,9 @@ print_message()
 	fi
 }
 
-#
-# Get pid from file
-#
-# $1 - pid file
-#
-get_pid()
-{
-	reset_message
-	PIDFILE=$1
-	if [ "X${PIDFILE}" = "X" ]; then
-		set_error "Pid file path is empty"
-		echo "0"
-		return 1
-	fi
-	if [ -f ${PIDFILE} -a -s ${PIDFILE} ]; then
-		PROC_PID=`${CAT} ${PIDFILE} | ${TR} -d '\n'`
-		if [ "X${PROC_PID}" != "X" ]; then
-			${PS} -p ${PROC_PID} >/dev/null 2>&1
-			if [ $? -ne 0 ]; then
-				set_debug "Pid(${PROC_PID}) is not running"
-				PROC_PID=0
-			fi
-		else
-			set_debug "Pid file(${PIDFILE}) has empty value"
-			PROC_PID=0
-		fi
-	else
-		set_debug "Not found pid file(${PIDFILE})"
-		PROC_PID=0
-	fi
-	echo "${PROC_PID}"
-	return 0
-}
-
-#
-# Stop process
-#
-# $1 - PID file path
-# $2 - Process name
-#
-stop_process()
-{
-	reset_message
-
-	if [ "X$1" = "X" -o "X$2" = "X" ]; then
-		set_error "This function needs two parameters."
-		return 1
-	fi
-	PROC_PIDFILE=$1
-	PROC_NAME=$2
-	MAX_LOOP_COUNT=10
-
-	while [ ${MAX_LOOP_COUNT} -ne 0 ]; do
-		PROC_PID=`get_pid ${PROC_PIDFILE}`
-		if [ ${PROC_PID} -eq 0 ]; then
-			set_debug "${PROC_NAME} process id=${PROC_PID} is 0, so do not need to stop it."
-			break;
-		fi
-
-		${SUDO} ${KILL} -HUP ${PROC_PID}
-		${SLEEP} 1
-		${PS} -p ${PROC_PID} >/dev/null 2>&1
-		if [ $? -ne 0 ]; then
-			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal HUP"
-			break;
-		fi
-
-		${SUDO} ${KILL} -TERM ${PROC_PID}
-		${SLEEP} 1
-		${PS} -p ${PROC_PID} >/dev/null 2>&1
-		if [ $? -ne 0 ]; then
-			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal TERM"
-			break;
-		fi
-
-		${SUDO} ${KILL} -KILL ${PROC_PID}
-		${SLEEP} 1
-		${PS} -p ${PROC_PID} >/dev/null 2>&1
-		if [ $? -ne 0 ]; then
-			set_debug "Stopped ${PROC_NAME} process(pid=${PROC_PID}) by signal KILL"
-			break;
-		fi
-
-		MAX_LOOP_COUNT=`expr ${MAX_LOOP_COUNT} - 1`
-		${SLEEP} 1
-	done
-
-	if [ ${MAX_LOOP_COUNT} -eq 0 ]; then
-		set_error "Could not stop ${PROC_NAME} process(pid=${PROC_PID}) despite ${MAX_LOOP_COUNT} attempts"
-		return 1
-	fi
-	return 0
-}
-
+#--------------------------------------------------------------
+# Utility functions
+#--------------------------------------------------------------
 #
 # Load extdata for script
 #
@@ -375,7 +282,6 @@ load_extdata_script()
 
 	return 0;
 }
-
 
 #
 # Register Instance
@@ -436,81 +342,10 @@ delete_instance()
 	return 0
 }
 
-#
-# Stop and Serviceout
-#
-do_stop_k2hdkc()
-{
-	reset_message
-
-	#
-	# Stop k2hdkc process
-	#
-	# [NOTE]
-	# The status will automatically change to SUSPEND.
-	#
-	stop_process ${K2HDKC_PROC_PIDFILE} "k2hdkc"
-	if [ $? -ne 0 ]; then
-		insert_error "Something error is occurred in stopping k2hdkc process, but continue..."
-	fi
-
-	#
-	# Stop chmpx process
-	#
-	# [NOTE]
-	# The status will automatically change to SERVICEOUT.
-	# It is assumed that AUTOMERGE is ON, and I expect it to become SERVICEOUT
-	# at the same time as the chmpx process ends.
-	#
-	stop_process ${CHMPX_PROC_PIDFILE} "chmpx"
-	if [ $? -ne 0 ]; then
-		insert_error "Something error is occurred in stopping chmpx process, but continue..."
-	fi
-
-	return 0
-}
-
-#
-# Create configuration file
-#
-# $1 - configuration file name
-#
-create_configuration_file()
-{
-	reset_message
-
-	_LOAD_LOCAL_CONF_NAME=$1
-
-	if [ "X${_LOAD_LOCAL_CONF_NAME}" = "X" ]; then
-		add_error "The parameter is empty(conf file name=${_LOAD_LOCAL_CONF_NAME})"
-		return 1
-	fi
-
-	#
-	# Check extdata for script
-	#
-	if [ ! -f ${TROVE_EXTDATA_SH_FILE} ]; then
-		set_error "Not found ${TROVE_EXTDATA_SH_FILE} for creating configuration file."
-		return 1;
-	fi
-
-	#
-	# Create configuration file
-	#
-	CREATE_CONF_RESULT_MSG=`${TROVE_EXTDATA_SH_FILE} -l -s ${_LOAD_LOCAL_CONF_NAME}`
-	if [ $? -ne 0 ]; then
-		set_error "Failed to create configuration file(${_LOAD_LOCAL_CONF_NAME})."
-		add_error "${CREATE_CONF_RESULT_MSG}"
-		return 1
-	fi
-
-	return 0
-}
-
 #--------------------------------------------------------------
 # Main
 #--------------------------------------------------------------
-if [ ${STOP_SERVICE} -ne 1 ]; then
+if [ "X${PROCESS_MODE}" = "Xstart" ]; then
 	###########################
 	# Start
 	###########################
@@ -526,6 +361,9 @@ if [ ${STOP_SERVICE} -ne 1 ]; then
 
 		#
 		# Load new mandatory parameters
+		#
+		# [NOTE]
+		# Other than CONFFILE_EXTDATA_URL(extdata-url), those only check the existence of the value.
 		#
 		if [ -f ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} -a -s ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} ]; then
 			CURRENT_EXTDATA_URL=`${CAT} ${CONFIGGROUP_PARAM_DIR}/${CONFFILE_EXTDATA_URL} | ${TR} -d '\n'`
@@ -600,29 +438,10 @@ if [ ${STOP_SERVICE} -ne 1 ]; then
 		#
 		if [ ${NOCHANGE_MANDATORY_PARAMS} -eq 1 ]; then
 			#
-			# Same mandatory parameters
+			# Same mandatory parameters, Nothing to do.
 			#
-			print_message "Required parameters remain empty as before"
-
-			if [ ${DEFICIENT_MANDATORY_PARAMS} -eq 1 ]; then
-				#
-				# Nothing to do
-				#
-				print_message "The process should not have been started because there were no required parameters before. Again, there is no parameter, so nothing is done."
-				IS_BREAK_LOOP=1
-
-			else
-				#
-				# Check new server.ini from K2HR3, if changed, only update.
-				#
-				create_configuration_file ${K2HDKC_CONF_NAME}
-				if [ $? -ne 0 ]; then
-					print_message "Something error is occurred in creating configuration, but continue..."
-				else
-					print_message
-					IS_BREAK_LOOP=1
-				fi
-			fi
+			print_message "Required parameters remain empty as before, then nothing to do."
+			IS_BREAK_LOOP=1
 
 		else
 			#
@@ -640,24 +459,6 @@ if [ ${STOP_SERVICE} -ne 1 ]; then
 			fi
 
 			#
-			# Do stop and serviceout
-			#
-			do_stop_k2hdkc
-			if [ $? -ne 0 ]; then
-				print_message "Something error is occurred in stop and serviceout, but continue..."
-			else
-				print_message
-			fi
-
-			#
-			# Remove configuration file
-			#
-			if [ -f ${K2HDKC_CONF_FILE} ]; then
-				${RM} -f ${K2HDKC_CONF_FILE}
-				print_message "Succeed to remove ${K2HDKC_CONF_FILE}"
-			fi
-
-			#
 			# New mandatory parameters are existed, restart processes
 			#
 			if [ ${DEFICIENT_MANDATORY_PARAMS} -ne 1 ]; then
@@ -667,16 +468,6 @@ if [ ${STOP_SERVICE} -ne 1 ]; then
 				register_instance ${CURRENT_EXTDATA_URL}
 				if [ $? -ne 0 ]; then
 					print_message "Something error is occurred in registering instance, but continue..."
-				else
-					print_message
-				fi
-
-				#
-				# Create configuration file
-				#
-				create_configuration_file ${K2HDKC_CONF_NAME}
-				if [ $? -ne 0 ]; then
-					print_message "Something error is occurred in creating configuration, but continue..."
 				else
 					print_message
 					IS_BREAK_LOOP=1
@@ -698,7 +489,7 @@ if [ ${STOP_SERVICE} -ne 1 ]; then
 	done
 
 	if [ ${LAG_UNIXTIME} -gt ${TIMEOUT_SECOND} ]; then
-		print_message  "Failed to create(update) ${K2HDKC_CONF_FILE} by timeout(${TIMEOUT_SECOND}s)"
+		print_message  "Failed (un)registration by timeout(${TIMEOUT_SECOND}s)"
 	fi
 
 else
@@ -716,24 +507,6 @@ else
 		print_message "Something error is occurred in removing instance, but continue..."
 	else
 		print_message
-	fi
-
-	#
-	# Do stop and serviceout
-	#
-	do_stop_k2hdkc
-	if [ $? -ne 0 ]; then
-		print_message "Something error is occurred in stop and serviceout, but continue..."
-	else
-		print_message
-	fi
-
-	#
-	# Remove configuration file
-	#
-	if [ -f ${K2HDKC_CONF_FILE} ]; then
-		${RM} -f ${K2HDKC_CONF_FILE}
-		print_message "Succeed to remove ${K2HDKC_CONF_FILE}"
 	fi
 
 	#

@@ -216,48 +216,7 @@ class Manager(manager.Manager):
                      root_password, overrides, cluster_config, snapshot):
         """Be invoked after successful prepare.
         """
-        services = [
-            'chmpx-trovectl', 'k2hdkc-trovectl', 'k2hdkc-check-conf.timer'
-        ]
-        service_error = False
-        for my_service in services:
-            try:
-                out, err = utils.execute_with_timeout(
-                    "/usr/bin/systemctl is-active {}".format(my_service),
-                    shell=True)
-                LOG.debug("out=(%s) err=(%s)", out, err)
-            except exception.ProcessExecutionError as exc:
-                if "activating" in exc.stdout:
-                    LOG.debug("k2hdkc is activating now.")
-                elif "inactive" in exc.stdout:
-                    out, err = utils.execute_with_timeout(
-                        "sudo systemctl start {}".format(my_service),
-                        shell=True)
-                    LOG.debug("out=(%s) err=(%s)", out, err)
-                else:
-                    LOG.exception("Error getting K2HDKC status.")
-                    service_error = True
-        for my_service in services:
-            try:
-                out, err = utils.execute_with_timeout(
-                    "/usr/bin/systemctl is-enabled {}".format(my_service),
-                    shell=True)
-                LOG.debug("out=(%s) err=(%s)", out, err)
-            except exception.ProcessExecutionError as exc:
-                if "disabled" in exc.stdout:
-                    out, err = utils.execute_with_timeout(
-                        "sudo systemctl enable {}".format(my_service),
-                        shell=True)
-                    LOG.debug("out=(%s) err=(%s)", out, err)
-                else:
-                    LOG.exception("Error getting K2HDKC status.")
-                    service_error = True
-
-        # put PREPARE_END_FILENAME in GUESTAGENT_DIR
-        if service_error:
-            LOG.error("Error starting k2hdkc services")
-        else:
-            self.status.set_ready()
+        self.status.set_ready()
 
     #################
     # Service related
