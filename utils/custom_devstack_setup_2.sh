@@ -63,6 +63,12 @@ if test "${OS_NAME}" = "centos"; then
     sudo dnf install -y git
     git clone https://git.openstack.org/openstack-dev/devstack --branch ${DEVSTACK_BRANCH} ${DEVSTACK_DIR}
 
+    # patch stack.sh
+    grep "^CentOS Linux release 8.3" /etc/centos-release
+    if test $? -eq 0; then
+        sh ${SRCDIR}/custom_devstack_patch_stack.sh
+    fi
+
     # Uses the custom git repository
     sh ${SRCDIR}/custom_devstack_local.conf.sh
 
@@ -86,6 +92,17 @@ if test "${OS_NAME}" = "centos"; then
 
     # semanage is required
     sudo dnf install -y policycoreutils-python-utils
+
+    # python3-systemd for centos-8.3 and centos-8.2
+    grep "^CentOS Linux release 8" /etc/centos-release
+    if test $? -eq 0; then
+        sudo dnf install -y python3-systemd
+    fi
+    # libusbx libvirt qemu-kvm for centos-8.2
+    grep "^CentOS Linux release 8.2" /etc/centos-release
+    if test $? -eq 0; then
+        sudo dnf install -y  libusbx libvirt qemu-kvm
+    fi
 
     # Deactivates libvirt default network eternally
     sudo virsh net-destroy default
