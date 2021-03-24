@@ -41,6 +41,7 @@ class TestK2hr3Resource(unittest.TestCase):
     def setUp(self):
         """Sets up a test case."""
         self.name = "test_resource"
+        self.project = "test_project"
         self.data_type = 'string'
         self.data = "testresourcedata"
         self.keys = {
@@ -56,13 +57,13 @@ class TestK2hr3Resource(unittest.TestCase):
 
     def test_k2hr3resource_construct(self):
         """Creates a K2hr3Resoiurce  instance."""
-        resource = K2hr3Resource("k2hr3tokenvalue", self.name, self.data_type,
+        resource = K2hr3Resource("k2hr3tokenvalue", self.project, self.name, self.data_type,
                                  self.data, self.keys, self.alias)
         self.assertIsInstance(resource, K2hr3Resource)
 
     def test_k2hr3resource_repr(self):
         """Represent a K2hr3Resource instance."""
-        resource = K2hr3Resource("k2hr3tokenvalue", self.name, self.data_type,
+        resource = K2hr3Resource("k2hr3tokenvalue", self.project, self.name, self.data_type,
                                  self.data, self.keys, self.alias)
         # Note: The order of _error and _code is unknown!
         self.assertRegex(repr(resource), '<K2hr3Resource .*>')

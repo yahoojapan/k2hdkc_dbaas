@@ -46,14 +46,15 @@ class K2hr3Resource(K2hr3Api):  # pylint: disable=too-many-instance-attributes
     """Represents K2hr3 RESOURCE API. See https://k2hr3.antpick.ax/api_resource.html for details.
     """
 
-    __slots__ = ('_r3token', '_name', '_data_type', '_data', '_keys', '_alias')
+    __slots__ = ('_r3token', '_project', '_name', '_data_type', '_data', '_keys', '_alias')
 
-    def __init__(self, r3token, name, data_type, data, keys, alias=None):  # pylint: disable=too-many-arguments
+    def __init__(self, r3token, project, name, data_type, data, keys, alias=None):  # pylint: disable=too-many-arguments
         super().__init__("resource")
         self.r3token = r3token
+        self.project = project
         self.name = name
         self.data_type = data_type
-        self.set_data(data, name)
+        self.set_data(data, project, name)
         self.keys = keys
         self.alias = alias
         # NOTE(hiwakaba)
@@ -116,7 +117,7 @@ class K2hr3Resource(K2hr3Api):  # pylint: disable=too-many-instance-attributes
         """ Returns data."""
         return self._data
 
-    def set_data(self, val, clustername):  # type: ignore # noqa: F811
+    def set_data(self, val, projectname, clustername):  # type: ignore # noqa: F811
         """ Sets data."""
         if getattr(self, '_data', None) is None:
             self._data = val
@@ -134,6 +135,8 @@ class K2hr3Resource(K2hr3Api):  # pylint: disable=too-many-instance-attributes
                 for line in iter(f.readline, ''):
                     # 3. replace TROVE_K2HDKC_CLUSTER_NAME with clustername
                     line = re.sub('__TROVE_K2HDKC_CLUSTER_NAME__', clustername, line)
+                    # 4. replace TROVE_K2HDKC_TENANT_NAME with projectname
+                    line = re.sub('__TROVE_K2HDKC_TENANT_NAME__', projectname, line)
                     line_len += len(line)
                     if line_len > _MAX_LINE_LENGTH:
                         raise Exception('data too big')

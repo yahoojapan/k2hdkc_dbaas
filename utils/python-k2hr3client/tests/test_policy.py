@@ -29,8 +29,8 @@ from k2hr3client.policy import K2hr3Policy
 LOG = logging.getLogger(__name__)
 
 
-class TestK2hr3Resource(unittest.TestCase):
-    """Tests the K2hr3Response class.
+class TestK2hr3Policy(unittest.TestCase):
+    """Tests the K2hr3Policy class.
 
     Simple usage(this class only):
     $ python -m unittest tests/test_resource.py
@@ -53,7 +53,7 @@ class TestK2hr3Resource(unittest.TestCase):
         """Tears down a test case."""
 
     def test_k2hr3resource_construct(self):
-        """Creates a K2hr3Response  instance."""
+        """Creates a K2hr3Policy  instance."""
         k2hr3_policy = K2hr3Policy(self.token,
                                    name=self.name,
                                    effect=self.effect,
@@ -64,7 +64,7 @@ class TestK2hr3Resource(unittest.TestCase):
         self.assertIsInstance(k2hr3_policy, K2hr3Policy)
 
     def test_k2hr3resource_repr(self):
-        """Represent a K2hr3Response instance."""
+        """Represent a K2hr3Policy instance."""
         k2hr3_policy = K2hr3Policy(self.token,
                                    name=self.name,
                                    effect=self.effect,
