@@ -55,6 +55,7 @@ if __name__ == '__main__':
     # 2. Makes a new k2hr3 resource
     k2hr3_resource = K2hr3Resource(
         k2hr3_token.token,
+        project=args.project,
         name=args.resource,
         data_type='string',
         data=Path('./example_resource.txt'),

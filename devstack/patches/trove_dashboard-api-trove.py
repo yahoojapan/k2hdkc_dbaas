@@ -18,10 +18,10 @@
 #
 
 diff --git a/trove_dashboard/api/trove.py b/trove_dashboard/api/trove.py
-index 83208de..2201a92 100644
+index 83208de..3b3266c 100644
 --- a/trove_dashboard/api/trove.py
 +++ b/trove_dashboard/api/trove.py
-@@ -25,6 +25,16 @@
+@@ -25,6 +25,16 @@ from keystoneauth1 import loading
  from keystoneauth1 import session
  from novaclient import client as nova_client
 
@@ -38,7 +38,7 @@ index 83208de..2201a92 100644
  # Supported compute versions
  NOVA_VERSIONS = base.APIVersionManager("compute", preferred_version=2)
  NOVA_VERSIONS.load_supported_version(1.1,
-@@ -67,7 +77,8 @@
+@@ -67,7 +77,8 @@ def cluster_delete(request, cluster_id):
 
  def cluster_create(request, name, volume, flavor, num_instances,
                     datastore, datastore_version,
@@ -48,7 +48,7 @@ index 83208de..2201a92 100644
      instances = []
      for i in range(num_instances):
          instance = {}
-@@ -84,7 +95,8 @@
+@@ -84,7 +95,8 @@ def cluster_create(request, name, volume, flavor, num_instances,
          datastore,
          datastore_version,
          instances=instances,
@@ -58,7 +58,7 @@ index 83208de..2201a92 100644
 
 
  def cluster_grow(request, cluster_id, new_instances):
-@@ -414,8 +426,210 @@
+@@ -414,8 +426,214 @@ def configuration_instances(request, group_id):
      return troveclient(request).configurations.instances(group_id)
 
 
@@ -159,6 +159,7 @@ index 83208de..2201a92 100644
 +        http.POST(k2hr3_token)
 +        k2hr3_resource = K2hr3Resource(
 +            k2hr3_token.token,
++            project=request.user.project_name,
 +            name=values["cluster-name"],
 +            data_type='string',
 +            data=Path('/opt/stack/k2hdkc_dbaas/utils/python-k2hr3client/examples/example_resource.txt'),
@@ -173,6 +174,7 @@ index 83208de..2201a92 100644
 +        http.POST(k2hr3_resource)
 +        k2hr3_resource_server = K2hr3Resource(
 +            k2hr3_token.token,
++            project=request.user.project_name,
 +            name="/".join([values["cluster-name"],"server"]),
 +            data_type='string',
 +            data="",
@@ -187,6 +189,7 @@ index 83208de..2201a92 100644
 +        http.POST(k2hr3_resource_server)
 +        k2hr3_resource_slave = K2hr3Resource(
 +            k2hr3_token.token,
++            project=request.user.project_name,
 +            name="/".join([values["cluster-name"],"slave"]),
 +            data_type='string',
 +            data="",
@@ -194,7 +197,8 @@ index 83208de..2201a92 100644
 +                "chmpx-mode": "SLAVE",
 +                "k2hr3-init-packages": "",
 +                "k2hr3-init-packagecloud-packages": "k2hdkc-dbaas-override-conf, k2hr3-get-resource, chmpx",
-+                "k2hr3-init-systemd-packages": "chmpx.service, k2hr3-get-resource.timer"
++                "k2hr3-init-systemd-packages": "chmpx.service, k2hr3-get-resource.timer",
++                "k2hdkc-dbaas-add-user": 1
 +            },
 +            alias=[]
 +        )
@@ -270,4 +274,3 @@ index 83208de..2201a92 100644
 
 
  def configuration_default(request, instance_id):
-

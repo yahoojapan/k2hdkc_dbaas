@@ -68,8 +68,8 @@ K2HMAXELE           = 16
 #
 # SERVER NODES SECTION
 #
-{{ foreach %host_key% in %yrn:yahoo:::demo:role:__TROVE_K2HDKC_CLUSTER_NAME__/server/hosts/ip% }}
-    {{ %one_host% = %yrn:yahoo:::demo:role:__TROVE_K2HDKC_CLUSTER_NAME__/server/hosts/ip%{%host_key%} }}
+{{ foreach %host_key% in %yrn:yahoo:::__TROVE_K2HDKC_TENANT_NAME__:role:__TROVE_K2HDKC_CLUSTER_NAME__/server/hosts/ip% }}
+    {{ %one_host% = %yrn:yahoo:::__TROVE_K2HDKC_TENANT_NAME__:role:__TROVE_K2HDKC_CLUSTER_NAME__/server/hosts/ip%{%host_key%} }}
 [SVRNODE]
 NAME                = {{= %one_host%{'host'} }}
 CUK                 = {{= %one_host%{'cuk'} }}
@@ -82,9 +82,9 @@ SSL                 = no
 #
 # SLAVE NODES SECTION
 #
-{{ if 0 < %yrn:yahoo:::demo:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip%.length }}
-    {{ foreach %host_key% in %yrn:yahoo:::demo:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip% }}
-        {{ %one_host% = %yrn:yahoo:::demo:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip%{%host_key%} }}
+{{ if 0 < %yrn:yahoo:::__TROVE_K2HDKC_TENANT_NAME__:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip%.length }}
+    {{ foreach %host_key% in %yrn:yahoo:::__TROVE_K2HDKC_TENANT_NAME__:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip% }}
+        {{ %one_host% = %yrn:yahoo:::__TROVE_K2HDKC_TENANT_NAME__:role:__TROVE_K2HDKC_CLUSTER_NAME__/slave/hosts/ip%{%host_key%} }}
 [SLVNODE]
 NAME                = {{= %one_host%{'host'} }}
 CUK                 = {{= %one_host%{'cuk'} }}
