@@ -1,7 +1,7 @@
 ---
 layout: contents
 language: ja
-title: Usage
+title: Usage(Trove)
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: usage.html
 lang_opp_word: To English
@@ -9,13 +9,13 @@ prev_url: buildja.html
 prev_string: Build a trial environment
 top_url: indexja.html
 top_string: TOP
-next_url: 
-next_string: 
+next_url: usage_clija.html
+next_string: Usage(CLI)
 ---
 
 # 使い方
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) の使い方を説明します。  
-**K2HDKC DBaaS** は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) に組み込まれたシステムであるため、TroveのDashboardおよび[CLI（openstackコマンドなど）](https://docs.openstack.org/python-openstackclient/latest/) から操作します。  
+[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の使い方を説明します。  
+この **K2HDKC DBaaS** (Database as a Service for K2HDKC) は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) に組み込まれたシステムであるため、TroveのDashboardおよび[CLI（openstackコマンドなど）](https://docs.openstack.org/python-openstackclient/latest/) から操作します。  
 
 ここでは、**K2HDKC DBaaS** でK2HDKCクラスターの作成、スケール、削除について、また自動化されたK2HDKCスレーブの起動・確認方法について説明します。  
 以下の説明は、Trove Dashboard経由での操作説明になります。  

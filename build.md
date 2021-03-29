@@ -10,13 +10,12 @@ prev_string: What's new
 top_url: index.html
 top_string: TOP
 next_url: usage.html
-next_string: Usage
+next_string: Usage(Trove)
 ---
 
 # Build a trial environment
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that is provided by [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) which incorporates [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) as one of the Database.  
-
-This document describes how to build a trial environment for **K2HDKC DBaaS**.  
+Describes how to build an environment for **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove).  
+This **K2HDKC DBaaS** (Database as a Service for K2HDKC) is a system that incorporates [K2HDKC](https://k2hdkc.antpick.ax/) as a distributed KVS into one of [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) Databases.  
 
 ## Required systems
 To build the **K2HDKC DBaaS** system environment, [OpenStack](https://www.openstack.org/) must be running.  
@@ -95,7 +94,7 @@ Finally, build the [K2HR3](https://k2hr3.antpick.ax/) system that is used as the
 [K2HR3](https://k2hr3.antpick.ax/) system is built to work in one instance(`Virtual Machine`) of OpenStack built above(3).  
 ```
 $ sudo su - stack
-$ ./k2hr3_devpack_setup.sh
+$ ./k2hr3_pack_setup.sh
 ```
 This script will ask you for a hostname or IP address to access with a browser along the way.  
 If you want to use a value different from the displayed hostname or IP address, you can correct it with this confirmation.  

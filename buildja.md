@@ -10,13 +10,12 @@ prev_string: What's new
 top_url: indexja.html
 top_string: TOP
 next_url: usageja.html
-next_string: Usage
+next_string: Usage(Trove)
 ---
 
 # 環境構築
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) にDatabaseのひとつとして 分散KVSである [K2HDKC](https://k2hdkc.antpick.ax/indexja.html) を組み込んだシステムです。  
-
-このドキュメントでは、**K2HDKC DBaaS** の構築方法について説明します。  
+[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の環境構築について説明します。
+この **K2HDKC DBaaS** (Database as a Service for K2HDKC) は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) にDatabaseのひとつとして 分散KVSである [K2HDKC](https://k2hdkc.antpick.ax/indexja.html) を組み込んだシステムです。  
 
 ## 必要となる周辺システム
 **K2HDKC DBaaS** の環境を構築するためには、[OpenStack](https://www.openstack.org/) が動作している環境が必要になります。  
@@ -92,7 +91,7 @@ URL: http://<hostname or ip address>/
 [K2HR3](https://k2hr3.antpick.ax/indexja.html) システムは、上記で構築したOpenStackの払い出す1つのインスタンス（`Virtual Machine`）で動作するように構築されます。  
 ```
 $ sudo su - stack
-$ ./k2hr3_devpack_setup.sh
+$ ./k2hr3_pack_setup.sh
 ```
 このスクリプトは、途中であなたにブラウザでアクセスするためのhostnameもしくはIPアドレスを確認します。  
 表示されているhostnameやIPアドレスと異なる値を使う場合には、この確認で修正することができます。  
