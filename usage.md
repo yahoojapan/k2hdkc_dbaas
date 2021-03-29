@@ -1,7 +1,7 @@
 ---
 layout: contents
 language: en-us
-title: Usage
+title: Usage(Trove)
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: usageja.html
 lang_opp_word: To Japanese
@@ -9,13 +9,13 @@ prev_url: build.html
 prev_string: Build a trial environment
 top_url: index.html
 top_string: TOP
-next_url: 
-next_string: 
+next_url: usage_cli.html
+next_string: Usage(CLI)
 ---
 
 # Usage
-This chapter describes how to use **K2HDKC DBaaS** (database as a service of K2HDKC).  
-**K2HDKC DBaaS** is a system built into [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), so you can operate it from the `Trove Dashboard` and [CLI(such as the openstack command)](https://docs.openstack.org/python-openstackclient/latest/).  
+Describes how to use **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove).  
+This **K2HDKC DBaaS** is a system built into [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), so you can operate it from the `Trove Dashboard` and [CLI(such as the openstack command)](https://docs.openstack.org/python-openstackclient/latest/).  
 
 The following describes how to create, scale, and delete **K2HDKC clusters** using **K2HDKC DBaaS**.  
 In addition, it explains how to start and check the **K2HDKC slave node** automated by using **K2HDKC DBaaS**.  
