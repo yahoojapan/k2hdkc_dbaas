@@ -1,3 +1,9 @@
+k2hdkc-dbaas (1.0.2) unstable; urgency=low
+
+  * Fixes the wrong format - #23
+
+ -- Hirotaka Wakabayashi <hiwakaba@yahoo-corp.jp>  Wed, 28 Apr 2021 14:54:10 +0900
+
 k2hdkc-dbaas (1.0.1) unstable; urgency=low
 
   * Updated README.md for k2hdkc_dbaas_override_conf - #18
