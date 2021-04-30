@@ -137,7 +137,7 @@ $ k2hr3 database openstack token --op_user demo --op_tenant demo --interactive -
 OpenStack User passphrase: ********
 gAAAAABgYV-h9MUf_gmfKRjx5cOGilOzg7KCSjccDwoPsYYTIao8gyA_VAozAFRVnconTsYQNTxYe01OWD8bmi_zcoeFzTEmqalt0INtHgP4-XXXXdVKWPNJ7o41NMCk95Oz6f3h6IJZPjYeMItymRBclLXKF4NykELxwgBl6ZqK-Z5laTRY5Njw_v-6ulhR9EzPyGP_gDqU
 ```
-上記では、`-\-interactive`オプションを指定することで、パスフレーズをコマンドラインで入力せず、対話式に入力しています。  
+上記では、`--interactive(-i)`オプションを指定することで、パスフレーズをコマンドラインで入力せず、対話式に入力しています。  
 
 #### 4.1.2. K2HR3トークン
 次に、上記で取得したOpenStackのトークンを使い、K2HR3のUnscopedおよびScopedトークンを取得し、**K2HR3 CLIのコンフィグレーション**に保管します。  
