@@ -104,7 +104,7 @@ The **K2HDKC DBaaS CLI** command accesses the [K2HR3 REST API](https://k2hr3.ant
 These URIs can be specified each time the command is executed, but this operation can be omitted by setting the URI as **K2HR3 CLI configuration** in advance.  
 Set each URI as follows.  
 ```
-$ /k2hr3 config set K2HR3CLI_API_URI https://localhost:3000
+$ k2hr3 config set K2HR3CLI_API_URI https://localhost:3000
 Succeed : Set "K2HR3CLI_API_URI: https://localhost:3000"
 
 $ k2hr3 config set K2HR3CLI_OPENSTACK_IDENTITY_URI https://localhost/identity
@@ -120,7 +120,7 @@ First, it is assumed that the [K2HR3](https://k2hr3.antpick.ax/) system is linke
 - Username  
 `demo`
 - Tenant(Project) name  
-`mytenant`
+`demo`
 
 ### 4.1. Tokens
 To build a **K2HDKC cluster**, you first need a Scoped token for the [K2HR3](https://k2hr3.antpick.ax/) system.  

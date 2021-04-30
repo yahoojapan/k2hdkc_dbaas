@@ -104,7 +104,7 @@ $ k2hr3 database --help
 コマンド実行毎に、これらのURIを指定することができますが、予めURIを**K2HR3 CLIのコンフィグレーション**として設定することで、この操作を省略できます。  
 以下のようにして各URIを設定します。  
 ```
-$ /k2hr3 config set K2HR3CLI_API_URI https://localhost:3000
+$ k2hr3 config set K2HR3CLI_API_URI https://localhost:3000
 Succeed : Set "K2HR3CLI_API_URI: https://localhost:3000"
 
 $ k2hr3 config set K2HR3CLI_OPENSTACK_IDENTITY_URI https://localhost/identity
@@ -121,7 +121,7 @@ _https://localhost:3000と、https://localhost/identityは、それぞれ K2HR3 
 - ユーザ名  
 `demo`
 - テナント（プロジェクト）名  
-`mytenant`
+`demo`
 
 ### 4.1. K2HR3 トークン
 **K2HDKC クラスター**を構築するために、まず[K2HR3](https://k2hr3.antpick.ax/indexja.html)システムのScopedトークンが必要となります。  
