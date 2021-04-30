@@ -26,7 +26,7 @@ next_string:
 以下でパッケージとしてインストールする場合の説明をします。  
 ソースコードを展開して利用する場合は、[k2hdkc_dbaas_cliリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_cli)を参照してください。  
 
-### リポジトリ設定
+### 1.1. リポジトリ設定
 まず、`packagecloud.io`のリポジトリの設定をします。
 ```
 $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.deb.sh | sudo bash
@@ -34,7 +34,7 @@ $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.d
 $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.rpm.sh | sudo bash
 ```
 
-### インストール
+### 1.2. インストール
 次に、**K2HDKC DBaaS CLI**（Command Line Interface）をインストールします。
 ```
 $ apt install k2hdkc-dbaas-cli
@@ -46,7 +46,7 @@ _各コマンドはお使いのOS環境に応じたパッケージマネージ�
 **K2HDKC DBaaS CLI**（Command Line Interface）は、[K2HR3 CLI](https://k2hr3.antpick.ax/clija.html)のプラグインです。  
 よって、[K2HR3 CLI](https://k2hr3.antpick.ax/clija.html)もインストールされます。  
 
-### 確認
+### 1.3. 確認
 以下のコマンドを実行して、正常にインストールされているか確認してください。
 ```
 $ k2hr3 --version
@@ -123,13 +123,13 @@ _https://localhost:3000と、https://localhost/identityは、それぞれ K2HR3 
 - テナント（プロジェクト）名  
 `mytenant`
 
-### 4.1 K2HR3 トークン
+### 4.1. K2HR3 トークン
 **K2HDKC クラスター**を構築するために、まず[K2HR3](https://k2hr3.antpick.ax/indexja.html)システムのScopedトークンが必要となります。  
 また、[OpenStack](https://www.openstack.org/) のScopedトークンも必要となります。  
 これらのトークンは、以降で説明するコマンド実行毎に指定することができますが、予め**K2HR3 CLIのコンフィグレーション**として設定することで、この操作を省略できます。  
 よって以下の説明では、**K2HR3 CLIのコンフィグレーション**にトークンを保管するオプションを含んだ事例を示しています。
 
-#### OpenStackトークン
+#### 4.1.1. OpenStackトークン
 まず、OpenStackのScopedトークンを取得し、**K2HR3 CLIのコンフィグレーション**に保管します。  
 
 ```
@@ -139,7 +139,7 @@ gAAAAABgYV-h9MUf_gmfKRjx5cOGilOzg7KCSjccDwoPsYYTIao8gyA_VAozAFRVnconTsYQNTxYe01O
 ```
 上記では、`-\-interactive`オプションを指定することで、パスフレーズをコマンドラインで入力せず、対話式に入力しています。  
 
-#### K2HR3トークン
+#### 4.1.2. K2HR3トークン
 次に、上記で取得したOpenStackのトークンを使い、K2HR3のUnscopedおよびScopedトークンを取得し、**K2HR3 CLIのコンフィグレーション**に保管します。  
 K2HR3のScopedトークンは、ユーザクレデンシャルを指定して取得することもできます。  
 詳しくは、[こちら](https://k2hr3.antpick.ax/cli_tokenja.html)を参照してください。  
@@ -149,7 +149,7 @@ $ k2hr3 token create token_optoken --tenant demo --saveconfig
 gAAAAABgYWFJDRoCI0R96YxUkbjE0A7b6OLIoZtkdC36yMvfkSha_1-zxOAmLYYYYWGJhk1O2ZV9FElRyCLvc5_8VNTJfh1HKk2ayANoDiv6LFk6O2DE40QXDR2yed70akOAUZNcJ_Dasbkt6OeSCMX6619OZ6fbpeYsingBC3-fY2XfPwQmc2QA4pFlzwsa34Di532MxtST
 ```
 
-### 4.2 K2HDKCクラスター設定
+### 4.2. K2HDKCクラスター設定
 **K2HDKC クラスター**のサーバーノードを作成する前に、**K2HDKC クラスター**の情報を[K2HR3](https://k2hr3.antpick.ax/indexja.html)システムに設定します。  
 
 作成する**K2HDKC クラスター**を`mycluster`として、以下のコマンドを実行します。  
@@ -168,7 +168,7 @@ Succeed : Registration of cluster "mycluster" with K2HR3 is complete
 このコマンドの実行により、[K2HR3](https://k2hr3.antpick.ax/indexja.html)のリソース（RESOURCE）、ポリシー（POLICY-RULE）、ロール（ROLE）が適切に設定されます。  
 [K2HR3](https://k2hr3.antpick.ax/indexja.html)に設定された情報を確認するには、[こちら](https://k2hr3.antpick.ax/usage_appja.html)の操作方法を使って、Web上で確認できます。  
 
-### 4.3 OpenStackの情報
+### 4.3. OpenStackの情報
 **K2HDKC クラスター**のサーバーノード（`Virtual Machine`）は、連携している[OpenStack](https://www.openstack.org/)のインスタンスとして起動します。  
 [OpenStack](https://www.openstack.org/)のインスタンスを起動するために、イメージ名（もしくはID）と、フレーバー名（もしくはID）が必要となります。  
 以下のコマンドを使い、利用できるイメージ名（もしくはID）と、フレーバー名（もしくはID）を確認できます。  
@@ -236,7 +236,7 @@ $ k2hr3 database list flavors --json
 次に説明する**K2HDKC クラスター**のサーバーノード（`Virtual Machine`）の起動では、イメージ名、フレーバー名を指定できます。  
 しかし、イメージIDおよびフレーバーIDを指定した方が、良好なパフォーマンスで起動できます。  
 
-### 4.3 K2HDKCサーバーノード
+### 4.4. K2HDKCサーバーノード
 **K2HDKC クラスター**を構築の最後に、K2HDKCサーバーノード（`Virtual Machine`）を起動します。  
 以下のコマンドを使って、起動します。  
 前述したように、イメージIDおよびフレーバーIDを指定して起動します。  
@@ -272,7 +272,7 @@ Succeed : Delete host myserver4 from mycluster cluster(OpenStack and K2HR3).
 このコマンドは、サーバーノード、スレーブノードの区別はありません。  
 いずれのノードであってもホスト名を指定するだけで破棄できます。  
 
-## 6. K2HDKCクラスターの破棄
+## 7. K2HDKCクラスターの破棄
 **K2HDKC クラスター**の全サーバーノードおよびスレーブノード、設定情報のすべてを破棄できます。  
 以下のコマンドにて実行できます。
 
@@ -285,6 +285,6 @@ Succeed : Delete all mycluster cluster(OpenStack and K2HR3).
 **K2HDKC クラスター**の削除の場合には、確認のためのプロンプトが表示されます。  
 このプロンプトを表示したくない場合には、`--yes(-y)`オプションを指定して、実行してください。
 
-## 7. まとめ
+## 8. まとめ
 上記、1から6までの操作で、[OpenStack](https://www.openstack.org/)に**K2HDKC クラスター**を簡単に構築できます。  
 必要となるのは、[OpenStack](https://www.openstack.org/)に連動する[K2HR3](https://k2hr3.antpick.ax/indexja.html)システムだけです。  

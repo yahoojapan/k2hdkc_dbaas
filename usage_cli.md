@@ -27,7 +27,7 @@ This section describes how to create, scale, and delete **K2HDKC clusters** with
 The following explains how to install it as a package.  
 To expand and use the source code, refer to [k2hdkc_dbaas_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_cli).  
 
-### Before installing
+### 1.1. Before installing
 First, set the repository for `packagecloud.io`.  
 ```
 $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.deb.sh | sudo bash
@@ -35,7 +35,7 @@ $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.d
 $ curl -s https://packagecloud.io/install/repositories/antpickax/stable/script.rpm.sh | sudo bash
 ```
 
-### Install pacakges
+### 1.2. Install pacakges
 Then install the **K2HDKC DBaaS CLI** package.  
 ```
 $ apt install k2hdkc-dbaas-cli
@@ -46,7 +46,7 @@ _Please use each command from the package manager according to your OS environme
 
 **K2HDKC DBaaS CLI** is a plugin for [K2HR3 CLI](https://k2hr3.antpick.ax/cli.html), then the [K2HR3 CLI](https://k2hr3.antpick.ax/cli.html) package will also be installed.  
 
-### Verification
+### 1.3. Verification
 Execute the following command to check if the installation is successful.  
 ```
 $ k2hr3 --version
@@ -122,13 +122,13 @@ First, it is assumed that the [K2HR3](https://k2hr3.antpick.ax/) system is linke
 - Tenant(Project) name  
 `mytenant`
 
-### 4.1 Tokens
+### 4.1. Tokens
 To build a **K2HDKC cluster**, you first need a Scoped token for the [K2HR3](https://k2hr3.antpick.ax/) system.  
 And you will also need a Scoped token for [OpenStack](https://www.openstack.org/).  
 These tokens can be specified for each command execution described below, but this operation can be omitted by setting them in advance as **K2HR3 CLI configuration**.  
 Therefore, the following explanation shows an example that includes an option to store tokens in **K2HR3 CLI configuration**.  
 
-#### OpenStack Token
+#### 4.1.1. OpenStack Token
 First, get the OpenStack Scoped token and store it in the **K2HR3 CLI configuration**.  
 ```
 $ k2hr3 database openstack token --op_user demo --op_tenant demo --interactive --saveconfig
@@ -137,7 +137,7 @@ gAAAAABgYV-h9MUf_gmfKRjx5cOGilOzg7KCSjccDwoPsYYTIao8gyA_VAozAFRVnconTsYQNTxYe01O
 ```
 In the above, by specifying the `--interactive(-i)` option, the passphrase is entered interactively instead of being entered on the command line.  
 
-#### K2HR3 Token
+#### 4.1.2. K2HR3 Token
 Then use the OpenStack tokens obtained above to get the K2HR3 Unscoped and Scoped tokens and store them in the **K2HR3 CLI Configuration**.  
 K2HR3 Scoped tokens can also be obtained by specifying user credentials.  
 For more information, see [here](https://k2hr3.antpick.ax/cli_token.html).  
@@ -147,7 +147,7 @@ $ k2hr3 token create token_optoken --tenant demo --saveconfig
 gAAAAABgYWFJDRoCI0R96YxUkbjE0A7b6OLIoZtkdC36yMvfkSha_1-zxOAmLYYYYWGJhk1O2ZV9FElRyCLvc5_8VNTJfh1HKk2ayANoDiv6LFk6O2DE40QXDR2yed70akOAUZNcJ_Dasbkt6OeSCMX6619OZ6fbpeYsingBC3-fY2XfPwQmc2QA4pFlzwsa34Di532MxtST
 ```
 
-### 4.2 Set information for K2HDKC Cluster
+### 4.2. Set information for K2HDKC Cluster
 Before creating the server node for the **K2HDKC cluster**, set the **K2HDKC cluster** information to the [K2HR3](https://k2hr3.antpick.ax/) system.  
 
 Execute the following command for the K2HDKC cluster to be created as `mycluster`.  
@@ -166,7 +166,7 @@ The `k2hdkcuser` above is the execution user of the [k2hdkc](https://k2hdkc.antp
 By executing this command, the RESOURCE, POLICY-RULE, and ROLE of [K2HR3](https://k2hr3.antpick.ax/) are set appropriately.  
 To check the information set in [K2HR3](https://k2hr3.antpick.ax/), use the operation method of [here](https://k2hr3.antpick.ax/usage_app.html).  
 
-### 4.3 Check OpenStack information
+### 4.3. Check OpenStack information
 The server node(`Virtual Machine`) of the **K2HDKC cluster** starts as an instance of the worked with [OpenStack](https://www.openstack.org/).  
 The image name(or ID) and flavor name(or ID) are required to launch an instance of [OpenStack](https://www.openstack.org/).  
 You can see the available image name(and ID) and flavor name(and ID) using the following command.  
@@ -234,7 +234,7 @@ $ k2hr3 database list flavors --json
 You can specify the image name and flavor name when starting the server node(`Virtual Machine`) of the **K2HDKC cluster** explained in the next chapter.  
 However, it is better to specify the image ID and flavor ID instead of them for better performance.  
 
-### 4.3 K2HDKC Server nodes
+### 4.4. K2HDKC Server nodes
 At the end of building the **K2HDKC cluster**, start the K2HDKC server node(`Virtual Machine`).  
 Start it using the following command.  
 As mentioned above, start by specifying the image ID and flavor ID.  
@@ -270,7 +270,7 @@ Succeed : Delete host myserver4 from mycluster cluster(OpenStack and K2HR3).
 This command makes no distinction between server nodes and slave nodes.  
 Any node can be destroyed simply by specifying the host name.  
 
-## 6. Destroy K2HDKC Cluster
+## 7. Destroy K2HDKC Cluster
 You can destroy all server nodes, slave nodes, and all configuration information in the **K2HDKC cluster**.  
 It can be executed with the following command.  
 
@@ -283,6 +283,6 @@ Succeed : Delete all mycluster cluster(OpenStack and K2HR3).
 In case of **K2HDKC cluster** deletion, you will be prompted for confirmation.  
 If you do not want to see this prompt, run it with the `--yes(-y)` option.  
 
-## 7. Summary
+## 8. Summary
 You can easily build a **K2HDKC cluster** on [OpenStack](https://www.openstack.org/) by following steps 1 to 6 above.  
 All you need is only [K2HR3](https://k2hr3.antpick.ax/) system that works with [OpenStack](https://www.openstack.org/).  
