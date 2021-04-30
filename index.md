@@ -33,8 +33,8 @@ You can see the source code of **K2HDKC DBaaS CLI** (Command Line Interface) at 
 ## {{ page.arrow_link_usage }}
 How to use **K2HDKC DBaaS** to build/start **K2HDKC cluster** and **K2HDKC slave node** easily.  
 
-For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [here](usageja.html).  
-For how to use **K2HDKC DBaaS CLI(Command Line Interface)**, refer to [here](usage_clija.html).  
+For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [here](usage.html).  
+For how to use **K2HDKC DBaaS CLI(Command Line Interface)**, refer to [here](usage_cli.html).  
 
 # About AntPickax
 [AntPickax](https://antpick.ax/) is product group that is provided as open source by Yahoo! JAPAN.  
