@@ -6,7 +6,7 @@ short_desc: Database as a Service for K2HDKC
 lang_opp_file: usage_k8s_clija.html
 lang_opp_word: To Japanese
 prev_url: usage_cli.html
-prev_string: Usage(kubernetes CLI)
+prev_string: Usage(CLI)
 top_url: index.html
 top_string: TOP
 next_url: 
