@@ -14,6 +14,9 @@ next_string: Build a trial environment
 ---
 
 # What's new
+## [30 Sep 2021] K2HDKC DBaaS on kubernetes Command Line Tool Release Version 1.0.0
+K2HDKC DBaaS on kubernetes Command Line Tool(CLI) Release Version(1.0.0), all source code released on Github.com.  
+
 ## [22 Mar 2021] K2HDKC DBaaS Command Line Tool Release Version 1.0.0
 K2HDKC DBaaS Command Line Tool(CLI) Release Version(1.0.0), all source code released on Github.com.  
 
