@@ -9,8 +9,8 @@ prev_url: usage.html
 prev_string: Usage(Trove)
 top_url: index.html
 top_string: TOP
-next_url: 
-next_string: 
+next_url: usage_k8s_cli.html
+next_string: Usage(kubernetes CLI)
 ---
 
 # Usage

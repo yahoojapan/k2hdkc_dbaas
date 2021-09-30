@@ -9,8 +9,8 @@ prev_url: usageja.html
 prev_string: Usage(Trove)
 top_url: indexja.html
 top_string: TOP
-next_url: 
-next_string: 
+next_url: usage_k8s_clija.html
+next_string: Usage(kubernetes CLI)
 ---
 
 # 使い方

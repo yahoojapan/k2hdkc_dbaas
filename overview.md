@@ -14,13 +14,13 @@ next_string: What's new
 ---
 
 # **K2HDKC DBaaS**
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that uses [K2HR3](https://k2hr3.antpick.ax/) and works with [OpenStack](https://www.openstack.org/) to build a [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) Cluster for distributed KVS.
+**K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that uses [K2HR3](https://k2hr3.antpick.ax/) and works with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/) to build a [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) Cluster for distributed KVS.
 
 ## Background
 Yahoo! JAPAN publishes some products as [AntPickax](https://antpick.ax/) as Open Source Software(OSS).  
 We planned to provide one of them, [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/) as **DBaaS(Database as a Service)** so that anyone can easily use it.  
 And the publicly available [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/) offers enough features to make this happen.  
-We have built ** DBaaS (Database as a Service)** in conjunction with [OpenStack](https://www.openstack.org/), centering on this [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/).  
+We have built ** DBaaS (Database as a Service)** in conjunction with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/), centering on this [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/).  
 
 **K2HDKC DBaaS** (Database as a Service for K2HDKC) is configured using the following products which is provided by [AntPickax](https://antpick.ax/index.html).  
 
@@ -32,7 +32,8 @@ This product is communication middleware over the network for sending binary dat
 This is extended RBAC (Role Based Access Control) system, and this system manages the configuration of the **K2HDKC cluster** as a backend for **K2HDKC DBaaS**.
 
 # Overview
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) provides the following **two ways** to build **DBaaS(Database as a Service)**.
+**K2HDKC DBaaS** (Database as a Service for K2HDKC) provides the following **two ways** to build **DBaaS(Database as a Service)** for cooperating with [OpenStack](https://www.openstack.org/).  
+It also provides the following **one way** for building **DBaaS(Database as a Service)** that cooperating with [kubernetes](https://kubernetes.io/).  
 
 ## With Trove(Trove is Database as a Service for OpenStack)
 This is **DBaaS(Database as a Service)** using [Trove](https://wiki.openstack.org/wiki/Trove) which is a product of [OpenStack](https://www.openstack.org/).  
@@ -40,6 +41,9 @@ It incorporates [K2HDKC](https://k2hdkc.antpick.ax/) (Distributed KVS) as one of
 
 ## OpenStack and K2HDKC DBaaS CLI(Command Line Interface)
 If you have an existing [OpenStack](https://www.openstack.org/) environment, this **K2HDKC DBaaS CLI(Command Line Interface)** allows you to implement **DBaaS(Database as a Service)** without any changes.
+
+## K2HDKC DBaaS on kubernetes CLI(Command Line Interface)
+If you are using [kubernetes](https://kubernetes.io/) cluster, this **K2HDKC DBaaS on kubernetes CLI(Command Line Interface)** allows you to implement **DBaaS(Database as a Service)** without any changes.
 
 # Overview - With Trove(Trove is Database as a Service for OpenStack)
 **K2HDKC DBaaS**(Database as a Service for K2HDKC) is based on [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) and works with other [OpenStack](https://www.openstack.org/) components.  
@@ -130,3 +134,59 @@ In addition, the K2HDKC slave node instance works with the [K2HR3](https://k2hr3
 
 Similar to the Trove type, the booted K2HDKC slave node can automate processes such as connecting and disconnecting according to the scale of the K2HDKC server node.  
 Then, the K2HDK cluster configuration is hidden from the user's program on the K2HDKC slave node, and the user's program does not need to be aware of the server node configuration, reducing the load on developers and operators.  
+
+# Overview - K2HDKC DBaaS on kubernetes CLI(Command Line Interface)
+**K2HDKC DBaaS on kubernetes CLI** makes it easy to build a **K2HDKC** cluster as **DBaaS(Database as a Service)** within a [kubernetes](https://kubernetes.io/) cluster.  
+
+![K2HDKC DBaaS on kubernetes CLI Overview](images/overview_k8s_cli.png)
+
+All construction and operation of K2HDKC cluster and [K2HR3](https://k2hr3.antpick.ax/index.html) system as **K2HDKC DBaaS** can be executed from **K2HDKC DBaaS on kubernetes CLI**.  
+
+The [K2HR3](https://k2hr3.antpick.ax/index.html) system required for **K2HDKC DBaaS** must be built in a [kubernetes](https://kubernetes.io/) cluster.  
+First of all, build a [K2HR3](https://k2hr3.antpick.ax/index.html) system in a [kubernetes](https://kubernetes.io/) cluster.  
+This operation is easy to do using the **K2HDKC DBaaS on kubernetes CLI**.  
+**K2HDKC DBaaS on kubernetes CLI** allows you to build and delete [K2HR3](https://k2hr3.antpick.ax/index.html) systems in your [kubernetes](https://kubernetes.io/) cluster.  
+
+Use the built [K2HR3](https://k2hr3.antpick.ax/index.html) system to build and delete the **K2HDKC cluster**.  
+**K2HDKC DBaaS on kubernetes CLI** can be used to scale in/out server nodes to a K2HDKC cluster.  
+You can scale in/out slave nodes that connect to the built K2HDKC cluster in the same way.  
+Automatic configuration and automatic data merging are supported as these operations increase or decrease the number of nodes in the K2HDKC cluster.  
+
+Below is a rough description of the **K2HDKC DBaaS** system using the **K2HDKC DBaaS on kubernetes CLI**.  
+
+## kubernetes control plane
+**K2HDKC DBaaS on kubernetes CLI** uses **kube-apiserver** of Control Plane in [kubernetes](https://kubernetes.io/) cluster.  
+**K2HDKC DBaaS on kubernetes CLI** can work with existing your [kubernetes](https://kubernetes.io/) clusters.  
+
+At this time, the [kubernetes](https://kubernetes.io/) cluster authentication system only supports [OpenID Connect](https://openid.net/connect/).  
+
+## K2HR3 system
+Similar to **K2HDKC DBaaS** which works with [OpenStack](https://www.openstack.org/), this type requires the [K2HR3](https://k2hr3.antpick.ax/) system which is one of the [AntPickax](https://antpick.ax/index.html) products.  
+**K2HDKC DBaaS on kubernetes CLI** manipulates [K2HR3](https://k2hr3.antpick.ax/) system and [kubernetes](https://kubernetes.io/) resources to realize **K2HDKC DBaaS** function.  
+
+This [K2HR3](https://k2hr3.antpick.ax/index.html) system must be in a same [kubernetes](https://kubernetes.io/) cluster that builds **K2HDKC DBaaS**.  
+
+You can build the [K2HR3](https://k2hr3.antpick.ax/index.html) system required by **K2HDKC DBaaS** using **K2HDKC DBaaS on kubernetes CLI**.  
+The required [K2HR3](https://k2hr3.antpick.ax/index.html) system configuration is set automatically by **K2HDKC DBaaS on kubernetes CLI**.  
+
+It is sufficient to have one [K2HR3](https://k2hr3.antpick.ax/index.html) system in a [kubernetes](https://kubernetes.io/) cluster, but you can build multiple [K2HR3](https://k2hr3.antpick.ax/index.html) systems.  
+
+## K2HDKC cluster
+This is a K2HDKC cluster built and launched by the **K2HDKC DBaaS on kubernetes CLI**.  
+On **Compute machie(nodes)** in the [kubernetes](https://kubernetes.io/) cluster, each node in the K2HDKC cluster is launched as a container.  
+
+**K2HDKC DBaaS on kubernetes CLI** can be used to create/delete(scale in/out) server nodes and slave nodes of a K2HDKC cluster.  
+(You can also scale directly using the **kubectl** command etc.)  
+
+## K2HDKC slave node
+This is the slave nodes(clients) that connect to server nodes in K2HDKC cluster created by **K2HDKC DBaaS on kubernetes CLI**.  
+
+![K2HDKC DBaaS Slave Overview](images/overview_k8s_cli_slave.png)
+
+K2HDKC slave nodes can also be created and deleted using **K2HDKC DBaaS on kubernetes CLI**.  
+And **K2HDKC DBaaS on kubernetes CLI** supports automatic configuration for these nodes.  
+
+The [kubernetes](https://kubernetes.io/) object used to build the K2HDKC slave node is represented as a **yaml file**.  
+Users modify this **yaml file template** used by the **K2HDKC DBaaS on kubernetes CLI** and change it to the container they need.  
+
+**K2HDKC DBaaS on kubernetes CLI** hides the K2HDK cluster configuration from the K2HDKC slave node programs, and these programs eliminate the need to be aware of the server node configuration, reducing the load on developers and operators.  
