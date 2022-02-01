@@ -7,7 +7,7 @@ lang_opp_file: index.html
 lang_opp_word: To English
 arrow_link_overview: <a href="overviewja.html" class="link-title"><span class="arrow-base link-arrow-right"></span>概要</a>
 arrow_link_whatnew: <a href="whatnewja.html" class="link-title"><span class="arrow-base link-arrow-right"></span>お知らせ</a>
-arrow_link_build: <a href="buildja.html" class="link-title"><span class="arrow-base link-arrow-right"></span>環境構築</a>
+arrow_link_sourcecode: <a class="link-title"><span class="arrow-base link-arrow-right"></span>ソースコード</a>
 arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-base link-arrow-right"></span>使い方</a>
 ---
 
@@ -25,18 +25,22 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 ## {{ page.arrow_link_overview }}
 **K2HDKC DBaaS** の[概要](overviewja.html)について説明します。  
 
+以下は、それぞれのタイプの**K2HDKC DBaaS**の概要説明です。  
+
+- [K2HDKC DBaaS with Trove](overview_troveja.html)  
+[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
+- [K2HDKC DBaaS CLI](overview_clija.html)  
+[OpenStack](https://www.openstack.org/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
+- [K2HDKC DBaaS on kubernetes CLI](overview_k8s_clija.html)  
+[kubernetes](https://kubernetes.io/ja/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
+
 ## {{ page.arrow_link_whatnew }}
 **K2HDKC DBaaS** について、新着情報などの[お知らせ](whatnewja.html)です。
 
-## {{ page.arrow_link_build }}
-3種類の **K2HDKC DBaaS** (Database as a Service for K2HDKC) のうち、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** は、環境の構築が必要となります。  
-[こちら](buildja.html)で、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** を試用目的として、簡単に[構築する方法](buildja.html)を説明します。  
+## {{ page.arrow_link_sourcecode }}
 
-**K2HDKC DBaaS CLI**（Command Line Interface）は、[OpenStack](https://www.openstack.org/) と連携するだけであり、[OpenStack](https://www.openstack.org/)システムのみを必要とし、パッケージをインストールすればすぐに使えます。  
+それぞれのタイプのK2HDKC DBaaSのソースコートは、以下に示すGithubリポジトリにあります。  
 
-**K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）も、[kubernetes](https://kubernetes.io/) と連携するだけであり、[kubernetes](https://kubernetes.io/) クラスターのみを必要とし、パッケージをインストールすればすぐに使えます。  
-
-それぞれのソースコートは、以下に示すGithubリポジトリにあります。
 - [k2hdkc_dbaasリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas)   
 [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** のソースコード
 - [k2hdkc_dbaas_cliリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
@@ -45,8 +49,12 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）のソースコード
 
 ## {{ page.arrow_link_usage }}
-3種類の**K2HDKC DBaaS** について、それぞれを使ってK2HDKCクラスターの構築、K2HDKCスレーブノードの簡単な起動などの使い方について説明します。  
-- [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** の使い方は、[こちら](usageja.html)を参照してください。
+
+**K2HDKC DBaaS** の[使い方](usageja.html)について説明します。  
+
+それぞれの**K2HDKC DBaaS** の使い方は、以下のリンクを直接参照することもできます。  
+
+- [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** の使い方は、[こちら](usage_troveja.html)を参照してください。
 - **K2HDKC DBaaS CLI**（Command Line Interface）の使い方は、[こちら](usage_clija.html)を参照してください。
 - **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）の使い方は、[こちら](usage_k8s_clija.html)を参照してください。
 

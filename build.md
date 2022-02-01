@@ -1,21 +1,21 @@
 ---
 layout: contents
 language: en-us
-title: Build a trial environment
+title: Trove Trial Environment
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: buildja.html
 lang_opp_word: To Japanese
-prev_url: whatnew.html
-prev_string: What's new
-top_url: index.html
-top_string: TOP
-next_url: usage.html
-next_string: Usage(Trove)
+prev_url: 
+prev_string: 
+top_url: usage_trove.html
+top_string: Usage DBaaS with Trove
+next_url: 
+next_string: 
 ---
 
 # Build a trial environment
-Describes how to build an environment for **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove).  
-This **K2HDKC DBaaS** (Database as a Service for K2HDKC) is a system that incorporates [K2HDKC](https://k2hdkc.antpick.ax/) as a distributed KVS into one of [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) Databases.  
+Describes how to build an environment for **K2HDKC DBaaS with Trove** (Database as a Service for K2HDKC) that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove).  
+This **K2HDKC DBaaS with Trove** is a system that incorporates [K2HDKC](https://k2hdkc.antpick.ax/) as a distributed KVS into one of [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) Databases.  
 
 ## Required systems
 To build the **K2HDKC DBaaS** system environment, [OpenStack](https://www.openstack.org/) must be running.  
