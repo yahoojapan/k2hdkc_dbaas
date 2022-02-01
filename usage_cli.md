@@ -1,19 +1,19 @@
 ---
 layout: contents
 language: en-us
-title: Usage(CLI)
+title: Usage DBaaS CLI
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: usage_clija.html
 lang_opp_word: To Japanese
-prev_url: usage.html
-prev_string: Usage(Trove)
-top_url: index.html
-top_string: TOP
+prev_url: usage_trove.html
+prev_string: Usage DBaaS with Trove
+top_url: usage.html
+top_string: Usage
 next_url: usage_k8s_cli.html
-next_string: Usage(kubernetes CLI)
+next_string: Usage DBaaS on k8s CLI
 ---
 
-# Usage
+# Usage - K2HDKC DBaaS CLI
 Describes how to use **K2HDKC DBaaS CLI** (Command Line Interface).  
 **K2HDKC DBaaS CLI** (Command Line Interface) works with [OpenStack](https://www.openstack.org/) components and [K2HR3](https://k2hr3.antpick.ax/) systems.  
 

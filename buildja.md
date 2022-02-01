@@ -1,21 +1,21 @@
 ---
 layout: contents
 language: ja
-title: Build a trial environment
+title: Trove Trial Environment
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: build.html
 lang_opp_word: To English
-prev_url: whatnewja.html
-prev_string: What's new
-top_url: indexja.html
-top_string: TOP
-next_url: usageja.html
-next_string: Usage(Trove)
+prev_url: 
+prev_string: 
+top_url: usage_troveja.html
+top_string: Usage DBaaS with Trove
+next_url: 
+next_string: 
 ---
 
-# 環境構築
-[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の環境構築について説明します。
-この **K2HDKC DBaaS** (Database as a Service for K2HDKC) は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) にDatabaseのひとつとして 分散KVSである [K2HDKC](https://k2hdkc.antpick.ax/indexja.html) を組み込んだシステムです。  
+# K2HDKC DBaaS with Trove 環境構築
+[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する**K2HDKC DBaaS with Trove** (Database as a Service for K2HDKC)の環境構築について説明します。
+この **K2HDKC DBaaS with Trove** は、[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) にDatabaseのひとつとして 分散KVSである [K2HDKC](https://k2hdkc.antpick.ax/indexja.html) を組み込んだシステムです。  
 
 ## 必要となる周辺システム
 **K2HDKC DBaaS** の環境を構築するためには、[OpenStack](https://www.openstack.org/) が動作している環境が必要になります。  
@@ -106,4 +106,3 @@ URL: http://<hostname or ip address>:28080/
 #### (5) 確認
 (3)で示したTrove Dashboardおよび、(4)で示すK2HR3 Web Applicationにアクセスできれば、試用環境の構築は完了です。  
 試用環境を含むK2HDKC DBaaSの使い方は、次章の**K2HDKC DBaaS** の使い方で説明します。  
-

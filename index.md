@@ -7,7 +7,7 @@ lang_opp_file: indexja.html
 lang_opp_word: To Japanese
 arrow_link_overview: <a href="overview.html" class="link-title"><span class="arrow-base link-arrow-right"></span>Overview</a>
 arrow_link_whatnew: <a href="whatnew.html" class="link-title"><span class="arrow-base link-arrow-right"></span>What's new</a>
-arrow_link_build: <a href="build.html" class="link-title"><span class="arrow-base link-arrow-right"></span>Build a trial environment</a>
+arrow_link_build: <a class="link-title"><span class="arrow-base link-arrow-right"></span>Source code</a>
 arrow_link_usage: <a href="usage.html" class="link-title"><span class="arrow-base link-arrow-right"></span>Usage</a>
 ---
 
@@ -27,26 +27,34 @@ It also provides a **command line tool** called **K2HDKC DBaaS on kubernetes CLI
 ![K2HDKC DBaaS](images/top_k2hdkc_dbaas.png)
 
 ## {{ page.arrow_link_overview }}
-[Overview](overview.html) about **K2HDKC DBaaS**.
+[Overview](overview.html) about **K2HDKC DBaaS**.  
+
+Below is an overview of each type of **K2HDKC DBaaS**.  
+
+- [K2HDKC DBaaS with Trove](overview_trove.html)  
+An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove).
+- [K2HDKC DBaaS CLI](overview_cli.html)  
+An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [OpenStack](https://www.openstack.org/).
+- [K2HDKC DBaaS on kubernetes CLI](overview_k8s_cli.html)  
+An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [kubernetes](https://kubernetes.io/).
 
 ## {{ page.arrow_link_whatnew }}
 What's new about **K2HDKC DBaaS**.
 
 ## {{ page.arrow_link_build }}
-Only the **K2HDKC DBaaS** (Database as a Service for K2HDKC) which that cooperates with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) requires the construction of an environment.  
-We explain how to [build](build.html) the **K2HDKC DBaaS** that cooperates with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) as trial purposes.  
 
-**K2HDKC DBaaS CLI**(Command Line Interface) requires only [OpenStack](https://www.openstack.org/) system, and can be used immediately after installing the package.  
+Each **K2HDKC DBaaS** source code is in the [Github](https://github.com/) repository shown below.  
 
-**K2HDKC DBaaS on kubernetes CLI**(Command Line Interface) also requires only [kubernetes](https://kubernetes.io/) clusters, and can be used immediately after installing the package.  
-
-Each source code is in the [Github](https://github.com/) repository shown below.
 - [k2hdkc_dbaas repository](https://github.com/yahoojapan/k2hdkc_dbaas) for cooperating with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)
 - [k2hdkc_dbaas_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_cli) is **K2HDKC DBaaS CLI** (Command Line Interface)
 - [k2hdkc_dbaas_k8s_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli) is **K2HDKC DBaaS on kubernetes CLI** (Command Line Interface)
 
 ## {{ page.arrow_link_usage }}
-How to use **K2HDKC DBaaS** to build/start **K2HDKC cluster** and **K2HDKC slave node** easily.  
+
+How to use **K2HDKC DBaaS** is explained in [Usage](usage.html).  
+
+You can also refer directly to the links below for how to use each **K2HDKC DBaaS**.  
+
 - For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [here](usage.html).
 - For how to use **K2HDKC DBaaS CLI**(Command Line Interface), refer to [here](usage_cli.html).
 - For how to use **K2HDKC DBaaS on kubernetes CLI**(Command Line Interface), refer to [here](usage_k8s_cli.html).

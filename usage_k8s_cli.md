@@ -1,19 +1,19 @@
 ---
 layout: contents
 language: en-us
-title: Usage(kubernetes CLI)
+title: Usage DBaaS on k8s CLI
 short_desc: Database as a Service for K2HDKC
 lang_opp_file: usage_k8s_clija.html
 lang_opp_word: To Japanese
 prev_url: usage_cli.html
-prev_string: Usage(CLI)
-top_url: index.html
-top_string: TOP
+prev_string: Usage DBaaS CLI
+top_url: usage.html
+top_string: Usage
 next_url: 
 next_string: 
 ---
 
-# Usage
+# Usage - K2HDKC DBaaS on kubernetes CLI
 Describes how to use **K2HDKC DBaaS on kubernetes CLI** (Command Line Interface).  
 **K2HDKC DBaaS on kubernetes CLI** works with [kubernetes](https://kubernetes.io/) and [K2HR3](https://k2hr3.antpick.ax/) systems.  
 

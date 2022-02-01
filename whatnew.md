@@ -9,8 +9,8 @@ prev_url: overview.html
 prev_string: Overview
 top_url: index.html
 top_string: TOP
-next_url: build.html
-next_string: Build a trial environment
+next_url: usage.html
+next_string: Usage
 ---
 
 # What's new

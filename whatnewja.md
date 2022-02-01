@@ -9,8 +9,8 @@ prev_url: overviewja.html
 prev_string: Overview
 top_url: indexja.html
 top_string: TOP
-next_url: buildja.html
-next_string: Build a trial environment
+next_url: usageja.html
+next_string: Usage
 ---
 
 # What's new
