@@ -47,7 +47,7 @@ See the [Helm](https://helm.sh/) documentation for more information.
 As mentioned earlier, the **K2HDKC Helm Chart** requires the [K2HR3](https://k2hr3.antpick.ax/index.html) system which is one of the [AntPickax](https://antpick.ax/index.html) products, like other types of K2HDKC DBaaS.  
 Before using **K2HDKC Helm Chart**, you need to setup(build) [K2HR3](https://k2hr3.antpick.ax) system by using [K2HR3 Helm Chart](https://k2hr3.antpick.ax/helm_chart.html).  
 
-Please refer to [Usage - K2HR3 Helm Chart](https://k2hr3.antpick.ax/setup_helm_chart.html) for how to use [K2HR3 Helm Chart](https://k2hr3.antpick.ax/k2hr3_helm_chart.html).  
+Please refer to [Usage - K2HR3 Helm Chart](https://k2hr3.antpick.ax/setup_helm_chart.html) for how to use [K2HR3 Helm Chart](https://k2hr3.antpick.ax/helm_chart.html).  
 
 ## K2HDKC Cluster
 You can build all parts for K2HDKC cluster(server / slave nodes) by **K2HDKC Helm Chart** easily.  

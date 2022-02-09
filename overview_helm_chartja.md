@@ -50,7 +50,7 @@ Helmの使い方については、[こちら](https://helm.sh/ja/)を参照し�
 
 **K2HDKC Helm Chart**を使う場合は、[K2HR3 Helm Chart](https://k2hr3.antpick.ax/helm_chartja.html) を使い、事前に [K2HR3](https://k2hr3.antpick.ax/indexja.html)システムを構築してください。  
 
-[K2HR3 Helm Chart](https://k2hr3.antpick.ax/k2hr3_helm_chartja.html) の使い方は、[こちら](https://k2hr3.antpick.ax/setup_helm_chartja.html)を参照してください。
+[K2HR3 Helm Chart](https://k2hr3.antpick.ax/helm_chartja.html) の使い方は、[こちら](https://k2hr3.antpick.ax/setup_helm_chartja.html)を参照してください。
 
 ## K2HDKC クラスター
 **K2HDKC Helm Chart** を使うことで、指定されたK2HDKCサーバーノード、スレーブノードが構築されます。  
