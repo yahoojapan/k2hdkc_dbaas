@@ -17,7 +17,7 @@ next_string:
 
 **K2HDKC DBaaS** (Database as a Service for K2HDKC) works with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/).  
 
-There are two types of **K2HDKC DBaaS** that support [OpenStack](https://www.openstack.org/) and one type that supports [kubernetes](https://kubernetes.io/), for a total of three types of **K2HDKC DBaaS**.  
+There are two types of **K2HDKC DBaaS** that support [OpenStack](https://www.openstack.org/) and two type that supports [kubernetes](https://kubernetes.io/), for a total of four types of **K2HDKC DBaaS**.  
 
 The following describes how to use each **K2HDKC DBaaS**.  
 
@@ -27,3 +27,5 @@ This is how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as 
 This is how to use **K2HDKC DBaaS** that works with [OpenStack](https://www.openstack.org/).
 - [K2HDKC DBaaS on kubernetes CLI](usage_k8s_cli.html)  
 This is how to use **K2HDKC DBaaS** that works with [kubernetes](https://kubernetes.io/).
+- [K2HDKC Helm Chart](usage_helm_chart.html)  
+This is how to use **K2HDKC DBaaS** by [Helm(The package manager for Kubernetes)](https://helm.sh/) that works with [kubernetes](https://kubernetes.io/).

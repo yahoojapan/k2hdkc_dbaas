@@ -9,8 +9,8 @@ prev_url: usage_clija.html
 prev_string: Usage DBaaS CLI
 top_url: usageja.html
 top_string: Usage
-next_url: 
-next_string: 
+next_url: usage_helm_chartja.html
+next_string: Usage K2HDKC Helm Chart
 ---
 
 # 使い方 - K2HDKC DBaaS on kubernetes CLI

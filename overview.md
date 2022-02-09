@@ -32,8 +32,8 @@ This product is communication middleware over the network for sending binary dat
 This is extended RBAC (Role Based Access Control) system, and this system manages the configuration of the **K2HDKC cluster** as a backend for **K2HDKC DBaaS**.
 
 # Overview
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) provides the following **two ways** to build **DBaaS(Database as a Service)** for cooperating with [OpenStack](https://www.openstack.org/).  
-It also provides the following **one way** for building **DBaaS(Database as a Service)** that cooperating with [kubernetes](https://kubernetes.io/).  
+There are four types of **DBaaS(Database as a Service)** provided by "K2HDKC DBaaS** (Database as a Service for K2HDKC) as shown below.
+We provide two **K2HDKC DBaaS** types that cooperate with [OpenStack](https://www.openstack.org/) and two types that cooperate with [kubernetes](https://kubernetes.io/).
 
 ## [With Trove(Trove is Database as a Service for OpenStack)](overview_trove.html)
 This is **DBaaS(Database as a Service)** using [Trove](https://wiki.openstack.org/wiki/Trove) which is a product of [OpenStack](https://www.openstack.org/).  
@@ -44,3 +44,6 @@ If you have an existing [OpenStack](https://www.openstack.org/) environment, thi
 
 ## [K2HDKC DBaaS on kubernetes CLI(Command Line Interface)](overview_k8s_cli.html)
 If you are using [kubernetes](https://kubernetes.io/) cluster or trial environment such as `minikube`, this **K2HDKC DBaaS on kubernetes CLI(Command Line Interface)** allows you to implement **DBaaS(Database as a Service)** without any changes.
+
+## [K2HDKC Helm Chart](overview_helm_chart.html)
+If you are using [kubernetes](https://kubernetes.io/) cluster or trial environment such as `minikube`, you can install(build) **DBaaS(Database as a Service)** by using [Helm(The package manager for Kubernetes)](https://helm.sh/) with **K2HDKC Helm Chart**.

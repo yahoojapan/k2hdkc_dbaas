@@ -14,6 +14,9 @@ next_string: Usage
 ---
 
 # What's new
+## 2022年2月9日 K2HDKC Helm Chart Release Version 1.0.0 公開
+K2HDKC Helm Chart Release Version 1.0.0 のソースコードをGithub.comで公開しました。  
+
 ## 2021年9月30日 K2HDKC DBaaS on kubernetes Command Line Tool Release Version 1.0.0 公開
 K2HDKC DBaaS on kubernetes Command Line Tool(CLI) Release Version 1.0.0 のソースコードをGithub.comで公開しました。  
 

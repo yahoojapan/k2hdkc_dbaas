@@ -9,8 +9,8 @@ prev_url: overview_clija.html
 prev_string: Overview DBaaS CLI
 top_url: overviewja.html
 top_string: Overview
-next_url: 
-next_string: 
+next_url: overview_helm_chartja.html
+next_string: Overview Helm Chart
 ---
 
 # K2HDKC DBaaS on kubernetes CLI 概要

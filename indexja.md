@@ -33,6 +33,8 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 [OpenStack](https://www.openstack.org/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
 - [K2HDKC DBaaS on kubernetes CLI](overview_k8s_clija.html)  
 [kubernetes](https://kubernetes.io/ja/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
+- [K2HDKC Helm Chart](overview_helm_chartja.html)  
+[Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー） を使い、[kubernetes](https://kubernetes.io/ja/)と連動する **K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
 
 ## {{ page.arrow_link_whatnew }}
 **K2HDKC DBaaS** について、新着情報などの[お知らせ](whatnewja.html)です。
@@ -42,21 +44,24 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 それぞれのタイプのK2HDKC DBaaSのソースコートは、以下に示すGithubリポジトリにあります。  
 
 - [k2hdkc_dbaasリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas)   
-[Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** のソースコード
+**K2HDKC DBaaS with Trove** のソースコード
 - [k2hdkc_dbaas_cliリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
 **K2HDKC DBaaS CLI**（Command Line Interface）のソースコード
 - [k2hdkc_dbaas_k8s_cliリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli)  
 **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）のソースコード
+- [k2hdkc_helm_chartリポジトリ](https://github.com/yahoojapan/k2hdkc_helm_chart)  
+**K2HDKC Helm Chart** のソースコード
 
 ## {{ page.arrow_link_usage }}
 
-**K2HDKC DBaaS** の[使い方](usageja.html)について説明します。  
+すべての **K2HDKC DBaaS** について、[使い方](usageja.html)で その使用方法を説明します。  
 
-それぞれの**K2HDKC DBaaS** の使い方は、以下のリンクを直接参照することもできます。  
+それぞれの **K2HDKC DBaaS** の使い方は、以下のリンクから直接参照することができます。  
 
-- [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)と連携する **K2HDKC DBaaS** の使い方は、[こちら](usage_troveja.html)を参照してください。
+- **K2HDKC DBaaS** with [Trove](https://wiki.openstack.org/wiki/Trove) の使い方は、[こちら](usage_troveja.html)を参照してください。
 - **K2HDKC DBaaS CLI**（Command Line Interface）の使い方は、[こちら](usage_clija.html)を参照してください。
 - **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）の使い方は、[こちら](usage_k8s_clija.html)を参照してください。
+- **K2HDKC Helm Chart** の使い方は、[こちら](usage_helm_chartja.html)を参照してください。
 
 # **AntPickaxについて**
 [AntPickax](https://antpick.ax/indexja.html)は、Yahoo! JAPANがオープンソースとして公開する一連のプロダクト群です。  

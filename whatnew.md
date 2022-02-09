@@ -14,6 +14,9 @@ next_string: Usage
 ---
 
 # What's new
+## [9 Feb 2022] K2HDKC Helm Chart Release Version 1.0.0
+K2HDKC Helm Chart Release Version(1.0.0), all source code released on Github.com.  
+
 ## [30 Sep 2021] K2HDKC DBaaS on kubernetes Command Line Tool Release Version 1.0.0
 K2HDKC DBaaS on kubernetes Command Line Tool(CLI) Release Version(1.0.0), all source code released on Github.com.  
 
