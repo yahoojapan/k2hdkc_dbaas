@@ -37,6 +37,8 @@ An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works wi
 An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [OpenStack](https://www.openstack.org/).
 - [K2HDKC DBaaS on kubernetes CLI](overview_k8s_cli.html)  
 An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [kubernetes](https://kubernetes.io/).
+- [K2HDKC Helm Chart](overview_helm_chart.html)  
+An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that uses [Helm(The package manager for Kubernetes)](https://helm.sh/) and works with [kubernetes](https://kubernetes.io/).
 
 ## {{ page.arrow_link_whatnew }}
 What's new about **K2HDKC DBaaS**.
@@ -45,19 +47,25 @@ What's new about **K2HDKC DBaaS**.
 
 Each **K2HDKC DBaaS** source code is in the [Github](https://github.com/) repository shown below.  
 
-- [k2hdkc_dbaas repository](https://github.com/yahoojapan/k2hdkc_dbaas) for cooperating with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove)
-- [k2hdkc_dbaas_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_cli) is **K2HDKC DBaaS CLI** (Command Line Interface)
-- [k2hdkc_dbaas_k8s_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli) is **K2HDKC DBaaS on kubernetes CLI** (Command Line Interface)
+- [k2hdkc_dbaas repository](https://github.com/yahoojapan/k2hdkc_dbaas)  
+The source code repository for [K2HDKC DBaaS with Trove](overview_trove.html)
+- [k2hdkc_dbaas_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
+The source code repository for [K2HDKC DBaaS CLI](overview_cli.html) (Command Line Interface)  
+- [k2hdkc_dbaas_k8s_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli)  
+The source code repository for [K2HDKC DBaaS on kubernetes CLI](overview_k8s_cli.html) (Command Line Interface)  
+- [k2hdkc_helm_chart repository](https://github.com/yahoojapan/k2hdkc_helm_chart)  
+The source code repository for [K2HDKC Helm Chart](overview_helm_chart.html)  
 
 ## {{ page.arrow_link_usage }}
 
-How to use **K2HDKC DBaaS** is explained in [Usage](usage.html).  
+How to use all **K2HDKC DBaaS** is explained in [Usage](usage.html).  
 
 You can also refer directly to the links below for how to use each **K2HDKC DBaaS**.  
 
-- For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [here](usage.html).
-- For how to use **K2HDKC DBaaS CLI**(Command Line Interface), refer to [here](usage_cli.html).
-- For how to use **K2HDKC DBaaS on kubernetes CLI**(Command Line Interface), refer to [here](usage_k8s_cli.html).
+- [Usage for K2HDKC DBaaS](usage.html) with [Trove](https://wiki.openstack.org/wiki/Trove)
+- [Usage for K2HDKC DBaaS CLI](usage_cli.html) (Command Line Interface)
+- [Usage for K2HDKC DBaaS on kubernetes CLI](usage_k8s_cli.html) (Command Line Interface)
+- [Usage for K2HDKC Helm Chart](usage_helm_chart.html)
 
 # About AntPickax
 [AntPickax](https://antpick.ax/) is product group that is provided as open source by Yahoo! JAPAN.  

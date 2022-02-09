@@ -32,8 +32,8 @@ Yahoo! JAPANがオープンソースとして公開する一連のプロダク�
 RBAC (Role Based Access Control) システムであり、**K2HDKC DBaaS** で作成されるK2HDKCクラスターの構成を管理します。
 
 # 概要
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) が提供する **DBaaS（Database as a Service）** は、[OpenStack](https://www.openstack.org/)と連動するために**2つの方法**を提供します。  
-また、[kubernetes](https://kubernetes.io/)と連動するために**1つの方法**を提供します。
+**K2HDKC DBaaS** (Database as a Service for K2HDKC) が提供する **DBaaS（Database as a Service）** は、以下に示す4つのタイプがあります。  
+[OpenStack](https://www.openstack.org/)と連動する **K2HDKC DBaaS** を2つ、[kubernetes](https://kubernetes.io/)と連動するものを2つ提供します。
 
 ## [Trove(Trove is Database as a Service for OpenStack) 対応](overview_troveja.html)
 [OpenStack](https://www.openstack.org/) のプロダクトである [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove) を使った**DBaaS（Database as a Service）**です。  
@@ -44,3 +44,6 @@ RBAC (Role Based Access Control) システムであり、**K2HDKC DBaaS** で作
 
 ## [K2HDKC DBaaS on kubernetes CLI（Command Line Interface）](overview_k8s_clija.html)
 すでに利用している[kubernetes](https://kubernetes.io/)クラスターや、`minikube`などの試用環境に、**K2HDKC DBaaS on kubernetes CLI（Command Line Interface）**を使って、**DBaaS（Database as a Service）**が実現できます。  
+
+## [K2HDKC Helm Chart](overview_helm_chartja.html)
+すでに利用している[kubernetes](https://kubernetes.io/)クラスターや、`minikube`などの試用環境に、[Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー）に対応した **K2HDKC Helm Chart** を使って、**DBaaS（Database as a Service）** を構築します。  
