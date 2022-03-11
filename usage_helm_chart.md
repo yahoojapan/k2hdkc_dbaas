@@ -9,8 +9,8 @@ prev_url: usage_k8s_cli.html
 prev_string: Usage DBaaS on k8s CLI
 top_url: usage.html
 top_string: Usage
-next_url: 
-next_string: 
+next_url: usage_rancher_helm_chart.html
+next_string: Usage Helm Chart with RANCHER
 ---
 
 # Usage - K2HDKC Helm Chart
@@ -20,6 +20,11 @@ This page explains how to use the **K2HDKC Helm Chart**.
 The **K2HDKC DBaaS** built with the **K2HDKC Helm Chart** works with the [K2HR3](https://k2hr3.antpick.ax/index.html) system built in the same kubernetes cluster.  
 
 This page describes how to use the `Helm command` to build a K2HDKC cluster which is a K2HDKC DBaaS from the **K2HDKC Helm Chart**.  
+
+### RANCHER
+The **K2HDKC Helm Chart** can be used as **RANCHER Helm Chart**.  
+You can easily build up a K2HDKC cluster by registering it in the [RANCHER](https://rancher.com/) repository.  
+Please refer to [K2HDKC Helm Chart with RANCHER](usage_rancher_helm_chart.html) for how to use from [RANCHER](https://rancher.com/).  
 
 ## About kubernetes environment
 At first, prepare or use the kubernetes cluster as the environment for installing the K2HDKC cluster.  

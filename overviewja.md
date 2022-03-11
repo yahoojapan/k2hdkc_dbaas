@@ -47,3 +47,7 @@ RBAC (Role Based Access Control) システムであり、**K2HDKC DBaaS** で作
 
 ## [K2HDKC Helm Chart](overview_helm_chartja.html)
 すでに利用している[kubernetes](https://kubernetes.io/)クラスターや、`minikube`などの試用環境に、[Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー）に対応した **K2HDKC Helm Chart** を使って、**DBaaS（Database as a Service）** を構築します。  
+
+### RANCHER対応
+[K2HDKC Helm Chart](overview_helm_chartja.html)は、**RANCHER Helm Chart** としても利用でき、[RANCHER](https://www.rancher.co.jp/)のリポジトリに登録できます。  
+[RANCHER](https://www.rancher.co.jp/)から[K2HDKC Helm Chart](overview_helm_chartja.html)を使い K2HDKCクラスターを簡単に構築できます。  

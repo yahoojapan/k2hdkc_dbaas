@@ -14,6 +14,10 @@ next_string: Usage
 ---
 
 # What's new
+## [11 Mar 2022] K2HDKC Helm Chart updated
+K2HDKC Helm Chart Release Version(1.0.1), all source code released on Github.com.  
+This version of the K2HDKC Helm Chart provides **RANCHER Helm Chart** functionality for [RANCHER](https://rancher.com/).  
+
 ## [9 Feb 2022] K2HDKC Helm Chart Release Version 1.0.0
 K2HDKC Helm Chart Release Version(1.0.0), all source code released on Github.com.  
 

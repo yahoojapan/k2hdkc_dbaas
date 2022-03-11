@@ -29,3 +29,5 @@ This is how to use **K2HDKC DBaaS** that works with [OpenStack](https://www.open
 This is how to use **K2HDKC DBaaS** that works with [kubernetes](https://kubernetes.io/).
 - [K2HDKC Helm Chart](usage_helm_chart.html)  
 This is how to use **K2HDKC DBaaS** by [Helm(The package manager for Kubernetes)](https://helm.sh/) that works with [kubernetes](https://kubernetes.io/).
+- [K2HDKC Helm Chart with RANCHER](usage_rancher_helm_chart.html)
+This is how to use the **K2HDKC Helm Chart** as a **RANCHER Helm Chart** from [RANCHER](https://rancher.com/) to build a **K2HDKC cluster**.

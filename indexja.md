@@ -34,7 +34,8 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 - [K2HDKC DBaaS on kubernetes CLI](overview_k8s_clija.html)  
 [kubernetes](https://kubernetes.io/ja/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
 - [K2HDKC Helm Chart](overview_helm_chartja.html)  
-[Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー） を使い、[kubernetes](https://kubernetes.io/ja/)と連動する **K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。
+[Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー） を使い、[kubernetes](https://kubernetes.io/ja/)と連動する **K2HDKC DBaaS** (Database as a Service for K2HDKC)の概要です。  
+**K2HDKC Helm Chart** の [RANCHER](https://www.rancher.co.jp/) 対応についても説明します。  
 
 ## {{ page.arrow_link_whatnew }}
 **K2HDKC DBaaS** について、新着情報などの[お知らせ](whatnewja.html)です。
@@ -62,6 +63,8 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 - **K2HDKC DBaaS CLI**（Command Line Interface）の使い方は、[こちら](usage_clija.html)を参照してください。
 - **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）の使い方は、[こちら](usage_k8s_clija.html)を参照してください。
 - **K2HDKC Helm Chart** の使い方は、[こちら](usage_helm_chartja.html)を参照してください。
+- **K2HDKC Helm Chart** の使い方は、[こちら](usage_helm_chartja.html)を参照してください。
+- **K2HDKC Helm Chart** を [RANCHER](https://www.rancher.co.jp/)から使う説明は、[こちら](usage_rancher_helm_chartja.html)を参照してください。
 
 # **AntPickaxについて**
 [AntPickax](https://antpick.ax/indexja.html)は、Yahoo! JAPANがオープンソースとして公開する一連のプロダクト群です。  
