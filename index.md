@@ -39,6 +39,7 @@ An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works wi
 An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that works with [kubernetes](https://kubernetes.io/).
 - [K2HDKC Helm Chart](overview_helm_chart.html)  
 An overview of **K2HDKC DBaaS** (Database as a Service for K2HDKC) that uses [Helm(The package manager for Kubernetes)](https://helm.sh/) and works with [kubernetes](https://kubernetes.io/).
+This section also explains how to support [RANCHER](https://rancher.com/) of **K2HDKC Helm Chart**.  
 
 ## {{ page.arrow_link_whatnew }}
 What's new about **K2HDKC DBaaS**.
@@ -66,6 +67,7 @@ You can also refer directly to the links below for how to use each **K2HDKC DBaa
 - [Usage for K2HDKC DBaaS CLI](usage_cli.html) (Command Line Interface)
 - [Usage for K2HDKC DBaaS on kubernetes CLI](usage_k8s_cli.html) (Command Line Interface)
 - [Usage for K2HDKC Helm Chart](usage_helm_chart.html)
+- [Usage for K2HDKC Helm Chart with RANCHER](usage_rancher_helm_chart.html)
 
 # About AntPickax
 [AntPickax](https://antpick.ax/) is product group that is provided as open source by Yahoo! JAPAN.  

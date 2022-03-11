@@ -37,7 +37,12 @@ next_string:
 
 Helmの使い方については、[こちら](https://helm.sh/ja/)を参照してください。
 
+### Helmコマンドから使う
 `Helmコマンド`を使い、**K2HDKC Helm Chart**から **K2HDKCクラスター** を構築する方法は、[こちら](usage_helm_chartja.html)を参照してください。  
+
+### [RANCHER](https://www.rancher.co.jp/)から使う
+**K2HDKC Helm Chart** は、**RANCHER Helm Chart** としても利用でき、[RANCHER](https://www.rancher.co.jp/)のリポジトリに登録できます。  
+[RANCHER](https://www.rancher.co.jp/) から **K2HDKC Helm Chart** を使い K2HDKCクラスターを構築する方法は、[こちら](usage_rancher_helm_chartja.html)を参照してください。  
 
 ### kubernetes control plane との関係
 [Helm](https://helm.sh/ja/) コマンドは、[kubernetes](https://kubernetes.io/) Control Planeの **kube-apiserver** や、**CRD(Custom Resource Definitions)** を使って、**Helm Chart**に従って kubernetesのリソースを構築します。  

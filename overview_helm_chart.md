@@ -35,7 +35,13 @@ Below is a description of the **K2HDKC DBaaS** system using the **K2HDKC Helm Ch
 **K2HDKC Helm Chart** is published on [Artifact Hub](https://artifacthub.io/packages/helm/k2hdkc/k2hdkc) and can be used from anywhere.  
 
 See the [Helm](https://helm.sh/) documentation for usage and more information.  
+
+### Use Helm command
 See [Usage - K2HDKC Helm Chart](usage_helm_chart.html) for information on how to build a **K2HDKC cluster** using the **Helm command**.  
+
+### Use with [RANCHER](https://rancher.com/)
+**K2HDKC Helm Chart** can also be used as **RANCHER Helm Chart** and can be registered in the [RANCHER](https://rancher.com/) repository.  
+See [here](usage_rancher_helm_chart.html) for instructions on how to build a **K2HDKC cluster** from [RANCHER](https://rancher.com/) using the **K2HDKC Helm Chart**.  
 
 ### To kubernetes control plane
 The **Helm command** uses **kube-apiserver** of [kubernetes](https://kubernetes.io/) Control Plane and **CRD(Custom Resource Definitions)** to build kubernetes **resources** according to **Helm Chart**.  

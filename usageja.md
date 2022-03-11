@@ -28,3 +28,5 @@ next_string:
 [kubernetes](https://kubernetes.io/ja/) と連携する**K2HDKC DBaaS** (Database as a Service for K2HDKC)の使い方を説明します。  
 - [K2HDKC Helm Chart](usage_helm_chartja.html)  
 [Helm](https://helm.sh/ja/)（Kubernetes用パッケージマネージャー）に対応し、[kubernetes](https://kubernetes.io/ja/) と連携する **K2HDKC DBaaS** (Database as a Service for K2HDKC)の使い方を説明します。  
+- [K2HDKC Helm Chart with RANCHER](usage_rancher_helm_chartja.html)
+**K2HDKC Helm Chart** を **RANCHER Helm Chart** として [RANCHER](https://www.rancher.co.jp/) から使い、**K2HDKC クラスター** を構築する使い方を説明します。  

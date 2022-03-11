@@ -9,8 +9,8 @@ prev_url: usage_k8s_clija.html
 prev_string: Usage DBaaS on k8s CLI
 top_url: usageja.html
 top_string: Usage
-next_url: 
-next_string: 
+next_url: usage_rancher_helm_chartja.html
+next_string: Usage Helm Chart with RANCHER
 ---
 
 # 使い方 - K2HDKC Helm Chart
@@ -20,6 +20,11 @@ next_string:
 **K2HDKC Helm Chart**で構築する **K2HDKC DBaaS** は、同じ kubernetes クラスターに構築された [K2HR3](https://k2hr3.antpick.ax/indexja.html)システムと連携します。  
 
 このページでは、`Helmコマンド`を使い、**K2HDKC Helm Chart**から K2HDKC DBaaSである K2HDKCクラスターを構築する方法を説明します。  
+
+## RANCHER対応
+**K2HDKC Helm Chart**は、**RANCHER Helm Chart** として利用できます。  
+[RANCHER](https://www.rancher.co.jp/)のリポジトリに登録し、K2HDKCクラスターを簡単に構築できます。  
+[RANCHER](https://www.rancher.co.jp/)からの利用方法は、[こちら](usage_rancher_helm_chartja.html)を参照してください。  
 
 ## kubernetes環境について
 K2HDKCクラスターを構築する環境として、kubernetes環境（クラスター）を準備、もしくはそれを使える必要があります。  

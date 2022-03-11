@@ -47,3 +47,7 @@ If you are using [kubernetes](https://kubernetes.io/) cluster or trial environme
 
 ## [K2HDKC Helm Chart](overview_helm_chart.html)
 If you are using [kubernetes](https://kubernetes.io/) cluster or trial environment such as `minikube`, you can install(build) **DBaaS(Database as a Service)** by using [Helm(The package manager for Kubernetes)](https://helm.sh/) with **K2HDKC Helm Chart**.
+
+### RANCHER
+[K2HDKC Helm Chart](overview_helm_chart.html) can also be used as **RANCHER Helm Chart** and can be registered in the [RANCHER](https://rancher.com/) repository.  
+You can easily build up a K2HDKC cluster using [RANCHER](https://rancher.com/) to [K2HDKC Helm Chart](overview_helm_chart.html).  
