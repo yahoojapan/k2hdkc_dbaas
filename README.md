@@ -5,15 +5,26 @@ K2HDKC DBaaS
 [![GitHub stars](https://img.shields.io/github/stars/yahoojapan/k2hdkc_dbaas.svg)](https://github.com/yahoojapan/k2hdkc_dbaas/stargazers)
 [![GitHub issues](https://img.shields.io/github/issues/yahoojapan/k2hdkc_dbaas.svg)](https://github.com/yahoojapan/k2hdkc_dbaas/issues)
 
-## **Database as a Service for K2HDKC** 
+## About **K2HDKC** **DBaaS**
+
 ![K2HDKC DBaaS](https://dbaas.k2hdkc.antpick.ax/images/top_k2hdkc_dbaas.png)
 
-## Overview
+### K2HDKC DBaaS Overview
+**K2HDKC DBaaS** (DataBase as a Service of K2HDKC) is a basic system that provides [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) as a service.  
 **K2HDKC DBaaS** (Database as a Service for K2HDKC) is a **Database as a Service** that uses [K2HR3](https://k2hr3.antpick.ax/) and works with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/) to build a [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/index.html) Cluster for distributed KVS.  
+Users can easily launch, scale, back up, and restore **K2HDKC** clusters as **K2HDKC DBaaS**.  
 
 Detailed documentation for K2HDKC DBaaS can be found [here](https://dbaas.k2hdkc.antpick.ax/).  
 
+#### Background
+Yahoo! JAPAN publishes some products as [AntPickax](https://antpick.ax/) as Open Source Software(OSS).  
+We planned to provide one of them, [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/) as **DBaaS(Database as a Service)** so that anyone can easily use it.  
+And the publicly available [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/) offers enough features to make this happen.  
+We have built **DBaaS**(Database as a Service) in conjunction with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/), centering on this [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/).  
+
+### Components for K2HKDC DBaaS system
 **K2HDKC DBaaS** (Database as a Service for K2HDKC) is configured using the following products which is provided by [AntPickax](https://antpick.ax/index.html).  
+
 - [K2HDKC](https://k2hdkc.antpick.ax/) - K2Hash based Distributed Kvs Cluster  
 This product is distributed KVS(Key Value Store) clustering system and the core product of **K2HDKC DBaaS**.
 - [CHMPX](https://chmpx.antpick.ax/) - Consistent Hashing Mq inProcess data eXchange  
@@ -21,28 +32,22 @@ This product is communication middleware over the network for sending binary dat
 - [K2HR3](https://k2hr3.antpick.ax/) - K2Hdkc based Resource and Roles and policy Rules  
 This is extended RBAC (Role Based Access Control) system, and this system manages the configuration of the **K2HDKC cluster** as a backend for **K2HDKC DBaaS**.
 
-**K2HDKC DBaaS** (Database as a Service for K2HDKC) provides the following **two ways** to build **DBaaS(Database as a Service)** on [OpenStack](https://www.openstack.org/).  
-And provides **one way** to build **DBaaS(Database as a Service)** on [kubernetes](https://kubernetes.io/).  
+### K2HKDC DBaaS types
+There are four types of **DBaaS** (Database as a Service) provided by **K2HDKC DBaaS** (Database as a Service for K2HDKC) as shown below.  
+We provide two K2HDKC DBaaS types that cooperate with OpenStack and two types that cooperate with kubernetes.  
 
-The source code for this repository is for **K2HKDC DBaaS system based on Trove**.  
-For other type's source code, see the repository below.  
+#### With Trove(Trove is Database as a Service for OpenStack)
+This is DBaaS(Database as a Service) using Trove which is a product of OpenStack.  
+It incorporates K2HDKC (Distributed KVS) as one of Trove’s databases to realize DBaaS(Database as a Service).
 
-### With Trove(Trove is Database as a Service for OpenStack)
-This is **DBaaS(Database as a Service)** using [Trove](https://wiki.openstack.org/wiki/Trove) which is a product of [OpenStack](https://www.openstack.org/).  
-It incorporates [K2HDKC](https://k2hdkc.antpick.ax/) (Distributed KVS) as one of Trove's databases to realize **DBaaS(Database as a Service)**.  
-Users can easily launch, scale, backup, and restore K2HDKC clusters through the Trove Dashboard(GUI) and through the CLI provided by Trove(openstack CLI).  
+#### K2HDKC DBaaS CLI(Command Line Interface) for OpenStack
+If you have an existing OpenStack environment, this K2HDKC DBaaS CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.
 
-### OpenStack and K2HDKC DBaaS CLI(Command Line Interface)
-If you have an existing [OpenStack](https://www.openstack.org/) environment, this **K2HDKC DBaaS CLI(Command Line Interface)** allows you to implement **DBaaS(Database as a Service)** without any changes.  
+#### K2HDKC DBaaS on kubernetes CLI(Command Line Interface)
+If you are using kubernetes cluster or trial environment such as minikube, this K2HDKC DBaaS on kubernetes CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.
 
-### kubernetes and K2HDKC DBaaS on kubernetes CLI(Command Line Interface)
-For [kubernetes](https://kubernetes.io/) environment, the **K2HDKC DBaaS on kubernetes CLI(Command Line Interface)** allows you to implement **DBaaS(Database as a Service)** on [kubernetes](https://kubernetes.io/).  
-
-### Background
-Yahoo! JAPAN publishes some products as [AntPickax](https://antpick.ax/) as Open Source Software(OSS).  
-We planned to provide one of them, [K2HDKC(K2Hash based Distributed Kvs Cluster)](https://k2hdkc.antpick.ax/) as **DBaaS(Database as a Service)** so that anyone can easily use it.  
-And the publicly available [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/) offers enough features to make this happen.  
-We have built **DBaaS**(Database as a Service) in conjunction with [OpenStack](https://www.openstack.org/) and [kubernetes](https://kubernetes.io/), centering on this [K2HR3(K2Hdkc based Resource and Roles and policy Rules)](https://k2hr3.antpick.ax/).  
+#### K2HDKC Helm Chart
+If you are using kubernetes cluster or trial environment such as minikube, you can install(build) DBaaS(Database as a Service) by using Helm(The package manager for Kubernetes) with K2HDKC Helm Chart.
 
 ## K2HKDC DBaaS system based on Trove
 K2HDKC DBaaS in this repository provides its functionality through Trove as a panel(feature) of OpenStack.  
@@ -52,7 +57,10 @@ Normally, users do not need to use the K2HR3 system directly, and the function a
 The overall system overview diagram is shown below.  
 ![K2HDKC DBaaS system](https://dbaas.k2hdkc.antpick.ax/images/overview.png)  
 
-## Trial
+The source code for this repository is for **K2HKDC DBaaS system based on Trove**.  
+For other type's source code, see the repository below.  
+
+### Trial
 For the K2HDKC DBaaS experience, you can build a minimum K2HDKC DBaaS system.  
 This minimum system has all the features of K2HDKC DBaaS.  
 So you can use it to try out all the features provided by K2HDKC DBaaS.  
@@ -60,7 +68,7 @@ So you can use it to try out all the features provided by K2HDKC DBaaS.
 This minimum system(trial environment) is very easy to build by simply running the script provided by this repository.  
 For how to use it, refer to the [Build document](https://dbaas.k2hdkc.antpick.ax/build.html).  
 
-## Usage
+### Usage
 How to use **K2HDKC DBaaS** to build/start **K2HDKC cluster** and **K2HDKC slave node** easily.  
 For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [Usage Trove document](https://dbaas.k2hdkc.antpick.ax/usage.html).  
 For how to use **K2HDKC DBaaS CLI(Command Line Interface)**, refer to [Usage CLI document](https://dbaas.k2hdkc.antpick.ax/usage_cli.html).  
