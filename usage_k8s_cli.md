@@ -59,7 +59,7 @@ $ k2hr3 --version
 
 K2HR3 Command Line Interface - 1.0.4(2c3f45a)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 K2HR3 is K2hdkc based Resource and Roles and policy Rules,
 gathers common management information for the cloud.
@@ -73,7 +73,7 @@ This software is released under the MIT License.
 -----------------------------------------------------------
 K2HDKC DBaaS on kubernetes Command Line Interface - 1.0.0(3541210)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 The K2HDKC DBaaS K8S CLI (Command Line Interface of Database as a
 Service for K2HDKC) is a tool for building a K2HDKC cluster in
@@ -466,4 +466,4 @@ If you want to customize the K2HDKC slave node, copy this **yaml template** and 
 Register the modified **yaml template** file in the **K2HDKC DBaaS on kubernetes CLI** configuration.  
 
 The configuration is described in the `<User HOME directory>/.Antpickax/dbaas-k8s/dbaas-k8s.config` file.  
-Change the value of **K2HR3CLI_DBAAS_K8S_K2HDKC_SLV_YAML_TEMPL** in this to the path of your customized yaml template file.  
+Change the value of **K2HR3CLI_DBAAS_K8S_K2HDKC_SLV_YAML_TEMPL** in this to the path of your customized yaml template file.

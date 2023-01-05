@@ -60,7 +60,7 @@ $ k2hr3 --version
 
 K2HR3 Command Line Interface - 1.0.4(2c3f45a)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 K2HR3 is K2hdkc based Resource and Roles and policy Rules,
 gathers common management information for the cloud.
@@ -74,7 +74,7 @@ This software is released under the MIT License.
 -----------------------------------------------------------
 K2HDKC DBaaS on kubernetes Command Line Interface - 1.0.0(3541210)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 The K2HDKC DBaaS K8S CLI (Command Line Interface of Database as a
 Service for K2HDKC) is a tool for building a K2HDKC cluster in
@@ -462,11 +462,11 @@ default.svc.cluster.local
 Succeed : Completed listing the configuration of K2HDKC DBaaS K8S
 ```
 
-上記は、**K2HDKC DBaaS on kubernetes CLI**のコンフィグレーションをリストした結果になります。
+上記は、**K2HDKC DBaaS on kubernetes CLI**のコンフィグレーションをリストした結果になります。  
 
-この結果に表示されている **K2HR3CLI_DBAAS_K8S_K2HDKC_SLV_YAML_TEMPL**の示す値が、K2HDKCスレーブノードのyamlテンプレートです。
-K2HDKCスレーブノードのカスタマイズする場合は、このyamlテンプレートをコピーして、修正してください。
-修正したyamlテンプレートファイルを、**K2HDKC DBaaS on kubernetes CLI**のコンフィグレーションに登録してください。
+この結果に表示されている **K2HR3CLI_DBAAS_K8S_K2HDKC_SLV_YAML_TEMPL**の示す値が、K2HDKCスレーブノードのyamlテンプレートです。  
+K2HDKCスレーブノードのカスタマイズする場合は、このyamlテンプレートをコピーして、修正してください。  
+修正したyamlテンプレートファイルを、**K2HDKC DBaaS on kubernetes CLI**のコンフィグレーションに登録してください。  
 
-コンフィグレーションは、`<User HOME directory>/.antpickax/dbaas-k8s/dbaas-k8s.config`ファイルに記述されています。
+コンフィグレーションは、`<User HOME directory>/.antpickax/dbaas-k8s/dbaas-k8s.config`ファイルに記述されています。  
 この中の**K2HR3CLI_DBAAS_K8S_K2HDKC_SLV_YAML_TEMPL**の値を、カスタマイズしたyamlテンプレートファイルのパスに変更してください。
