@@ -53,7 +53,7 @@ $ k2hr3 --version
 
 K2HR3 Command Line Interface - 1.0.1(d12a87d)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 K2HR3 is K2hdkc based Resource and Roles and policy Rules,
 gathers common management information for the cloud.
@@ -67,7 +67,7 @@ This software is released under the MIT License.
 -----------------------------------------------------------
 K2HDKC DBaaS Command Line Interface - 1.0.0(26cdbcc)
 
-Copyright 2021 Yahoo! Japan Corporation.
+Copyright 2021 Yahoo Japan Corporation.
 
 The K2HDKC DBaaS CLI (Command Line Interface of Database as a
 Service for K2HDKC) is a tool for building a K2HDKC cluster
@@ -285,4 +285,4 @@ If you do not want to see this prompt, run it with the `--yes(-y)` option.
 
 ## 8. Summary
 You can easily build a **K2HDKC cluster** on [OpenStack](https://www.openstack.org/) by following steps 1 to 6 above.  
-All you need is only [K2HR3](https://k2hr3.antpick.ax/) system that works with [OpenStack](https://www.openstack.org/).  
+All you need is only [K2HR3](https://k2hr3.antpick.ax/) system that works with [OpenStack](https://www.openstack.org/).
