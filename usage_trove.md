@@ -147,17 +147,17 @@ Set each parameter as follows.
 - Cluster Name  
 This value is used as part of the HOST(`Virtual Machine`) name for the server node of the K2HDKC cluster. In the sample above, it is set `mycluster`.
 - Datastore  
-The names given to the `Trove guest OS image` such as `k2hdkc - 0.9.30` are listed, so select the one that exists.
+The names given to the K2HDKC Version such as `k2hdkc - 1.0.14` are listed, so select the one that exists.
 - Flavor  
-Select a flavor. If you are using a trial environment, select `ds1G`.
+Select a flavor. If you are using a trial environment, select `ds2G`.
 - Network  
 Select `private` for a trial environment.
 - Volume Size  
-Set `1` for a trial environment.
+Set `2` for a trial environment.
 - Locality  
 Select `None` for a trial environment.
 - ConfigurationGroup  
-The `Configuration Group` you created is listed. If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-0.9.30)`.
+The `Configuration Group` you created is listed. If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-1.0.14)`.
 - Number of Instances  
 Specifies the number of server nodes in the K2HDKC cluster to boot. The default is `3`.
 
@@ -189,7 +189,7 @@ Set each parameter as follows.
 - Flavor  
 Select a flavor. Make sure to select the same one as the other server nodes.
 - Volume Size  
-Make sure to select the same one as the other server nodes. Set it to `1` for a trial environment.
+Make sure to select the same one as the other server nodes. Set it to `2` for a trial environment.
 - Name  
 Specify the name of the HOST(`Virtual Machine`) of the server node to be added. In the above figure, it is set to `mycluster-member-4` according to the existing server node.
 - Instance Type / Related To  
@@ -197,7 +197,7 @@ Do not need to set these parameters.
 - Network  
 Make sure to select the same one as the other server nodes. Select `private` for a trial environment.
 - ConfigurationGroup  
-Make sure to select the same one as the other server nodes. If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-0.9.30)`.
+Make sure to select the same one as the other server nodes. If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-1.0.14)`.
 
 After setting all the parameters, click the `Add` button.  
 If you want to add multiple server nodes at the same time, repeat this `Add Instance` work for each additional one.  
@@ -249,13 +249,13 @@ Specify the Availability Zone. Select `nova` for a trial environment.
 - Instance Name  
 Specifies the name of the instance of the server node. In this example, it is `server-node-1`.
 - Volume Size  
-Set `1` for a trial environment.
+Set `2` for a trial environment.
 - Volume Type  
 Select `lvmdriver-1` for a trial environment.
 - Datastore  
-The names given to the `Trove guest OS image` such as `k2hdkc - 0.9.30` are listed, so select the one that exists.
+The names given to the K2HDKC Version such as `k2hdkc - 1.0.14` are listed, so select the one that exists.
 - Flavor  
-Select a flavor. If you are using a trial environment, select `ds1G`.
+Select a flavor. If you are using a trial environment, select `ds2G`.
 - Locality  
 Select `None` for a trial environment.
 
@@ -274,7 +274,7 @@ _There are no parameters that need to be set._
 
 Set each parameter on the `Advanced` tab as follows.  
 - ConfigurationGroup  
-If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-0.9.30)`.
+If you have followed the steps so far, select `mycluster_configurationgroup (k2hdkc-1.0.14)`.
 - Source for initial state  
 Leave it as `None`.
 
@@ -479,7 +479,7 @@ To proceed, login to Trove Dashboard and select the same project as your K2HDKC 
 Open `Compute` > `Images` in the left panel.
 Make sure that the OS image for launching the K2HDKC slave node exists.  
 _Please use an OS supported by [K2HDKC](https://k2hdkc.antpick.ax/)._  
-As for the trial environment, there is an Ubuntu 18.04 image called `k2hdkc-dbaas-k2hr3-ubuntu-1804`, so use this.  
+As for the trial environment, there is an Ubuntu 22.04 image called `k2hdkc-dbaas-k2hr3-ubuntu-2204`, so use this.  
 
 ![Slave - Images](images/usage_slave_openstack_images.png)
 
@@ -512,9 +512,9 @@ The settings related to the K2HDKC slave node on each page are shown below.
 - Details  
 Please set the instance name etc. There are no parameters specifically for K2HDKC slave nodes.
 - Source  
-Select the OS image for the K2HDKC slave node. For a trial environment, select `k2hdkc-dbaas-k2hr3-ubuntu-1804`.
+Select the OS image for the K2HDKC slave node. For a trial environment, select `k2hdkc-dbaas-k2hr3-ubuntu-2204`.
 - Flavor  
-Select the flavor according to the prepared OS image. Select `ds1G` for a trial environment.
+Select the flavor according to the prepared OS image. Select `ds2G` for a trial environment.
 - Networks  
 Please set according to the environment. For a trial environment, leave `private` selected.
 - Security Groups  

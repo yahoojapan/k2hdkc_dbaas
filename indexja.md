@@ -44,7 +44,7 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 
 それぞれのタイプのK2HDKC DBaaSのソースコートは、以下に示すGithubリポジトリにあります。  
 
-- [k2hdkc_dbaasリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas)   
+- [k2hdkc_dbaas_troveリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_trove)   
 **K2HDKC DBaaS with Trove** のソースコード
 - [k2hdkc_dbaas_cliリポジトリ](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
 **K2HDKC DBaaS CLI**（Command Line Interface）のソースコード

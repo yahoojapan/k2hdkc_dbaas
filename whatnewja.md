@@ -14,6 +14,10 @@ next_string: Usage
 ---
 
 # What's new
+## 2024年12月16日
+K2HDKC DBaaS with Troveのソースコードを [k2hdkc_dbaas_trove](https://github.com/yahoojapan/k2hdkc_dbaas_trove)リポジトリとして [k2hdkc_dbaas](https://github.com/yahoojapan/k2hdkc_dbaas)リポジトリから分離し、K2HDKC DBaaS with Trove の Release Version 1.0.2をリリースしました。
+このバージョンは、OpenStack Trove の `stable/2024.1`に対応します。
+
 ## 2022年3月11日
 K2HDKC Helm Chart Release Version 1.0.1 のソースコードをGithub.comで公開しました。  
 このバージョンのK2HDKC Helm Chartは、[RANCHER](https://www.rancher.co.jp/) に対応した **RANCHER Helm Chart** の機能を提供します。  

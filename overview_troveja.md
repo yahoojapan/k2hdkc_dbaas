@@ -49,6 +49,8 @@ Trove は、OpenStack コンポーネントのひとつであり、**K2HDKC DBaa
 OpenStackの管理する複数のインスタンス（`Virtual Machine`）でK2HDKCサーバーノードが起動され、クラスターを構成します。  
 **K2HDKC DBaaS** の機能は、このK2HDKCクラスターの構築、破棄、制御（スケール、データマージ）することです。  
 
+_K2HDKCサーバープロセス群は、インスタンス（`Virtual Machine`）内でDockerコンテナーとして起動されます。（K2HDKC DBaaS Trove バージョン1.0.2以降、OpenStack Trove stable/2024.1以降）_
+
 ## K2HDKC スレーブノード
 **K2HDKC DBaaS**により作成されたK2HDKCクラスター（サーバーノード）に接続するノード（クライアント）のことです。
 
