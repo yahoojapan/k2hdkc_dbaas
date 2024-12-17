@@ -48,7 +48,7 @@ What's new about **K2HDKC DBaaS**.
 
 Each **K2HDKC DBaaS** source code is in the [Github](https://github.com/) repository shown below.  
 
-- [k2hdkc_dbaas repository](https://github.com/yahoojapan/k2hdkc_dbaas)  
+- [k2hdkc_dbaas_trove repository](https://github.com/yahoojapan/k2hdkc_dbaas_trove)  
 The source code repository for [K2HDKC DBaaS with Trove](overview_trove.html)
 - [k2hdkc_dbaas_cli repository](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
 The source code repository for [K2HDKC DBaaS CLI](overview_cli.html) (Command Line Interface)  

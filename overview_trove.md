@@ -50,6 +50,8 @@ For example, you can build [K2HR3](https://k2hr3.antpick.ax/) system in instance
 **K2HDKC cluster** is a cluster consisting of multiple K2HDKC server nodes launched on instances(`Virtual Machine`) managed by OpenStack.  
 **K2HDKC DBaaS** builds, destroys, and controls(scales, data merges) these K2HDKC clusters.  
 
+_K2HDKC server processes are launched as Docker containers in an instance.(K2HDKC DBaaS Trove version 1.0.2 or later, OpenStack Trove stable/2024.1 or later)_
+
 ## K2HDKC Slave nodes
 **K2HDKC slave node** is the client that connects to a K2HDKC cluster(server nodes) created by **K2HDKC DBaaS**.  
 

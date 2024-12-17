@@ -144,17 +144,17 @@ K2HDKCクラスターの構築には、**K2HDKC DBaaS** は**2通りの方法** 
 - Cluster Name  
 この値は、K2HDKCクラスターのサーバーノードのHOST（Virtual Machine）の名前の一部分になります。上図では、`mycluster`としています。
 - Datastore  
-`k2hdkc - 0.9.30`などのように`TroveゲストOSイメージ`に付与された名前が一覧されますので、存在するものを選択してください。
+`k2hdkc - 1.0.14`などのように K2HDKCのバージョンが一覧されますので、存在するものを選択してください。
 - Flavor  
-フレーバーを選択します。試用環境を使用している場合は、`ds1G`を選択してください。
+フレーバーを選択します。試用環境を使用している場合は、`ds2G`を選択してください。
 - Network  
 試用環境を使用している場合は、`private`を選択します。
 - Volume Size  
-試用環境を使用している場合は、`1`としてください。
+試用環境を使用している場合は、`2`としてください。
 - Locality  
 試用環境を使用している場合は、`None`を選択します。
 - ConfigurationGroup  
-上記で作成した`Configuration Group`がリストされていますので、選択してください。ここまで手順通りに進めている場合、`mycluster_configurationgroup (k2hdkc-0.9.30)`を選択します。
+上記で作成した`Configuration Group`がリストされていますので、選択してください。ここまで手順通りに進めている場合、`mycluster_configurationgroup (k2hdkc-1.0.14)`を選択します。
 - Number of Instances  
 起動するK2HDKCクラスターのサーバノード数を指定します。デフォルトは`3`となっています。
 
@@ -186,7 +186,7 @@ K2HDKCクラスターの構築には、**K2HDKC DBaaS** は**2通りの方法** 
 - Flavor  
 フレーバーを選択します。他のサーバーノードと同じものを選択するようにします。
 - Volume Size  
-他のサーバーノードと同じものを選択するようにします。試用環境を使用している場合は、`1`としてください。
+他のサーバーノードと同じものを選択するようにします。試用環境を使用している場合は、`2`としてください。
 - Name  
 この値は、追加するサーバーノードのHOST（Virtual Machine）の名前になります。上図では、既存サーバーノードと合わせて`mycluster-member-4`としています。
 - Instance Type / Related To  
@@ -194,7 +194,7 @@ K2HDKCクラスターの構築には、**K2HDKC DBaaS** は**2通りの方法** 
 - Network  
 他のサーバーノードと同じものを選択するようにします。試用環境を使用している場合は、`private`を選択します。
 - ConfigurationGroup  
-他のサーバーノードと同じものを選択するようにします。ここまで手順通りの場合は、`mycluster_configurationgroup (k2hdkc-0.9.30)`を選択します。
+他のサーバーノードと同じものを選択するようにします。ここまで手順通りの場合は、`mycluster_configurationgroup (k2hdkc-1.0.14)`を選択します。
 
 上記の設定で、`Add`ボタンをクリックしてください。  
 複数のサーバーノードを同時に追加する場合には、この`Add Instance`の作業を追加分繰り返してください。  
@@ -244,13 +244,13 @@ K2HDKCクラスターを構成するサーバーノードはすべて削除さ�
 - Instance Nmame  
 サーバーノードのインスタンスの名称を指定します。この例では、`server-node-1`としています。
 - Volume Size  
-試用環境を使用している場合は、`1`としてください。
+試用環境を使用している場合は、`2`としてください。
 - Volume Type  
 試用環境を使用している場合は、`lvmdriver-1`を選択してください。
 - Datastore  
-`k2hdkc - 0.9.30`などのように`TroveゲストOSイメージ`に付与された名前が一覧されますので、存在するものを選択してください。
+`k2hdkc - 1.0.14`などのように K2HDKC バージョンが一覧されますので、存在するものを選択してください。
 - Flavor  
-フレーバーを選択します。試用環境を使用している場合は、`ds1G`を選択してください。
+フレーバーを選択します。試用環境を使用している場合は、`ds2G`を選択してください。
 - Locality  
 試用環境を使用している場合は、`None`を選択します。
 
@@ -269,7 +269,7 @@ _特に設定する必要な項目はありません。_
 
 `Advanced`タブの各項目は以下のように設定します。  
 - ConfigurationGroup  
-手順通りの場合は、`mycluster_configurationgroup (k2hdkc-0.9.30)`を選択します。
+手順通りの場合は、`mycluster_configurationgroup (k2hdkc-1.0.14)`を選択します。
 - Source for initial state  
 `None`のままとします。
 
@@ -468,7 +468,7 @@ _試用環境を使っている場合は、予め事前設定されているた�
 `Compute` > `Images` を開いてください。  
 予めK2HDKCスレーブノードを起動するためのOSイメージが存在することを確認してください。  
 _OSイメージは、[K2HDKC](https://k2hdkc.antpick.ax/indexja.html)がサポートするOSをお使いください。_  
-試用環境を使っている場合は、`k2hdkc-dbaas-k2hr3-ubuntu-1804`というUbuntu 18.04のイメージが存在しますので、これを利用します。  
+試用環境を使っている場合は、`k2hdkc-dbaas-k2hr3-ubuntu-2204`というUbuntu 22.04のイメージが存在しますので、これを利用します。  
 
 ![Slave - Images](images/usage_slave_openstack_images.png)
 
@@ -501,9 +501,9 @@ _`Database` > `Instances`ではないので、注意してください。_
 - Details  
 インスタンス名などを設定してください。特にK2HDKCスレーブノードに特化した項目はありません。
 - Source  
-K2HDKCスレーブノード用のOSイメージを選択してください。試用環境の場合は、`k2hdkc-dbaas-k2hr3-ubuntu-1804`を選択します。
+K2HDKCスレーブノード用のOSイメージを選択してください。試用環境の場合は、`k2hdkc-dbaas-k2hr3-ubuntu-2204`を選択します。
 - Flavor  
-準備したOSイメージなどに応じて、フレーバーを選択してください。試用環境の場合は、`ds1G`を選択します。
+準備したOSイメージなどに応じて、フレーバーを選択してください。試用環境の場合は、`ds2G`を選択します。
 - Networks  
 環境に応じて設定してください。試用環境の場合は、`private`が選択されている状態にします。
 - Security Groups  
