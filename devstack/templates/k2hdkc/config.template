@@ -1,5 +1,0 @@
-cluster-name=None
-extdata-url=None
-chmpx-server-port=8020
-chmpx-server-ctlport=8021
-chmpx-slave-ctlport=8031
