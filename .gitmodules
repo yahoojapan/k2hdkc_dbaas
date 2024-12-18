@@ -1,0 +1,12 @@
+[submodule "k2hdkc_dbaas_trove"]
+	path = k2hdkc_dbaas_trove
+	url = https://github.com/yahoojapan/k2hdkc_dbaas_trove.git
+[submodule "k2hdkc_dbaas_cli"]
+	path = k2hdkc_dbaas_cli
+	url = https://github.com/yahoojapan/k2hdkc_dbaas_cli.git
+[submodule "k2hdkc_dbaas_k8s_cli"]
+	path = k2hdkc_dbaas_k8s_cli
+	url = https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli.git
+[submodule "k2hdkc_helm_chart"]
+	path = k2hdkc_helm_chart
+	url = https://github.com/yahoojapan/k2hdkc_helm_chart.git
