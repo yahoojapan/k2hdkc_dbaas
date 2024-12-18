@@ -38,43 +38,20 @@ We provide two K2HDKC DBaaS types that cooperate with OpenStack and two types th
 
 #### With Trove(Trove is Database as a Service for OpenStack)
 This is DBaaS(Database as a Service) using Trove which is a product of OpenStack.  
-It incorporates K2HDKC (Distributed KVS) as one of Trove’s databases to realize DBaaS(Database as a Service).
+It incorporates K2HDKC (Distributed KVS) as one of Trove’s databases to realize DBaaS(Database as a Service).  
+The source code is [k2hdkc_dbaas_trove](https://github.com/yahoojapan/k2hdkc_dbaas_trove).
 
 #### K2HDKC DBaaS CLI(Command Line Interface) for OpenStack
-If you have an existing OpenStack environment, this K2HDKC DBaaS CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.
+If you have an existing OpenStack environment, this K2HDKC DBaaS CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.  
+The source code is [k2hdkc_dbaas_cli](https://github.com/yahoojapan/k2hdkc_dbaas_cli).
 
 #### K2HDKC DBaaS on kubernetes CLI(Command Line Interface)
-If you are using kubernetes cluster or trial environment such as minikube, this K2HDKC DBaaS on kubernetes CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.
+If you are using kubernetes cluster or trial environment such as minikube, this K2HDKC DBaaS on kubernetes CLI(Command Line Interface) allows you to implement DBaaS(Database as a Service) without any changes.  
+The source code is [k2hdkc_dbaas_k8s_cli](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli).
 
 #### K2HDKC Helm Chart
-If you are using kubernetes cluster or trial environment such as minikube, you can install(build) DBaaS(Database as a Service) by using Helm(The package manager for Kubernetes) with K2HDKC Helm Chart.
-
-## K2HKDC DBaaS system based on Trove
-K2HDKC DBaaS in this repository provides its functionality through Trove as a panel(feature) of OpenStack.  
-And the [K2HR3](https://k2hr3.antpick.ax/) system is used as the back end as an RBAC(Role Base Access Control) system dedicated to K2HDKC DBaaS.  
-Normally, users do not need to use the K2HR3 system directly, and the function as DBaaS uses Trove Dashboard(or Trove CLI).  
-
-The overall system overview diagram is shown below.  
-![K2HDKC DBaaS system](https://dbaas.k2hdkc.antpick.ax/images/overview.png)  
-
-The source code for this repository is for **K2HKDC DBaaS system based on Trove**.  
-For other type's source code, see the repository below.  
-
-### Trial
-For the K2HDKC DBaaS experience, you can build a minimum K2HDKC DBaaS system.  
-This minimum system has all the features of K2HDKC DBaaS.  
-So you can use it to try out all the features provided by K2HDKC DBaaS.  
-
-This minimum system(trial environment) is very easy to build by simply running the script provided by this repository.  
-For how to use it, refer to the [Build document](https://dbaas.k2hdkc.antpick.ax/build.html).  
-
-### Usage
-How to use **K2HDKC DBaaS** to build/start **K2HDKC cluster** and **K2HDKC slave node** easily.  
-For information on how to use **K2HDKC DBaaS** that works with [Trove(Trove is Database as a Service for OpenStack)](https://wiki.openstack.org/wiki/Trove), see [Usage Trove document](https://dbaas.k2hdkc.antpick.ax/usage.html).  
-For how to use **K2HDKC DBaaS CLI(Command Line Interface)**, refer to [Usage CLI document](https://dbaas.k2hdkc.antpick.ax/usage_cli.html).  
-These document describes all usage, including how to use K2HDKC DBaaS to create a K2HDKC cluster, how to launch a K2HDKC slave node, and more.  
-
-Let's get started.  
+If you are using kubernetes cluster or trial environment such as minikube, you can install(build) DBaaS(Database as a Service) by using Helm(The package manager for Kubernetes) with K2HDKC Helm Chart.  
+The source code is [k2hdkc_helm_chart](https://github.com/yahoojapan/k2hdkc_helm_chart).
 
 ## Documents
 [K2HDKC DBaaS Document](https://dbaas.k2hdkc.antpick.ax/index.html)  
@@ -89,6 +66,7 @@ Let's get started.
 ## Repositories
 [k2hdkc](https://github.com/yahoojapan/k2hdkc)  
 [chmpx](https://github.com/yahoojapan/chmpx)  
+[k2hdkc_dbaas_trove](https://github.com/yahoojapan/k2hdkc_dbaas_trove)  
 [k2hdkc_dbaas_cli](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
 [k2hdkc_dbaas_k8s_cli](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli)  
 [k2hdkc_dbaas_override_conf](https://github.com/yahoojapan/k2hdkc_dbaas_override_conf)  
@@ -101,13 +79,15 @@ Let's get started.
 ## Packages
 [k2hdkc(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc)  
 [chmpx(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=chmpx)  
+[k2hdkc-trove(Docker image)](https://hub.docker.com/r/antpickax/k2hdkc-trove)  
+[k2hdkc-trove-backup(Docker image)](https://hub.docker.com/r/antpickax/k2hdkc-trove-backup)  
 [k2hdkc-dbaas-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-cli)  
 [k2hdkc-dbaas-k8s-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-k8s-cli)  
 [k2hdkc-dbaas-override-conf(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-override-conf)  
 [k2hr3-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-cli)  
+[k2hr3-get-resource(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-get-resource)  
 [k2hr3-app(npm packages)](https://www.npmjs.com/package/k2hr3-app)  
 [k2hr3-api(npm packages)](https://www.npmjs.com/package/k2hr3-api)  
-[k2hr3-get-resource(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-get-resource)  
 
 ### License
 This software is released under the 2.0 version of the Apache License, see the license file.
