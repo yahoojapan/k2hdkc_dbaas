@@ -1,3 +1,11 @@
+k2hdkc-dbaas (1.0.3) unstable; urgency=low
+
+  * Added All K2HDKC DBaaS products as submodules - #41
+  * Updated README.md - #40
+  * Removed Trove related code that was migrated to k2hdkc_dbaas_trove - #39
+
+ -- Takeshi Nakatani <ggtakec@gmail.com>  Wed, 18 Dec 2024 14:02:53 +0900
+
 k2hdkc-dbaas (1.0.2) unstable; urgency=low
 
   * Fixes the wrong format - #23
