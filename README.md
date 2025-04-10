@@ -64,30 +64,34 @@ The source code is [k2hdkc_helm_chart](https://github.com/yahoojapan/k2hdkc_helm
 [About AntPickax](https://antpick.ax/)  
 
 ## Repositories
-[k2hdkc](https://github.com/yahoojapan/k2hdkc)  
-[chmpx](https://github.com/yahoojapan/chmpx)  
 [k2hdkc_dbaas_trove](https://github.com/yahoojapan/k2hdkc_dbaas_trove)  
 [k2hdkc_dbaas_cli](https://github.com/yahoojapan/k2hdkc_dbaas_cli)  
 [k2hdkc_dbaas_k8s_cli](https://github.com/yahoojapan/k2hdkc_dbaas_k8s_cli)  
 [k2hdkc_dbaas_override_conf](https://github.com/yahoojapan/k2hdkc_dbaas_override_conf)  
+
+[k2hdkc](https://github.com/yahoojapan/k2hdkc)  
+[chmpx](https://github.com/yahoojapan/chmpx)  
+
 [k2hr3](https://github.com/yahoojapan/k2hr3)  
 [k2hr3_app](https://github.com/yahoojapan/k2hr3_app)  
-[k2hr3_cli](https://github.com/yahoojapan/k2hr3_cli)  
 [k2hr3_api](https://github.com/yahoojapan/k2hr3_api)  
+[k2hr3_cli](https://github.com/yahoojapan/k2hr3_cli)  
 [k2hr3_get_resource](https://github.com/yahoojapan/k2hr3_get_resource)  
 
 ## Packages
-[k2hdkc(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc)  
-[chmpx(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=chmpx)  
 [k2hdkc-trove(Docker image)](https://hub.docker.com/r/antpickax/k2hdkc-trove)  
 [k2hdkc-trove-backup(Docker image)](https://hub.docker.com/r/antpickax/k2hdkc-trove-backup)  
 [k2hdkc-dbaas-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-cli)  
 [k2hdkc-dbaas-k8s-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-k8s-cli)  
 [k2hdkc-dbaas-override-conf(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc-dbaas-override-conf)  
-[k2hr3-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-cli)  
-[k2hr3-get-resource(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-get-resource)  
+
+[k2hdkc(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hdkc)  
+[chmpx(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=chmpx)  
+
 [k2hr3-app(npm packages)](https://www.npmjs.com/package/k2hr3-app)  
 [k2hr3-api(npm packages)](https://www.npmjs.com/package/k2hr3-api)  
+[k2hr3-cli(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-cli)  
+[k2hr3-get-resource(packagecloud.io)](https://packagecloud.io/app/antpickax/stable/search?q=k2hr3-get-resource)  
 
 ### License
 This software is released under the 2.0 version of the Apache License, see the license file.
