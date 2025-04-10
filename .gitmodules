@@ -10,3 +10,6 @@
 [submodule "k2hdkc_helm_chart"]
 	path = k2hdkc_helm_chart
 	url = https://github.com/yahoojapan/k2hdkc_helm_chart.git
+[submodule "k2hdkc_dbaas_override_conf"]
+	path = k2hdkc_dbaas_override_conf
+	url = https://github.com/yahoojapan/k2hdkc_dbaas_override_conf.git
