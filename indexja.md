@@ -63,7 +63,6 @@ arrow_link_usage: <a href="usageja.html" class="link-title"><span class="arrow-b
 - **K2HDKC DBaaS CLI**（Command Line Interface）の使い方は、[こちら](usage_clija.html)を参照してください。
 - **K2HDKC DBaaS on kubernetes CLI**（Command Line Interface）の使い方は、[こちら](usage_k8s_clija.html)を参照してください。
 - **K2HDKC Helm Chart** の使い方は、[こちら](usage_helm_chartja.html)を参照してください。
-- **K2HDKC Helm Chart** の使い方は、[こちら](usage_helm_chartja.html)を参照してください。
 - **K2HDKC Helm Chart** を [RANCHER](https://www.rancher.co.jp/)から使う説明は、[こちら](usage_rancher_helm_chartja.html)を参照してください。
 
 # **AntPickaxについて**
