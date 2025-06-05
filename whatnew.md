@@ -14,6 +14,10 @@ next_string: Usage
 ---
 
 # What's new
+## [5 Jun 2025] K2HDKC DBaaS with Trove Release Version 1.0.6
+K2HDKC DBaaS with Trove Release Version(1.0.6), all source code released on Github.com.  
+This version corresponds to OpenStack Trove `stable/2025.1`.
+
 ## [19 Mar 2025] K2HDKC DBaaS with Trove Release Version 1.0.4
 K2HDKC DBaaS with Trove Release Version(1.0.4), all source code released on Github.com.  
 This version corresponds to OpenStack Trove `stable/2024.2`.
