@@ -14,6 +14,10 @@ next_string: Usage
 ---
 
 # What's new
+## 2025年6月5日
+K2HDKC DBaaS with Trove Version 1.0.6 のソースコードをGithub.comで公開しました。  
+このバージョンは、OpenStack Trove の `stable/2025.1`に対応します。
+
 ## 2025年3月19日
 K2HDKC DBaaS with Trove Version 1.0.4 のソースコードをGithub.comで公開しました。  
 このバージョンは、OpenStack Trove の `stable/2024.2`に対応します。
